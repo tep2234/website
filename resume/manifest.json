@@ -1,0 +1,133 @@
+[
+ {
+  "id": "master",
+  "label": "General (all roles)",
+  "headline": "AI Solutions Designer & Automation Developer | EdTech and Instructional Design",
+  "summary": "Business and education technology professional with an MBA, a Philippine teaching license and Senior High School teaching experience since 2017. I find the tasks people repeat every day, map the workflow, plan a staged roadmap and build working applications with AI-assisted development. Built DALIguro, an AI-powered workspace for DepEd teachers covering grading, lesson planning, scheduling, grade analysis and automated school forms, plus offline Excel and VBA systems for item analysis, attendance and report cards, one of them licensed to schools.",
+  "projects": [
+   "daliguro",
+   "partsflow",
+   "sf9",
+   "item-analysis"
+  ],
+  "html": "resume/master.html",
+  "pdf": "resume/Alvin-Diaz-Merasol-Resume.pdf",
+  "docx": "resume/Alvin-Diaz-Merasol-Resume.docx"
+ },
+ {
+  "id": "ai-automation",
+  "label": "AI Automation Specialist",
+  "headline": "AI Automation Specialist | Workflow Automation and AI-Assisted Development",
+  "summary": "Automation builder with an MBA and a teaching license who turns repeated manual work into working software. I map how a task is done today, design the automated version, and build it with AI-assisted development, from AI lesson generation and assisted score encoding in DALIguro to Excel and VBA systems that generate reports, remediation plans and school forms from data entered once.",
+  "projects": [
+   "daliguro",
+   "scanner",
+   "item-analysis",
+   "sf9"
+  ],
+  "html": "resume/ai-automation.html",
+  "pdf": "resume/Alvin-Diaz-Merasol-Resume-AI-Automation-Specialist.pdf",
+  "docx": "resume/Alvin-Diaz-Merasol-Resume-AI-Automation-Specialist.docx"
+ },
+ {
+  "id": "business-analyst",
+  "label": "Business Systems Analyst",
+  "headline": "Business Systems Analyst | Workflow Mapping, Requirements and Data Systems",
+  "summary": "Business systems analyst with an MBA who connects operations to the software that runs them. I document workflows, write requirements, plan staged roadmaps and deliver working systems: PartsFlow Pro for inventory, sales and suppliers, DALIguro for school operations, and spreadsheet systems with reconciliation checks. Experienced in feasibility studies, financial projections and franchise development.",
+  "projects": [
+   "partsflow",
+   "daliguro",
+   "attendance",
+   "asenso"
+  ],
+  "html": "resume/business-analyst.html",
+  "pdf": "resume/Alvin-Diaz-Merasol-Resume-Business-Systems-Analyst.pdf",
+  "docx": "resume/Alvin-Diaz-Merasol-Resume-Business-Systems-Analyst.docx"
+ },
+ {
+  "id": "app-developer",
+  "label": "AI-Assisted Application Developer",
+  "headline": "AI-Assisted Application Developer | Next.js, TypeScript, Supabase, Vercel",
+  "summary": "Application developer who builds production web apps with AI-assisted development (Claude Code, Codex). Built DALIguro, a multi-tenant teacher workspace on Next.js, TypeScript and Supabase with row-level security, migrations and pull-request release gates, and PartsFlow Pro, a live inventory and point-of-sale system. Works from requirements to deployed software, with tests, type checks and build checks before release.",
+  "projects": [
+   "daliguro",
+   "partsflow",
+   "scanner"
+  ],
+  "html": "resume/app-developer.html",
+  "pdf": "resume/Alvin-Diaz-Merasol-Resume-AI-Assisted-Application-Developer.pdf",
+  "docx": "resume/Alvin-Diaz-Merasol-Resume-AI-Assisted-Application-Developer.docx"
+ },
+ {
+  "id": "operations",
+  "label": "Operations and Workflow Automation Specialist",
+  "headline": "Operations and Workflow Automation Specialist | Process Design and Automated Reporting",
+  "summary": "Operations-minded automation specialist with an MBA. I find the routines that cost teams the most time, redesign the workflow and automate it: attendance tracked once and reported automatically, report cards consolidated across terms, inventory and sales updated at the point of sale. Comfortable across spreadsheets, web apps and the business side of operations.",
+  "projects": [
+   "attendance",
+   "partsflow",
+   "sf9",
+   "asenso"
+  ],
+  "html": "resume/operations.html",
+  "pdf": "resume/Alvin-Diaz-Merasol-Resume-Operations-and-Workflow-Automation-Specialist.pdf",
+  "docx": "resume/Alvin-Diaz-Merasol-Resume-Operations-and-Workflow-Automation-Specialist.docx"
+ },
+ {
+  "id": "excel",
+  "label": "Excel Automation Specialist",
+  "headline": "Excel and VBA Automation Specialist | Dashboards, Reports and Form Automation",
+  "summary": "Excel and VBA developer who builds macro-enabled systems people use daily. My workbooks produce DepEd report cards from one masterlist, analyze up to 60 test items with remediation plans, and track attendance for every section with a shared engine and reconciliation checks. SF9 Master is sold to schools as licensed client copies.",
+  "projects": [
+   "sf9",
+   "item-analysis",
+   "attendance"
+  ],
+  "html": "resume/excel.html",
+  "pdf": "resume/Alvin-Diaz-Merasol-Resume-Excel-Automation-Specialist.pdf",
+  "docx": "resume/Alvin-Diaz-Merasol-Resume-Excel-Automation-Specialist.docx"
+ },
+ {
+  "id": "edtech",
+  "label": "Educational Technology Specialist",
+  "headline": "Educational Technology Specialist | Teacher Tools, Assessment and School Systems",
+  "summary": "Licensed teacher since 2017 who builds the technology schools need. I created DALIguro, an AI-powered workspace for DepEd teachers with grading, lesson planning, attendance, QR assessment and automated school forms, and offline Excel systems for item analysis, attendance and report cards. I design tools around how teachers actually work.",
+  "projects": [
+   "daliguro",
+   "scanner",
+   "item-analysis",
+   "sf9"
+  ],
+  "html": "resume/edtech.html",
+  "pdf": "resume/Alvin-Diaz-Merasol-Resume-Educational-Technology-Specialist.pdf",
+  "docx": "resume/Alvin-Diaz-Merasol-Resume-Educational-Technology-Specialist.docx"
+ },
+ {
+  "id": "instructional",
+  "label": "Instructional Designer",
+  "headline": "Instructional Designer | Curriculum, Assessment and Learning Resources",
+  "summary": "Instructional designer and licensed teacher with Senior High School experience since 2017. I write learning objectives, lesson plans, modules, assessments and rubrics aligned to the DepEd curriculum, and use item analysis to target remediation. I also build the tools that support learning, from an AI lesson generator to automated item analysis.",
+  "projects": [
+   "lesson",
+   "item-analysis",
+   "daliguro"
+  ],
+  "html": "resume/instructional.html",
+  "pdf": "resume/Alvin-Diaz-Merasol-Resume-Instructional-Designer.pdf",
+  "docx": "resume/Alvin-Diaz-Merasol-Resume-Instructional-Designer.docx"
+ },
+ {
+  "id": "bizdev",
+  "label": "Business Development Specialist",
+  "headline": "Business Development Specialist | Feasibility, Franchise Development and Growth",
+  "summary": "Business development professional with an MBA and hands-on venture experience. I founded Asenso Gas One, a micro fuel station franchise with three package tiers, and grew its page to 1,000 followers with content and boosted ads. I prepare feasibility studies, business plans and financial projections, manage social media for a client, and build systems such as PartsFlow Pro.",
+  "projects": [
+   "asenso",
+   "partsflow",
+   "primeshade"
+  ],
+  "html": "resume/bizdev.html",
+  "pdf": "resume/Alvin-Diaz-Merasol-Resume-Business-Development-Specialist.pdf",
+  "docx": "resume/Alvin-Diaz-Merasol-Resume-Business-Development-Specialist.docx"
+ }
+]
