@@ -1367,7 +1367,7 @@ img,video{max-width:100%}
   <footer class="wrap site-foot">
     <div class="inner">
       <span>© 2026 Alvin Diaz Merasol, LPT, MBA</span>
-      <p class="stats" id="stats" role="status" hidden><span class="lbl">Visitor statistics</span> <span id="statsText"></span></p>
+      <p class="stats" id="stats" hidden><span class="lbl">Site traffic</span> <span id="statsText"></span></p>
       <span class="foot-links"><a href="resume/">Résumé</a><a href="https://github.com/tep2234" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/alvin-diaz-lpt-mba-b533a0275" target="_blank" rel="noopener">LinkedIn</a></span>
     </div>
   </footer>
@@ -1977,50 +1977,36 @@ $("#inq").addEventListener("submit",function(e){e.preventDefault();if(!inqOk())r
 $("#inqCopy").addEventListener("click",function(){if(!inqOk())return;var o=$("#inqOut");
   try{navigator.clipboard.writeText(inqText()).then(function(){o.textContent="Inquiry copied. Paste it into an email to alvindiazmerasol@gmail.com."},function(){o.textContent="Copy didn't work here. Select the text in the boxes and copy it manually."})}catch(err){o.textContent="Copy didn't work here. Select the text in the boxes and copy it manually."}});
 
-/* ---------- visitor counter ----------
-   GitHub Pages can't store anything, so counting needs a small database.
-   Set COUNTER.url and COUNTER.anonKey to a Supabase project that has run supabase/visitor-counter.sql.
-   Until both are set, nothing is requested and nothing is shown: no placeholder or invented numbers. */
-var COUNTER={url:"",anonKey:""};
+/* ---------- public page-view counter ----------
+   Abacus (abacus.jasoncameron.dev): free, no account, no secret in the page. It stores one site-wide
+   number. It cannot tell people apart, so the footer shows page views only, never "visitors".
+   Nothing is shown until the service returns a real value; any failure keeps the line hidden. */
+var PAGEVIEWS={api:"https://abacus.jasoncameron.dev",namespace:"tep2234-website",key:"pageviews"};
 (function(){
-  var base=String(COUNTER.url||"").replace(/\/+$/,""), key=String(COUNTER.anonKey||"");
-  if(!/^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(base)||key.length<20||!window.fetch||!window.JSON)return;
-  var UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i, WINDOW=30*60*1000;
-  function newId(){
-    try{if(crypto.randomUUID)return crypto.randomUUID();
-      var b=crypto.getRandomValues(new Uint8Array(16));b[6]=b[6]&15|64;b[8]=b[8]&63|128;
-      var x=Array.prototype.map.call(b,function(n){return(n+256).toString(16).slice(1)}).join("");
-      return x.slice(0,8)+"-"+x.slice(8,12)+"-"+x.slice(12,16)+"-"+x.slice(16,20)+"-"+x.slice(20)}catch(e){return null}}
-  /* Anonymous random browser id. If storage is blocked we only read totals, never count. */
-  var id=null,store=null;
-  try{store=window.localStorage;id=store.getItem("adm-visitor");if(!UUID.test(id||"")){id=newId();if(id)store.setItem("adm-visitor",id);if(store.getItem("adm-visitor")!==id)id=null}}catch(e){id=null}
-  var path=location.pathname.slice(0,200)||"/", lastKey="adm-visit:"+path, last=0;
-  try{last=+store.getItem(lastKey)||0}catch(e){}
+  var C=PAGEVIEWS,NAME=/^[A-Za-z0-9_.-]{3,64}$/,WINDOW=30*60*1000;
+  if(!/^https:\/\/[a-z0-9.-]+$/i.test(C.api||"")||!NAME.test(C.namespace||"")||!NAME.test(C.key||"")||!window.fetch)return;
+  var store=null,last=0,mark="adm-pv:"+C.namespace+"/"+C.key;
+  try{store=window.localStorage;last=+store.getItem(mark)||0}catch(e){store=null}
   var optOut=navigator.doNotTrack==="1"||window.doNotTrack==="1"||navigator.globalPrivacyControl===true;
   var bot=navigator.webdriver||/bot|crawl|spider|slurp|preview|headless|lighthouse|pagespeed/i.test(navigator.userAgent||"");
-  var record=!!id&&!optOut&&!bot&&!(Date.now()-last>=0&&Date.now()-last<WINDOW);
-  function ok(n){return typeof n==="number"&&isFinite(n)&&n>=0&&Math.floor(n)===n&&n<=Number.MAX_SAFE_INTEGER}
-  function show(d){
-    if(!d||!ok(d.page_views)||!ok(d.unique_visitors)||d.unique_visitors>d.page_views)return;
-    var el=$("#statsText"),nf=new Intl.NumberFormat("en-US"),since=d.since?new Date(d.since):null;
-    el.textContent="";
-    function b(t){var x=document.createElement("b");x.textContent=t;el.appendChild(x)}
-    b(nf.format(d.page_views));el.appendChild(document.createTextNode(d.page_views===1?" page view · ":" page views · "));
-    b(nf.format(d.unique_visitors));el.appendChild(document.createTextNode(" estimated unique "+(d.unique_visitors===1?"visitor":"visitors")));
-    if(since&&!isNaN(since))el.appendChild(document.createTextNode(" since "+since.toLocaleDateString("en-US",{month:"short",year:"numeric"})));
+  var recent=Date.now()-last>=0&&Date.now()-last<WINDOW;
+  /* Count only with storage (so refreshes inside 30 min can be skipped), no opt-out signal, no automation. */
+  var count=!!store&&!optOut&&!bot&&!recent;
+  function show(v){
+    if(typeof v!=="number"||!isFinite(v)||v<1||Math.floor(v)!==v||v>Number.MAX_SAFE_INTEGER)return;
+    var el=$("#statsText"),b=document.createElement("b");
+    b.textContent=new Intl.NumberFormat("en-US").format(v);
+    el.textContent="";el.appendChild(b);el.appendChild(document.createTextNode(v===1?" page view":" page views"));
     $("#stats").hidden=false}
   function go(){
     var ctl=window.AbortController?new AbortController():null,timer=setTimeout(function(){if(ctl)ctl.abort()},6000);
-    fetch(base+"/rest/v1/rpc/"+(record?"record_visit":"visit_stats"),{method:"POST",mode:"cors",credentials:"omit",cache:"no-store",keepalive:false,
-      signal:ctl?ctl.signal:undefined,referrerPolicy:"no-referrer",
-      /* New sb_publishable_ keys go only in the apikey header; legacy anon JWTs also go in Authorization. */
-      headers:/^eyJ[\w-]*\.[\w-]+\.[\w-]+$/.test(key)?{"apikey":key,"Authorization":"Bearer "+key,"Content-Type":"application/json"}:{"apikey":key,"Content-Type":"application/json"},
-      body:JSON.stringify(record?{p_visitor:id,p_path:path}:{})})
+    fetch(C.api+"/"+(count?"hit":"get")+"/"+encodeURIComponent(C.namespace)+"/"+encodeURIComponent(C.key),
+      {method:"GET",mode:"cors",credentials:"omit",cache:"no-store",referrerPolicy:"no-referrer",signal:ctl?ctl.signal:undefined})
      .then(function(r){if(!r.ok)throw new Error("counter "+r.status);return r.json()})
-     .then(function(d){clearTimeout(timer);if(record){try{store.setItem(lastKey,String(Date.now()))}catch(e){}}show(d)})
+     .then(function(d){clearTimeout(timer);if(count){try{store.setItem(mark,String(Date.now()))}catch(e){}}show(d&&d.value)})
      .catch(function(){clearTimeout(timer);$("#stats").hidden=true/* stays hidden: no placeholder, no invented numbers */})}
-  /* Count only a page someone actually sees: wait for a prerendered or background tab to become visible. */
-  if(document.visibilityState==="visible"||!record)go();
+  /* A background or prerendered tab is counted only once someone actually looks at it. */
+  if(document.visibilityState==="visible"||!count)go();
   else{var once=function(){if(document.visibilityState!=="visible")return;document.removeEventListener("visibilitychange",once);go()};document.addEventListener("visibilitychange",once)}
 })();
 
@@ -2035,5 +2021,6 @@ document.addEventListener("keydown",function(e){
 
 })();
 </script>
+<!-- Cloudflare Web Analytics: not active. Paste the snippet from Cloudflare > Web Analytics > Manage site here (see docs/VISITOR-COUNTER.md). -->
 </body>
 </html>

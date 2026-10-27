@@ -1,66 +1,88 @@
-# Visitor counter
+# Visitor analytics
 
-**Status: built and tested, switched off.** `index.html` ships with `var COUNTER={url:"",anonKey:""};`, so the page makes no counter request and the footer shows nothing. It switches on only when a database is chosen and approved (see "Switching it on").
+The site uses two free services. Neither one uses Supabase or touches the DALIguro databases.
 
-## Why it was inactive
-1. `COUNTER.url` and `COUNTER.anonKey` are empty, so the script exits before any request. That is deliberate: no database had been approved.
-2. There is no free slot to host the database. The Supabase organization is on the **Free plan**, which allows **two active free projects**. Both are DALIguro: `DaliGuro` (production) and `daliguro-staging`. The other three projects (`partsflow-pro`, `daliguro-ppt-studio`, `daliguro-qr-assessment`) are paused. Portfolio analytics must not go into a DALIguro database, and no project was created, paused or restored without the owner's approval.
+| | Public footer counter | Private analytics |
+| --- | --- | --- |
+| Service | [Abacus](https://v2.jasoncameron.dev/abacus) (`abacus.jasoncameron.dev`) | [Cloudflare Web Analytics](https://developers.cloudflare.com/web-analytics/) |
+| Shows | Total **page views**, in the footer | Visits, page views, top pages, referrers, countries, devices, Core Web Vitals, in your Cloudflare dashboard only |
+| Account needed | No | Yes, a free Cloudflare account and a site token |
+| Status | **Ready to work after merge.** Counter `tep2234-website/pageviews` was created on 28 Oct 2026 at 0. | **Waiting for your token.** Nothing is loaded until it is added. |
 
-## Why it needs a database
-GitHub Pages only serves files. It cannot run code on the server or save anything, so it cannot count visits by itself.
+## Footer counter (Abacus)
 
-| Option | Why it doesn't work |
+### How it works
+On each page load the browser makes one GET request to Abacus:
+
+- `/hit/tep2234-website/pageviews` adds 1 and returns the new total, or
+- `/get/tep2234-website/pageviews` returns the total without adding anything.
+
+The footer then shows "Site traffic: **N** page views". No key or secret is in the page; the hit and get endpoints are public by design.
+
+### When a view is counted
+- Counted: a visible page in a normal browser.
+- Not counted, total still shown (uses `/get`): a refresh or return visit from the same browser within 30 minutes; browsers sending Do Not Track or Global Privacy Control; automated browsers (`navigator.webdriver`, headless Chrome, crawlers, link previews, Lighthouse); browsers that block storage.
+- A tab opened in the background is counted only when someone switches to it.
+
+### Why it shows page views only
+Abacus stores a single number. It can't tell people or devices apart, so the site does not show "unique visitors". Cloudflare's dashboard gives an estimate of visits for your own use.
+
+### When it stays hidden
+The footer line is hidden until Abacus returns a whole number of 1 or more. It stays hidden if the request fails, times out (6 s), is rate-limited, or returns anything else. There is no placeholder number. Until the first real view after merge, the counter is at 0 and the line stays hidden.
+
+### Limitations
+- **Not tamper-proof.** The 30-minute rule runs in the visitor's browser. Anyone can call the public `/hit` URL directly and raise the count (Abacus limits each IP address to 30 requests per 10 seconds). Treat the number as an approximate total, not an audited figure.
+- **Ad and privacy blockers** may block the request. Those visits aren't counted, and the line stays hidden for those visitors.
+- **No SLA.** Abacus is a free community service run by one developer. If it goes down, the line hides itself; the rest of the site is unaffected.
+- **Expiry.** Abacus keeps a counter for 6 months after its last access. Any visit resets that clock.
+
+### Admin key
+Creating the counter returned an admin key, which can set or reset the value. It was given to the owner privately and is **not** in this repository. Without it, nobody else can change the value except through ordinary hits.
+
+## Cloudflare Web Analytics (private dashboard)
+
+Free, no cookies, no fingerprinting. Cloudflare's docs say it is free and allows up to 10 sites that aren't proxied through Cloudflare. It does **not** offer a public count endpoint, so it isn't used for the footer. DNS, the domain and GitHub Pages hosting stay as they are.
+
+### What you need to do (about 5 minutes)
+1. Sign up or log in at <https://dash.cloudflare.com/sign-up> (free plan).
+2. Open **Web Analytics** (type "Web Analytics" in the dashboard search if it isn't in the menu) and select **Add a site**.
+3. Under **Set up hostname**, enter `tep2234.github.io`, confirm, and select **Done**. Don't add the domain to Cloudflare or change any DNS or nameserver settings; the JS snippet works without them.
+4. Open **Manage site** and copy the JS snippet. It looks like this; the token is a 32-character code:
+   ```html
+   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "YOUR_TOKEN"}'></script>
+   ```
+5. Send the token to Claude, or paste the snippet yourself in `index.html` in place of the line
+   `<!-- Cloudflare Web Analytics: not active. ... -->`, just before `</body>`.
+6. After merge, data appears in the dashboard within a few minutes of the first visit.
+
+Ad blockers such as Brave, Adblock Plus and DuckDuckGo can block the Cloudflare beacon, so the dashboard undercounts visitors who use them.
+
+## Verification (28 Oct 2026)
+
+**Against the real Abacus service**, run from `https://tep2234.github.io` in a desktop browser on a test counter (`tep2234-website-qa/live-check-1028`), using the exact code from `index.html`:
+
+| Check | Result |
 | --- | --- |
-| GitHub Actions | Runs on pushes or schedules, not on page visits. A visitor's browser can't trigger it without a GitHub token, and a token in page code would let anyone write to the repo. |
-| Writing a JSON file in the repo | Same problem: every write needs a token with write access. |
-| Repository "Insights → Traffic" | Counts people viewing the repository on github.com, not the website. |
-| `localStorage` | Lives in one visitor's browser. It can't add up visits from different people. |
+| First visit | `/hit`; footer showed "1 page view" |
+| Two refreshes | `/get` only; still "1 page view" |
+| Second browser (new storage) | `/hit`; "2 page views" |
+| Read back from the service | `{"value":2}` |
+| Cross-origin access from github.io | Works (no CORS error) |
+| Request time | 296–446 ms per request |
 
-## How it works
-The page calls two database functions through Supabase's REST API. No third-party counter service, no GoatCounter account.
+**Simulated service** (`tests/page-views/browser_tests.py`, Chromium via Playwright, Abacus replaced by a local fake with one shared count): 34/34 checks passed, run 3 times. Covered:
 
-- `record_visit(visitor_id, path)` records one page view if it qualifies, then returns the totals.
-- `visit_stats()` returns the totals only.
+- recording, refreshes, 31-minute return, multiple browsers and a shared persisted total;
+- Do Not Track, Global Privacy Control, automation and blocked storage;
+- background tabs;
+- 12 failure cases (500, 429, 404, refused, timeout, bad or invalid values);
+- network requests (the counter is the only third-party request);
+- performance (the request starts after the HTML has arrived, and a hung API doesn't delay page load);
+- 390 px and 1440 px, light and dark themes, reduced motion, axe accessibility scan.
 
-The footer shows **page views** and **estimated unique visitors** separately, with the month counting started. If the counter isn't configured, the request fails, times out (6 s) or returns anything other than valid totals, the footer line stays hidden. It never shows a placeholder or a made-up number.
+**Rest of the site:** functional suite 58/58; axe 0 violations at 1440 px and 390 px, light and dark; no sideways scrolling.
 
-### What the numbers mean
-- **Page views:** one per browser, per page, per 30 minutes. Refreshing inside 30 minutes does not add views. This is enforced in the database; the browser also skips the write so it doesn't send pointless requests.
-- **Estimated unique visitors:** distinct random IDs kept in visitors' browsers. One person on two devices, or someone who clears site data or browses privately, counts more than once.
-- **Not recorded (totals still shown):** browsers that send Do Not Track or Global Privacy Control, automated browsers (`navigator.webdriver`, headless Chrome, crawlers, link previews, Lighthouse), and browsers that block storage.
-- A tab opened in the background or prerendered is counted only when someone actually looks at it.
-- Counting starts on the day it's switched on. There is no history before that.
+**Not verified:** iPhone Safari and in-app browsers (Facebook, Messenger) on a real phone; the Cloudflare beacon, which needs your token.
 
-### Security and abuse controls (`supabase/visitor-counter.sql`)
-- Data lives in a private schema, `portfolio_analytics`, which the REST API does not expose. Its tables have row-level security on, no policies, and all privileges revoked from `anon` and `authenticated`.
-- The public key can call only the two functions. `EXECUTE` is revoked from `PUBLIC`, `anon` and `authenticated` (Supabase grants it by default), then granted to `anon` only.
-- Both functions are `SECURITY DEFINER` with `search_path = ''` and fully qualified names, and a 2-second `statement_timeout`.
-- Input validation: the visitor id must be a UUID (PostgreSQL rejects anything else with HTTP 400). Query strings and fragments are stripped from the path; anything not matching `^/[A-Za-z0-9/_.~-]{0,199}$` is stored as `/`. A `CHECK` constraint enforces the same rule on the table.
-- Concurrency: each write locks the single totals row (`SELECT … FOR UPDATE`), so the 30-minute check, the caps and the totals update happen as one step. Simultaneous refreshes can't double-count.
-- Abuse caps: at most 120 new page views per minute site-wide and at most 30 new browser ids per minute. Above that, requests return totals without recording.
-- Totals are kept in a one-row table, so reading the counter doesn't scan the visit log.
-- No personal data is stored: no IP address, user agent, name or email. Only a random id, the page path and the time.
-- Residual risk: someone scripting requests can still add up to the caps (about 30 fake visitors and 120 fake views per minute). The anon key is public by design, so this can be limited but not prevented without a server or CAPTCHA.
-
-## Switching it on (needs your approval)
-Cheapest safe option first:
-
-1. **New free organization (₱0).** Supabase lets you create another Free Plan organization; its two free project slots are separate from the DALIguro organization. Create the organization and one project in it (for example `portfolio-analytics`). DALIguro is not touched.
-2. **Reuse a paused project.** Restoring `partsflow-pro`, `daliguro-ppt-studio` or `daliguro-qr-assessment` needs a free slot, which means pausing DALIguro production or staging. Not recommended.
-3. **Pro plan.** USD 25/month (includes USD 10 of compute credit, enough for one project); each extra project is roughly USD 10/month.
-
-Free projects pause after a period of inactivity. A paused project makes the counter hide itself until the project is restored; no wrong numbers are shown.
-
-Then:
-1. In the new project open **SQL editor**, paste `supabase/visitor-counter.sql`, run it. It's safe to run again.
-2. From **Project Settings → API Keys**, copy the **Project URL** and the **publishable** key (`sb_publishable_…`) or the legacy **anon** key. Never use the secret or `service_role` key.
-3. In `index.html`, fill `var COUNTER={url:"https://<ref>.supabase.co",anonKey:"<key>"};`.
-4. Commit and push. Open the site once, then check in the SQL editor:
-   `select * from portfolio_analytics.totals;`
-
-## Tests
-Run against PostgreSQL 17.5 with Supabase-style roles and default privileges (scripts in `tests/visitor-counter/`):
-
-- `sql_tests.sh`: 37 checks covering recording, 30-minute window, input validation, permissions, caps and totals drift.
-- `concurrency.sh`: 50 simultaneous refreshes from one browser record exactly 1 view; 25 simultaneous new browsers record exactly 25.
-- The browser behaviour (real database behind PostgREST, failure modes, privacy signals, hidden tabs) was tested with Playwright and Chromium.
+## Removed
+The earlier Supabase counter (`supabase/visitor-counter.sql`, `tests/visitor-counter/`, and its frontend code) has been removed. It is in git history at commit `39ee1f4` if ever needed.
