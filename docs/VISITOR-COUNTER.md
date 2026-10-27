@@ -7,7 +7,7 @@ The site uses two free services. Neither one uses Supabase or touches the DALIgu
 | Service | [Abacus](https://v2.jasoncameron.dev/abacus) (`abacus.jasoncameron.dev`) | [Cloudflare Web Analytics](https://developers.cloudflare.com/web-analytics/) |
 | Shows | Total **page views**, in the footer | Visits, page views, top pages, referrers, countries, devices, Core Web Vitals, in your Cloudflare dashboard only |
 | Account needed | No | Yes, a free Cloudflare account and a site token |
-| Status | **Ready to work after merge.** Counter `tep2234-website/pageviews` was created on 28 Oct 2026 at 0. | **Waiting for your token.** Nothing is loaded until it is added. |
+| Status | **Working, with one blocker before merge:** the counter's admin key is treated as exposed and needs a replacement counter (see below). The current counter `tep2234-website/pageviews` reads 0. | **Waiting for your token.** Nothing is loaded until it is added. |
 
 ## Footer counter (Abacus)
 
@@ -28,7 +28,7 @@ The footer then shows "Site traffic: **N** page views". No key or secret is in t
 Abacus stores a single number. It can't tell people or devices apart, so the site does not show "unique visitors". Cloudflare's dashboard gives an estimate of visits for your own use.
 
 ### When it stays hidden
-The footer line is hidden until Abacus returns a whole number of 1 or more. It stays hidden if the request fails, times out (6 s), is rate-limited, or returns anything else. There is no placeholder number. Until the first real view after merge, the counter is at 0 and the line stays hidden.
+The footer line appears only after Abacus returns a whole number. A confirmed 0 is shown as "0 page views". It stays hidden if the request fails, times out (6 s), is rate-limited, returns 404, or returns anything else. There is no placeholder number.
 
 ### Limitations
 - **Not tamper-proof.** The 30-minute rule runs in the visitor's browser. Anyone can call the public `/hit` URL directly and raise the count (Abacus limits each IP address to 30 requests per 10 seconds). Treat the number as an approximate total, not an audited figure.
@@ -36,8 +36,19 @@ The footer line is hidden until Abacus returns a whole number of 1 or more. It s
 - **No SLA.** Abacus is a free community service run by one developer. If it goes down, the line hides itself; the rest of the site is unaffected.
 - **Expiry.** Abacus keeps a counter for 6 months after its last access. Any visit resets that clock.
 
-### Admin key
-Creating the counter returned an admin key, which can set or reset the value. It was given to the owner privately and is **not** in this repository. Without it, nobody else can change the value except through ordinary hits.
+### Admin key: treat as exposed, replacement pending
+Creating a counter with `/create` returns an admin key that can set, reset or delete it. The key for `tep2234-website/pageviews` was shown in a chat conversation, so it is treated as exposed. It has never been in this repository, its history, the pull request or the page code.
+
+**Abacus can't rotate or revoke an admin key.** Its documentation lists only `/delete`, `/set`, `/reset` and `/update` for admin keys, with no endpoint to regenerate one. The only fix is a new counter whose key nobody else has seen. Do this before merging:
+
+1. **Create the new counter yourself** in your own browser, so the key never passes through anyone else. Open:
+   `https://abacus.jasoncameron.dev/create/tep2234-website/<new-name>`
+   The page shows JSON with `admin_key`. Save that value straight into your password manager. Don't paste it into chats, issues, commits or this file.
+2. **Point the page at it.** In `index.html`, change `key:"pageviews"` in `var PAGEVIEWS={...}` to the new name, then commit to this PR.
+3. **Retire the old counter** (optional; needs the old key): `POST https://abacus.jasoncameron.dev/delete/tep2234-website/pageviews` with header `Authorization: Bearer <old key>`. After that the old key no longer controls anything.
+4. **Check it.** `https://abacus.jasoncameron.dev/info/tep2234-website/<new-name>` should show `"exists":true` and `"is_genuine":false`. Abacus documents `is_genuine` as false when a counter was made with `/create`, so an admin key exists.
+
+Only the counter name goes in the page. The name is public by design; the admin key is the secret.
 
 ## Cloudflare Web Analytics (private dashboard)
 

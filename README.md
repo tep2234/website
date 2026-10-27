@@ -9,6 +9,8 @@ Static site served by GitHub Pages at https://tep2234.github.io/website/. No bui
 | `assets/img`, `assets/media`, `assets/fonts` | Screenshots, screen recordings with posters, self-hosted fonts. |
 | `resume/` | Résumé hub files: one PDF, Word file and print page per role. `resume-data.json` is the single source. |
 | `tools/` | Scripts that rebuild the résumé files. |
+| `tests/site/acceptance.py` | Site acceptance tests: features, 8 screen widths, axe WCAG 2.2 AA, performance (Playwright + Chromium). |
+| `tests/resume/ats_check.py` | ATS checks for all 9 résumé versions in PDF, DOCX and HTML (needs pypdf and pandoc). |
 | `tests/page-views/` | Browser tests for the footer page-view counter. See `docs/VISITOR-COUNTER.md`. |
 | `sitemap.xml` | Sitemap for search engines. |
 
