@@ -1983,18 +1983,45 @@ $("#inqCopy").addEventListener("click",function(){if(!inqOk())return;var o=$("#i
    Until both are set, nothing is requested and nothing is shown: no placeholder or invented numbers. */
 var COUNTER={url:"",anonKey:""};
 (function(){
-  if(!COUNTER.url||!COUNTER.anonKey||!window.fetch)return;
-  var id=null;
-  try{id=localStorage.getItem("adm-visitor");if(!id){id=(crypto.randomUUID?crypto.randomUUID():null);if(id)localStorage.setItem("adm-visitor",id)}}catch(e){}
-  var bot=navigator.webdriver||/bot|crawl|spider|preview|lighthouse/i.test(navigator.userAgent);
-  var fn=(id&&!bot)?"record_visit":"visit_stats", body=(id&&!bot)?{p_visitor:id,p_path:location.pathname}:{};
-  fetch(COUNTER.url.replace(/\/$/,"")+"/rest/v1/rpc/"+fn,{method:"POST",headers:{"apikey":COUNTER.anonKey,"Authorization":"Bearer "+COUNTER.anonKey,"Content-Type":"application/json"},body:JSON.stringify(body)})
-   .then(function(r){if(!r.ok)throw 0;return r.json()})
-   .then(function(d){if(!d||typeof d.page_views!=="number"||typeof d.unique_visitors!=="number")return;
-     var nf=new Intl.NumberFormat("en-US"),since=d.since?new Date(d.since).toLocaleDateString("en-US",{month:"short",year:"numeric"}):"";
-     $("#statsText").innerHTML="<b>"+nf.format(d.page_views)+"</b> page views · <b>"+nf.format(d.unique_visitors)+"</b> unique visitors"+(since?" since "+h(since):"");
-     $("#stats").hidden=false})
-   .catch(function(){/* counter stays hidden if the service is unavailable */});
+  var base=String(COUNTER.url||"").replace(/\/+$/,""), key=String(COUNTER.anonKey||"");
+  if(!/^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(base)||key.length<20||!window.fetch||!window.JSON)return;
+  var UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i, WINDOW=30*60*1000;
+  function newId(){
+    try{if(crypto.randomUUID)return crypto.randomUUID();
+      var b=crypto.getRandomValues(new Uint8Array(16));b[6]=b[6]&15|64;b[8]=b[8]&63|128;
+      var x=Array.prototype.map.call(b,function(n){return(n+256).toString(16).slice(1)}).join("");
+      return x.slice(0,8)+"-"+x.slice(8,12)+"-"+x.slice(12,16)+"-"+x.slice(16,20)+"-"+x.slice(20)}catch(e){return null}}
+  /* Anonymous random browser id. If storage is blocked we only read totals, never count. */
+  var id=null,store=null;
+  try{store=window.localStorage;id=store.getItem("adm-visitor");if(!UUID.test(id||"")){id=newId();if(id)store.setItem("adm-visitor",id);if(store.getItem("adm-visitor")!==id)id=null}}catch(e){id=null}
+  var path=location.pathname.slice(0,200)||"/", lastKey="adm-visit:"+path, last=0;
+  try{last=+store.getItem(lastKey)||0}catch(e){}
+  var optOut=navigator.doNotTrack==="1"||window.doNotTrack==="1"||navigator.globalPrivacyControl===true;
+  var bot=navigator.webdriver||/bot|crawl|spider|slurp|preview|headless|lighthouse|pagespeed/i.test(navigator.userAgent||"");
+  var record=!!id&&!optOut&&!bot&&!(Date.now()-last>=0&&Date.now()-last<WINDOW);
+  function ok(n){return typeof n==="number"&&isFinite(n)&&n>=0&&Math.floor(n)===n&&n<=Number.MAX_SAFE_INTEGER}
+  function show(d){
+    if(!d||!ok(d.page_views)||!ok(d.unique_visitors)||d.unique_visitors>d.page_views)return;
+    var el=$("#statsText"),nf=new Intl.NumberFormat("en-US"),since=d.since?new Date(d.since):null;
+    el.textContent="";
+    function b(t){var x=document.createElement("b");x.textContent=t;el.appendChild(x)}
+    b(nf.format(d.page_views));el.appendChild(document.createTextNode(d.page_views===1?" page view · ":" page views · "));
+    b(nf.format(d.unique_visitors));el.appendChild(document.createTextNode(" estimated unique "+(d.unique_visitors===1?"visitor":"visitors")));
+    if(since&&!isNaN(since))el.appendChild(document.createTextNode(" since "+since.toLocaleDateString("en-US",{month:"short",year:"numeric"})));
+    $("#stats").hidden=false}
+  function go(){
+    var ctl=window.AbortController?new AbortController():null,timer=setTimeout(function(){if(ctl)ctl.abort()},6000);
+    fetch(base+"/rest/v1/rpc/"+(record?"record_visit":"visit_stats"),{method:"POST",mode:"cors",credentials:"omit",cache:"no-store",keepalive:false,
+      signal:ctl?ctl.signal:undefined,referrerPolicy:"no-referrer",
+      /* New sb_publishable_ keys go only in the apikey header; legacy anon JWTs also go in Authorization. */
+      headers:/^eyJ[\w-]*\.[\w-]+\.[\w-]+$/.test(key)?{"apikey":key,"Authorization":"Bearer "+key,"Content-Type":"application/json"}:{"apikey":key,"Content-Type":"application/json"},
+      body:JSON.stringify(record?{p_visitor:id,p_path:path}:{})})
+     .then(function(r){if(!r.ok)throw new Error("counter "+r.status);return r.json()})
+     .then(function(d){clearTimeout(timer);if(record){try{store.setItem(lastKey,String(Date.now()))}catch(e){}}show(d)})
+     .catch(function(){clearTimeout(timer);$("#stats").hidden=true/* stays hidden: no placeholder, no invented numbers */})}
+  /* Count only a page someone actually sees: wait for a prerendered or background tab to become visible. */
+  if(document.visibilityState==="visible"||!record)go();
+  else{var once=function(){if(document.visibilityState!=="visible")return;document.removeEventListener("visibilitychange",once);go()};document.addEventListener("visibilitychange",once)}
 })();
 
 /* ---------- keep keyboard focus inside the open drawer or search ---------- */
