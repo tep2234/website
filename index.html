@@ -640,6 +640,19 @@ body.cur-on .cur{opacity:1}
   .cells{grid-template-columns:24px repeat(4,minmax(0,1fr))}
   .cells .x5,.cells .x6{display:none}
 }
+
+/* Client-first mobile refinements and accessible portfolio visitor counter */
+.statement{overflow-wrap:anywhere;max-width:100%}
+.statement>span{max-width:100%}
+@media(max-width:700px){
+  .statement{font-size:clamp(2.55rem,11vw,4.6rem);line-height:.98;letter-spacing:-.045em;font-stretch:100%}
+  .statement .thin{font-size:.52em;line-height:1.15}
+  .intro{font-size:1rem;line-height:1.65}
+  .who .lbl{overflow-wrap:anywhere}
+  .cta .btn{max-width:100%;justify-content:center}
+}
+.visitor-count{display:inline-flex;align-items:center;gap:.45rem;font:500 12px/1.4 var(--mono);color:var(--fg-2)}
+.visitor-count strong{font-weight:600;color:var(--fg)}
 </style>
 </head>
 <body>
@@ -688,8 +701,8 @@ body.cur-on .cur{opacity:1}
           <p class="statement in" style="--d:1"><span>Paperwork in.</span><span class="thin">Out comes a working</span><span><span class="hl">system</span>.</span></p>
           <p class="intro in" style="--d:2">I'm a business and education technology professional with an <strong>MBA</strong>, a <strong>teaching license</strong>, and experience in business development, instructional design, Excel automation and AI-assisted software development. I build practical tools: automated spreadsheets, data systems, educational apps, assessment tools, learning resources and business reports.</p>
           <div class="cta in" style="--d:3">
-            <a class="btn btn-a" href="#watch"><svg aria-hidden="true"><use href="#i-play"/></svg>Watch the recordings</a>
-            <a class="btn btn-b" href="#vault">Open the vault</a>
+            <a class="btn btn-a" href="#vault">Explore my projects</a>
+            <a class="btn btn-b" href="#contact">Hire me / Get in touch</a>
           </div>
           <div class="avail in" style="--d:4"><i></i>Available for remote projects and roles</div>
         </div>
@@ -1078,7 +1091,7 @@ body.cur-on .cur{opacity:1}
       </div>
     </div>
   </section>
-  <footer class="wrap"><div class="inner"><span>© 2026 Alvin Diaz Merasol, LPT, MBA</span><span><a href="https://github.com/tep2234" target="_blank" rel="noopener" style="color:inherit">github.com/tep2234</a> · Capiz, Philippines</span></div></footer>
+  <footer class="wrap"><div class="inner"><span>© 2026 Alvin Diaz Merasol, LPT, MBA</span><span class="visitor-count" id="portfolio-visitor-count" role="status" aria-live="polite" hidden>Portfolio visits: <strong id="portfolio-visitor-number"></strong></span><span><a href="https://github.com/tep2234" target="_blank" rel="noopener" style="color:inherit">github.com/tep2234</a> · Capiz, Philippines</span></div></footer>
 </main>
 
 <div class="scrim" id="scrim"></div>
@@ -1487,5 +1500,43 @@ function hidePeek(){peek.classList.remove("on")}
 })();
 </script>
 
+
+<script>
+/* Setup: create a GoatCounter account, then replace YOUR_GOATCOUNTER_CODE below.
+   Until configured, hide the counter rather than showing fabricated statistics.
+   Hosted counter measures visits, not historical traffic before setup. */
+(function(){
+  const code = "YOUR_GOATCOUNTER_CODE";
+  if (code === "YOUR_GOATCOUNTER_CODE") return;
+  const counter = document.getElementById("portfolio-visitor-count");
+  const value = document.getElementById("portfolio-visitor-number");
+  if (!counter || !value || !/^[a-z0-9-]+$/i.test(code)) return;
+  const script = document.createElement("script");
+  script.async = true;
+  script.dataset.goatcounter = "https://" + code + ".goatcounter.com/count";
+  script.src = "https://gc.zgo.at/count.js";
+  script.onload = function(){
+    const gc = window.goatcounter;
+    if (!gc || typeof gc.visit_count !== "function") return;
+    const mount = document.createElement("span");
+    mount.id = "goatcounter-result";
+    mount.style.display = "none";
+    counter.appendChild(mount);
+    try {
+      gc.visit_count({append:"#goatcounter-result",path:"TOTAL",no_branding:true});
+      const observer = new MutationObserver(function(){
+        const n = mount.querySelector("#gcvc-views");
+        if (n && n.textContent.trim()) {
+          value.textContent = n.textContent.trim();
+          counter.hidden = false;
+          observer.disconnect();
+        }
+      });
+      observer.observe(mount,{childList:true,subtree:true,characterData:true});
+    } catch(e) { /* Counter stays hidden if provider unavailable. */ }
+  };
+  document.head.appendChild(script);
+})();
+</script>
 </body>
 </html>
