@@ -20,7 +20,7 @@ returns json
 language sql
 stable
 security definer
-set search_path = public
+set search_path = ''
 as $$
   select json_build_object(
     'page_views',      count(*),
@@ -36,7 +36,7 @@ create or replace function public.record_visit(p_visitor uuid, p_path text)
 returns json
 language plpgsql
 security definer
-set search_path = public
+set search_path = ''
 as $$
 declare
   v_path text := left(coalesce(nullif(trim(p_path), ''), '/'), 200);

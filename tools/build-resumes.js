@@ -3,7 +3,7 @@
 // Run from the repo root: node tools/build-resumes.js && python3 tools/print-resumes.py
 const fs = require("fs");
 const path = require("path");
-const { Document, Packer, Paragraph, TextRun, AlignmentType, LevelFormat, BorderStyle, TabStopType, ExternalHyperlink } = require("docx");
+const { Document, Packer, Paragraph, TextRun, AlignmentType, LevelFormat, BorderStyle, TabStopType, ExternalHyperlink, HeadingLevel } = require("docx");
 
 const root = path.join(__dirname, "..");
 const D = JSON.parse(fs.readFileSync(path.join(root, "resume/resume-data.json"), "utf8"));
@@ -14,7 +14,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 const FONT = "Arial";
 const SZ = 20; // 10pt
 function heading(text) {
-  return new Paragraph({ spacing: { before: 220, after: 80 }, border: { bottom: { style: BorderStyle.SINGLE, size: 8, color: "141B2B", space: 2 } },
+  return new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 220, after: 80 }, border: { bottom: { style: BorderStyle.SINGLE, size: 8, color: "141B2B", space: 2 } },
     children: [new TextRun({ text: text.toUpperCase(), bold: true, font: FONT, size: 21, characterSpacing: 20 })] });
 }
 function jobHead(left, right) {
@@ -27,7 +27,7 @@ function bullet(text) {
 function para(runs, opts = {}) { return new Paragraph({ spacing: { after: 40 }, ...opts, children: runs }); }
 function docxFor(role) {
   const C = [];
-  C.push(para([new TextRun({ text: D.name + ", " + D.credentials, bold: true, font: FONT, size: 36 })], { spacing: { after: 40 } }));
+  C.push(new Paragraph({ heading: HeadingLevel.HEADING_1, spacing: { after: 40 }, children: [new TextRun({ text: D.name + ", " + D.credentials, bold: true, font: FONT, size: 36, color: "141B2B" })] }));
   C.push(para([new TextRun({ text: role.headline, font: FONT, size: 22, color: "8F5400" })]));
   C.push(para([new TextRun({ text: D.location + "  |  " + D.email, font: FONT, size: 18, color: "3D485C" })], { spacing: { after: 0 } }));
   const linkRuns = [];
@@ -50,7 +50,11 @@ function docxFor(role) {
   D.education.forEach((e) => C.push(jobHead(e.title, e.where)));
   return new Document({
     creator: D.name, title: D.name + " — Résumé", description: role.label,
-    styles: { default: { document: { run: { font: FONT, size: SZ } } } },
+    styles: { default: { document: { run: { font: FONT, size: SZ } } },
+      paragraphStyles: [
+        { id: "Heading1", name: "Heading 1", basedOn: "Normal", next: "Normal", quickFormat: true, run: { font: FONT, size: 36, bold: true, color: "141B2B" }, paragraph: { spacing: { after: 40 }, outlineLevel: 0 } },
+        { id: "Heading2", name: "Heading 2", basedOn: "Normal", next: "Normal", quickFormat: true, run: { font: FONT, size: 21, bold: true, color: "141B2B" }, paragraph: { spacing: { before: 220, after: 80 }, outlineLevel: 1 } },
+      ] },
     numbering: { config: [{ reference: "dots", levels: [{ level: 0, format: LevelFormat.BULLET, text: "•", alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 360, hanging: 240 } } } }] }] },
     sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1000, bottom: 1000, left: 1134, right: 1134 } } }, children: C }],
   });

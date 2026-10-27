@@ -48,7 +48,7 @@
   "id": "app-developer",
   "label": "AI-Assisted Application Developer",
   "headline": "AI-Assisted Application Developer | Next.js, TypeScript, Supabase, Vercel",
-  "summary": "Application developer who builds production web apps with AI-assisted development (Claude Code, Codex). Built DALIguro, a multi-tenant teacher workspace on Next.js, TypeScript and Supabase with row-level security, migrations and pull-request release gates, and PartsFlow Pro, a live inventory and point-of-sale system. Works from requirements to deployed software, with tests, type checks and build checks before release.",
+  "summary": "Application developer who builds and deploys web apps with AI-assisted development (Claude Code, Codex). Built DALIguro, a multi-tenant teacher workspace on Next.js, TypeScript and Supabase with row-level security, migrations and pull-request release gates, and PartsFlow Pro, an inventory and point-of-sale system in pilot. Works from requirements to deployed software, with tests, type checks and build checks before release.",
   "projects": [
    "daliguro",
    "partsflow",
