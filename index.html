@@ -416,6 +416,102 @@ footer .inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px
 .proto .spec-sheet{max-width:none}
 .proto-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 28px}
 
+
+/* ---------- why hire me ---------- */
+.why-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(24px,4vw,64px);align-items:end;margin-bottom:clamp(44px,6vw,80px)}
+.why-quote{font:900 clamp(2.4rem,6.4vw,5.6rem)/.9 var(--display);font-stretch:118%;letter-spacing:-.035em;text-transform:uppercase}
+.why-quote .thin{display:block;font-weight:300;font-stretch:72%;text-transform:none;letter-spacing:-.02em;color:var(--fg-2);font-size:.5em;line-height:1.05;margin-top:.3em}
+.why-pitch{display:grid;gap:14px;color:var(--fg-2);font-size:1.06rem}
+.why-pitch strong{color:var(--fg);font-weight:600}
+.sig{display:flex;align-items:center;gap:12px;margin-top:6px}
+.sig img{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:2px solid var(--amber)}
+.sig b{display:block;font:800 15px/1.2 var(--display)}
+.sig span{font-size:13px;color:var(--fg-3)}
+/* dossier: what a team gets */
+.dossier{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:0;border-top:2px solid var(--fg)}
+.dlist{display:grid;align-content:start}
+.dlist button{display:grid;grid-template-columns:44px minmax(0,1fr) 18px;gap:12px;align-items:center;text-align:left;padding:16px 14px 16px 0;border-bottom:1px solid var(--rule);transition:background-color 160ms ease}
+.dlist .n{font:900 1.35rem/1 var(--display);font-stretch:120%;color:var(--fg-3);transition:color 160ms ease}
+.dlist b{font:800 clamp(1.02rem,1.6vw,1.22rem)/1.2 var(--display);font-stretch:104%}
+.dlist svg{width:16px;height:16px;color:var(--fg-3);opacity:0;transition:opacity 160ms ease,transform 180ms var(--ease-out)}
+.dlist button[aria-selected="true"] .n{color:var(--amber-text)}
+.dlist button[aria-selected="true"] svg{opacity:1;color:var(--amber-text)}
+.dlist button[aria-selected="true"]{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--amber) 9%,transparent))}
+.dpanel{position:relative;margin:18px 0 18px clamp(16px,3vw,40px);background:var(--paper);color:var(--paper-ink);border-radius:2px;padding:clamp(22px,3vw,34px);box-shadow:var(--sh);display:grid;gap:14px;align-content:start;min-height:340px;background-image:linear-gradient(var(--paper-rule) 1px,transparent 1px);background-size:100% 30px;background-position:0 86px}
+.dpanel .lbl{color:#4E586B}
+.dpanel h3{font:900 clamp(1.6rem,3vw,2.4rem)/1 var(--display);font-stretch:112%;letter-spacing:-.02em;max-width:18ch}
+.dpanel p{color:#2D3647;font-size:15.5px;max-width:58ch}
+.dpanel ul{margin:0;padding-left:18px;display:grid;gap:5px;color:#2D3647;font-size:14.5px}
+.dpanel .proof{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:4px;padding-top:12px;border-top:1px dashed var(--paper-rule)}
+.dpanel .proof a,.dpanel .proof button{display:inline-flex;align-items:center;gap:6px;font:600 14px var(--body);color:#7A4A00;text-decoration:none}
+.dpanel .proof svg{width:13px;height:13px}
+.dpanel .stampmark{top:22px;right:22px;bottom:auto}
+.dpanel.swap{animation:swap 220ms var(--ease-out)}
+@keyframes swap{from{opacity:.4;transform:translateY(6px)}}
+/* pipeline */
+.pipe{list-style:none;margin:clamp(56px,7vw,96px) 0 0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));counter-reset:p;border-top:2px solid var(--fg)}
+.pipe li{counter-increment:p;position:relative;padding:18px 14px 6px 0;display:grid;gap:6px;align-content:start;min-width:0}
+.pipe li::before{content:counter(p,decimal-leading-zero);font:500 11.5px var(--mono);color:var(--fg-3)}
+.pipe li::after{content:"";position:absolute;top:-6px;left:0;width:10px;height:10px;background:var(--bg);border:2px solid var(--fg);transform:rotate(45deg)}
+.pipe li:last-child::after{background:var(--amber);border-color:var(--amber)}
+.pipe b{font:800 1.08rem/1.15 var(--display);font-stretch:106%}
+.pipe span{font-size:13.5px;color:var(--fg-2)}
+/* routine converter */
+.conv{margin-top:clamp(56px,7vw,96px);border:1px solid var(--rule-2);border-radius:6px;background:var(--sheet);box-shadow:var(--sh);overflow:hidden}
+.conv-head{display:grid;gap:14px;padding:clamp(18px,3vw,28px);border-bottom:1px solid var(--rule)}
+.conv-head h3{font:900 clamp(1.5rem,3vw,2.3rem)/1 var(--display);font-stretch:114%;letter-spacing:-.02em;text-transform:uppercase}
+.rchips{display:flex;flex-wrap:wrap;gap:8px}
+.rchip{height:40px;padding:0 14px;border:1px solid var(--rule-2);border-radius:999px;font-size:14px;font-weight:500;color:var(--fg-2);transition:background-color 160ms ease,color 160ms ease,border-color 160ms ease,transform 140ms var(--ease-out)}
+.rchip:active{transform:scale(.97)}
+.rchip[aria-pressed="true"]{background:var(--amber);border-color:var(--amber);color:var(--on-amber)}
+.conv-body{display:grid;grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr) minmax(0,.9fr);align-items:stretch}
+.conv-col{padding:clamp(18px,3vw,28px);display:grid;gap:10px;align-content:start;min-width:0}
+.conv-col + .conv-col{border-left:1px solid var(--rule)}
+.conv-col h4{font:800 1.2rem/1.2 var(--display);font-stretch:104%}
+.conv-col p,.conv-col li{color:var(--fg-2);font-size:14.5px}
+.conv-col ul{margin:0;padding-left:18px;display:grid;gap:5px}
+.conv-arrow{display:grid;place-items:center;color:var(--amber-text);border-left:1px solid var(--rule)}
+.conv-arrow svg{width:22px;height:22px;transform:rotate(45deg)}
+.conv-col.today{background:color-mix(in srgb,var(--stamp) 6%,transparent)}
+.conv-col.built{background:color-mix(in srgb,var(--green) 6%,transparent)}
+/* latest build strip */
+.latest{margin-top:clamp(56px,7vw,96px);display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(20px,4vw,56px);align-items:center;padding-top:28px;border-top:2px solid var(--fg)}
+.latest h3{font:900 clamp(1.8rem,3.6vw,2.9rem)/.95 var(--display);font-stretch:115%;letter-spacing:-.03em}
+.latest p{margin-top:12px;color:var(--fg-2)}
+.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.fgrid div{background:var(--bg);padding:14px;display:grid;gap:4px;min-width:0}
+.fgrid b{font:700 15px/1.2 var(--display)}
+.fgrid span{font-size:13px;color:var(--fg-2)}
+.fgrid .ai{background:color-mix(in srgb,var(--amber) 12%,var(--bg))}
+
+/* ---------- contact v2 ---------- */
+.ct-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(20px,3vw,40px);margin-top:clamp(36px,5vw,60px);align-items:start}
+.me-card{display:grid;grid-template-columns:76px minmax(0,1fr);gap:16px;align-items:center;padding:20px;border:1px solid var(--rule-2);border-radius:6px;background:var(--sheet)}
+.me-card img{width:76px;height:76px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:3px solid var(--paper)}
+.me-card b{font:800 1.15rem/1.2 var(--display);font-stretch:104%}
+.me-card p{font-size:14px;color:var(--fg-2);margin-top:4px}
+.crow{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--rule)}
+.crow .ic{width:44px;height:44px;border-radius:4px;display:grid;place-items:center;background:var(--sheet);border:1px solid var(--rule);color:var(--amber-text)}
+.crow .ic svg{width:18px;height:18px}
+.crow .v{min-width:0}
+.crow .v b{display:block;font:600 15.5px/1.3 var(--body);overflow-wrap:anywhere}
+.crow .v a{color:inherit;text-decoration:none}
+.mini{height:34px;padding:0 12px;border:1px solid var(--rule-2);border-radius:4px;font:600 12.5px var(--body);color:var(--fg-2);transition:transform 140ms var(--ease-out),border-color 160ms ease}
+.mini:active{transform:scale(.97)}
+.brief{border:1px solid var(--rule-2);border-radius:6px;background:var(--paper);color:var(--paper-ink);padding:clamp(20px,3vw,32px);display:grid;gap:16px;box-shadow:var(--sh)}
+.brief h3{font:900 clamp(1.4rem,2.6vw,2rem)/1 var(--display);font-stretch:112%;letter-spacing:-.02em}
+.brief .row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.brief label{display:grid;gap:6px;font:600 13px var(--body);color:#2D3647}
+.brief input,.brief select,.brief textarea{width:100%;min-width:0;font:400 16px var(--body);color:var(--paper-ink);background:#fff;border:1px solid rgba(18,25,39,.22);border-radius:4px;padding:11px 12px;outline:none;transition:border-color 160ms ease,box-shadow 160ms ease}
+.brief select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#4E586B 50%),linear-gradient(135deg,#4E586B 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
+.brief textarea{min-height:130px;resize:vertical}
+.brief input:focus,.brief select:focus,.brief textarea:focus{border-color:#B7362A;box-shadow:0 0 0 3px rgba(242,165,22,.3)}
+.brief .acts{display:flex;flex-wrap:wrap;gap:10px}
+.brief .btn-b{border-color:rgba(18,25,39,.25);color:var(--paper-ink)}
+.brief .note{font-size:13px;color:#4E586B}
+.brief .out{font-size:14px;color:#0E6B4A;min-height:1.4em}
+.brief .err{color:#B7362A}
+
 /* drawer: a paper case sheet */
 .scrim{position:fixed;inset:0;z-index:80;background:rgba(4,8,15,.58);opacity:0;pointer-events:none;transition:opacity 200ms ease}
 .scrim.on{opacity:1;pointer-events:auto}
@@ -462,6 +558,11 @@ body.cur-on .cur{opacity:1}
   .lrow:hover{background:color-mix(in srgb,var(--sheet) 70%,transparent)}
   .lrow:hover .go{transform:translate(3px,-3px);color:var(--amber-text)}
   .tlink:hover svg{transform:translate(2px,-2px)}
+  .dlist button:hover{background:color-mix(in srgb,var(--sheet) 70%,transparent)}
+  .dlist button:hover svg{opacity:1}
+  .rchip:hover{border-color:var(--amber);color:var(--fg)}
+  .rchip[aria-pressed="true"]:hover{color:var(--on-amber)}
+  .mini:hover{border-color:var(--amber);color:var(--fg)}
   .seg button:hover{color:var(--fg)}
   .item:hover,.opt:hover{border-color:var(--fg-3)}
   .plist button:hover{background:color-mix(in srgb,var(--amber) 12%,transparent)}
@@ -491,6 +592,12 @@ body.cur-on .cur{opacity:1}
   .copy{position:static}
   .skills{grid-template-columns:repeat(2,minmax(0,1fr))}
   .feat16{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .why-top,.dossier,.latest,.ct-grid{grid-template-columns:minmax(0,1fr)}
+  .dpanel{margin:18px 0 0}
+  .pipe{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:22px}
+  .conv-body{grid-template-columns:minmax(0,1fr)}
+  .conv-arrow{display:none}
+  .conv-col + .conv-col{border-left:0;border-top:1px solid var(--rule)}
   .stack-grid{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:760px){
@@ -515,6 +622,11 @@ body.cur-on .cur{opacity:1}
   .proto-cols{grid-template-columns:minmax(0,1fr)}
   .feat16 > div{padding-right:10px}
   .lrow .evc{display:none}
+  .pipe{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .brief .row2{grid-template-columns:minmax(0,1fr)}
+  .crow{grid-template-columns:40px minmax(0,1fr)}
+  .crow .mini{grid-column:2;justify-self:start}
   .tl > li{grid-template-columns:minmax(0,1fr);gap:4px}
   .flow li{grid-template-columns:48px minmax(0,1fr)}
   .flow em{grid-column:2;justify-self:start}
@@ -543,6 +655,11 @@ body.cur-on .cur{opacity:1}
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9.5" r="2.5" fill="currentColor"/></symbol>
+  <symbol id="i-at" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-3.5 7.1" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-gh" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></symbol>
+  <symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10v7M8 7v.5M12 17v-4a2 2 0 0 1 4 0v4M12 10v7" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-hand" viewBox="0 0 24 24"><path d="M12 3v10M8 7v7M16 7v7M4 12c0 5 3 9 8 9s8-4 8-9" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-mark" viewBox="0 0 40 40"><rect x="1" y="1" width="38" height="38" rx="3" fill="#F2A516"/><path d="M8 29L14.5 11h3L24 29h-3.6l-1.4-4.2h-6.2L11.4 29zM13.7 22h4.4l-2.2-6.6zM25.5 11h3.4l3.6 10.6L36 11h0v18h-3V18.6L29.4 29h-2l-1.9-5.6" fill="#1B1203"/></symbol>
 </svg>
@@ -609,6 +726,61 @@ body.cur-on .cur{opacity:1}
     </div>
   </section>
 
+  <!-- WHY HIRE ME -->
+  <section class="sec wrap" id="why" data-sec="why" aria-labelledby="why-title">
+    <div class="inner">
+      <div class="fno lbl"><i style="--tc:var(--f5)"></i>Why hire me</div>
+      <div class="why-top">
+        <h2 id="why-title" class="why-quote">I have more app ideas than <span class="hl">hours</span> in a day.<span class="thin">And I finish the ones that remove real work from someone's week.</span></h2>
+        <div class="why-pitch">
+          <p>Building apps is what I do with most of my time, and I still get excited by every new idea. I'm <strong>curious about how AI and large language models work</strong>, and about where they can make people's days faster, easier and less stressful.</p>
+          <p>I look for the tasks people repeat every day, in schools, businesses and personal routines, and turn them into <strong>working apps</strong>. I start by understanding the workflow, plan a strategic roadmap, then build it step by step until it runs.</p>
+          <div class="sig"><img src="portrait.webp" alt="" width="46" height="46"><div><b>Alvin Diaz Merasol</b><span>LPT · MBA · teaching since 2017</span></div></div>
+        </div>
+      </div>
+
+      <div class="dossier">
+        <div class="dlist" id="dlist" role="tablist" aria-label="What your team gets"></div>
+        <div class="dpanel" id="dpanel" role="tabpanel" aria-live="polite"></div>
+      </div>
+
+      <ol class="pipe" aria-label="How I take a problem to a working app">
+        <li><b>The problem</b><span>A task someone repeats and dreads.</span></li>
+        <li><b>The workflow</b><span>I watch how it's done today, step by step.</span></li>
+        <li><b>The roadmap</b><span>Stages, priorities and what "done" means.</span></li>
+        <li><b>The prototype</b><span>An early version you can click and react to.</span></li>
+        <li><b>The working app</b><span>Tested, checked and deployed.</span></li>
+        <li><b>Daily use</b><span>Notifications and AI that keep doing the work.</span></li>
+      </ol>
+
+      <div class="conv" id="conv">
+        <div class="conv-head">
+          <span class="lbl">Try it</span>
+          <h3>Pick a routine. See the app.</h3>
+          <div class="rchips" id="rchips" role="group" aria-label="Choose a routine"></div>
+        </div>
+        <div class="conv-body" id="convBody" aria-live="polite"></div>
+      </div>
+
+      <div class="latest">
+        <div>
+          <span class="lbl">Latest build</span>
+          <h3 style="margin-top:10px">A teacher's whole day, in one web app.</h3>
+          <p>Teaching comes with routines that turn the job into a hassle. I turned mine into DALIguro, where AI does part of the work every day.</p>
+          <div class="links"><button class="btn btn-a" type="button" data-play="daliguro-app"><svg aria-hidden="true"><use href="#i-play"/></svg>Watch it working</button><a class="btn btn-b" href="#daliguro">Read the file</a></div>
+        </div>
+        <div class="fgrid">
+          <div><b>Grading</b><span>E-grading and consolidated grades</span></div>
+          <div><b>Lesson planning</b><span>ILAW lesson plans with AI</span></div>
+          <div><b>Schedule</b><span>Class program and teacher load</span></div>
+          <div><b>Grade analysis</b><span>Item analysis and remediation</span></div>
+          <div><b>Automated forms</b><span>School forms from one profile</span></div>
+          <div class="ai"><b>Daily notifications</b><span>Reminders of what needs doing today</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- WHAT I BUILD -->
   <section class="sec wrap" id="build" data-sec="build" aria-labelledby="build-title">
     <div class="inner">
@@ -635,7 +807,7 @@ body.cur-on .cur{opacity:1}
       <div class="reel-grid">
         <div class="reel">
           <span class="reel-cap" id="reelCap">Screen recording · DALIguro web app</span>
-          <video id="vid" src="media/daliguro-app.mp4" poster="media/daliguro-app-poster.webp" muted loop playsinline preload="metadata" aria-label="Screen recording of the DALIguro web app"></video>
+          <video id="vid" src="daliguro-app.mp4" poster="daliguro-app-poster.webp" muted loop playsinline preload="metadata" aria-label="Screen recording of the DALIguro web app"></video>
           <div class="reel-bar"><button class="play" type="button" id="playBtn" aria-label="Play video"><svg aria-hidden="true"><use href="#i-play"/></svg></button><div class="scrub" aria-hidden="true"><i id="scrub"></i></div><span class="lbl" id="vtime">0:00 / 1:40</span></div>
         </div>
         <ol class="chapters" id="chapters"></ol>
@@ -662,8 +834,8 @@ body.cur-on .cur{opacity:1}
   <section class="sec wrap" id="daliguro" data-sec="daliguro" aria-labelledby="dg-title">
     <div class="inner band">
       <div class="media">
-        <figure class="shot"><img src="img/daliguro-dashboard.webp" width="1200" height="683" alt="DALIguro education workflow dashboard" loading="lazy"><figcaption>Workflow dashboard · screenshot from the app</figcaption></figure>
-        <figure class="shot"><img src="img/daliguro-ilaw.webp" width="1200" height="688" alt="DALIguro ILAW lesson planning pipeline" loading="lazy"><figcaption>ILAW lesson planning pipeline · screenshot from the app</figcaption></figure>
+        <figure class="shot"><img src="daliguro-dashboard.webp" width="1200" height="683" alt="DALIguro education workflow dashboard" loading="lazy"><figcaption>Workflow dashboard · screenshot from the app</figcaption></figure>
+        <figure class="shot"><img src="daliguro-ilaw.webp" width="1200" height="688" alt="DALIguro ILAW lesson planning pipeline" loading="lazy"><figcaption>ILAW lesson planning pipeline · screenshot from the app</figcaption></figure>
       </div>
       <div class="copy">
         <div class="fno lbl"><i style="--tc:var(--f1)"></i>File 01 · Web app · Live</div>
@@ -693,7 +865,7 @@ body.cur-on .cur{opacity:1}
       <div class="band flip" style="margin-bottom:clamp(40px,5vw,64px)">
         <div class="media">
           <figure class="inline-vid" style="margin:0">
-            <video id="ivid" src="media/item-analysis.mp4" poster="media/item-analysis-poster.webp" muted loop playsinline preload="none" aria-label="Screen recording of the Smart Item Analysis and Intervention System workbook"></video>
+            <video id="ivid" src="item-analysis.mp4" poster="item-analysis-poster.webp" muted loop playsinline preload="none" aria-label="Screen recording of the Smart Item Analysis and Intervention System workbook"></video>
             <figcaption><span>Screen recording · Smart Item Analysis &amp; Intervention System</span><button class="watch-btn" type="button" data-play="item-analysis"><svg aria-hidden="true"><use href="#i-play"/></svg>Watch larger</button></figcaption>
           </figure>
         </div>
@@ -780,17 +952,17 @@ body.cur-on .cur{opacity:1}
       </div>
       <div class="biz">
         <article class="case wide" style="--tc:var(--f6)">
-          <div class="pic"><img src="img/partsflow-command.webp" width="1200" height="689" alt="PartsFlow Pro operations command center" loading="lazy"></div>
+          <div class="pic"><img src="partsflow-command.webp" width="1200" height="689" alt="PartsFlow Pro operations command center" loading="lazy"></div>
           <div class="txt"><span class="lbl">Web app · Live pilot</span><h3>PartsFlow Pro</h3><p>A live inventory and sales system: product catalog with low-stock alerts, point of sale, suppliers, customer ledger and sales analytics.</p><div class="tags" style="margin:0"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">Vercel</span></div><a class="tlink" href="https://partsflow-pro.vercel.app/dashboard" target="_blank" rel="noopener" data-cur="Visit">Open the live system<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </article>
         <article class="case" style="--tc:var(--f5)">
-          <div class="pic"><img src="img/asenso-packages.webp" width="1200" height="560" alt="Asenso Gas One package comparison banner with three tiers" loading="lazy"></div>
+          <div class="pic"><img src="asenso-packages.webp" width="1200" height="560" alt="Asenso Gas One package comparison banner with three tiers" loading="lazy"></div>
           <div class="txt"><span class="lbl">Venture · Founder</span><h3>Asenso Gas One</h3><p>A micro fuel station franchise in three tiers. I designed the packages, wrote the content and ran the boosted ads.</p>
             <div class="nums"><div><b>1K</b><span class="lbl">Followers</span></div><div><b>64</b><span class="lbl">Reactions</span></div><div><b>57</b><span class="lbl">Comments</span></div></div>
             <a class="tlink" href="https://www.facebook.com/p/Asenso-Gas-One-61583838741892/" target="_blank" rel="noopener" data-cur="Visit">View the page<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </article>
         <article class="case" style="--tc:var(--f4)">
-          <div class="pic"><img src="img/primeshade-banner.webp" width="1200" height="540" alt="PrimeShade Auto Tint page banner" loading="lazy"></div>
+          <div class="pic"><img src="primeshade-banner.webp" width="1200" height="540" alt="PrimeShade Auto Tint page banner" loading="lazy"></div>
           <div class="txt"><span class="lbl">Client · Social media</span><h3>PrimeShade Auto Tint</h3><p>Page content, campaigns and lead-generation posts for a window tinting business serving Capiz, Iloilo and Aklan.</p><a class="tlink" href="https://www.facebook.com/profile.php?id=61586100442996" target="_blank" rel="noopener" data-cur="Visit">View the client page<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </article>
         <article class="small-case" style="--tc:var(--f3)"><span class="lbl">Service</span><h3>Business consulting</h3><p>Feasibility studies, business plans and franchise development for startups, expansions and lending submissions.</p></article>
@@ -861,7 +1033,7 @@ body.cur-on .cur{opacity:1}
           <li><div class="when">Ongoing</div><div><h3>Business consultant</h3><div class="org">Feasibility studies · Business plans · Franchise development</div></div></li>
         </ol>
         <div class="creds">
-          <figure class="grad"><img src="img/graduation.webp" width="700" height="700" alt="Alvin Diaz Merasol at his MBA graduation" loading="lazy"><figcaption>MBA graduation · Filamer Christian University</figcaption></figure>
+          <figure class="grad"><img src="graduation.webp" width="700" height="700" alt="Alvin Diaz Merasol at his MBA graduation" loading="lazy"><figcaption>MBA graduation · Filamer Christian University</figcaption></figure>
           <div class="cred"><b>Master of Business Administration</b><span>Filamer Christian University</span></div>
           <div class="cred"><b>BS Business Administration</b><span>Capiz State University</span></div>
           <div class="cred"><b>Licensed Professional Teacher</b><span>PRC No. 1385342</span></div>
@@ -874,23 +1046,39 @@ body.cur-on .cur{opacity:1}
   <section class="contact wrap" id="contact" data-sec="contact" aria-labelledby="ct-title">
     <div class="inner">
       <div class="fno lbl"><i style="--tc:var(--f6)"></i>Contact</div>
-      <h2 id="ct-title">Send me the <span class="hl">messy</span> workflow.</h2>
-      <div class="contact-grid">
-        <div style="display:grid;gap:12px;align-content:start">
-          <span class="lbl">Email</span>
-          <div class="mail"><code id="email">alvindiazmerasol@gmail.com</code><button class="cbtn" type="button" id="copyBtn">Copy</button></div>
-          <p id="copyMsg" aria-live="polite" style="color:var(--fg-2);font-size:14.5px">I reply within a day on weekdays.</p>
+      <h2 id="ct-title">Let's build something <span class="hl">useful</span>.</h2>
+      <p style="margin-top:22px;max-width:60ch;color:var(--fg-2);font-size:1.08rem">Tell me the problem, who it's for and when you need it. I'll reply with how I'd solve it, usually within a day on weekdays.</p>
+      <div class="ct-grid">
+        <div>
+          <div class="me-card"><img src="portrait.webp" alt="Alvin Diaz Merasol" width="76" height="76"><div><b>You'll work directly with me</b><p>No middlemen and no handoffs. I read and answer every message myself.</p></div></div>
+          <div class="crow"><span class="ic"><svg aria-hidden="true"><use href="#i-mail"/></svg></span><span class="v"><span class="lbl">Email</span><b id="email">alvindiazmerasol@gmail.com</b></span><button class="mini" type="button" id="copyBtn">Copy</button></div>
+          <div class="crow"><span class="ic"><svg aria-hidden="true"><use href="#i-gh"/></svg></span><span class="v"><span class="lbl">GitHub</span><b><a href="https://github.com/tep2234" target="_blank" rel="noopener" data-cur="Visit">github.com/tep2234</a></b></span><a class="mini" href="https://github.com/tep2234" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;text-decoration:none">Open</a></div>
+          <div class="crow"><span class="ic"><svg aria-hidden="true"><use href="#i-in"/></svg></span><span class="v"><span class="lbl">LinkedIn</span><b><a href="https://www.linkedin.com/in/alvin-diaz-lpt-mba-b533a0275" target="_blank" rel="noopener" data-cur="Visit">alvin-diaz-lpt-mba</a></b></span><a class="mini" href="https://www.linkedin.com/in/alvin-diaz-lpt-mba-b533a0275" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;text-decoration:none">Open</a></div>
+          <div class="crow"><span class="ic"><svg aria-hidden="true"><use href="#i-at"/></svg></span><span class="v"><span class="lbl">Handle</span><b>@alvindiazmerasol</b></span></div>
+          <div class="crow"><span class="ic"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><span class="v"><span class="lbl">Location</span><b>Capiz, Philippines · works remotely</b></span></div>
+          <p id="copyMsg" aria-live="polite" style="margin-top:12px;color:var(--fg-3);font-size:13.5px"></p>
         </div>
-        <div class="elsewhere">
-          <span class="lbl">Elsewhere</span>
-          <a class="tlink" href="https://www.linkedin.com/in/alvin-diaz-lpt-mba-b533a0275" target="_blank" rel="noopener" data-cur="Visit">LinkedIn<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <a class="tlink" href="https://daliguro-main.vercel.app" target="_blank" rel="noopener" data-cur="Visit">DALIguro live app<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <a class="tlink" href="https://partsflow-pro.vercel.app/dashboard" target="_blank" rel="noopener" data-cur="Visit">PartsFlow Pro live system<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </div>
+        <form class="brief" id="brief" novalidate>
+          <div><span class="lbl" style="color:#4E586B">Project brief</span><h3 style="margin-top:8px">Describe the routine you want gone.</h3></div>
+          <div class="row2">
+            <label for="bName">Name<input id="bName" name="name" autocomplete="name" required></label>
+            <label for="bMail">Your email<input id="bMail" name="email" type="email" autocomplete="email" required></label>
+          </div>
+          <label for="bType">Project type<select id="bType" name="type">
+            <option value="">Choose one</option><option>Excel and VBA automation</option><option>Web app or prototype</option><option>Educational technology system</option><option>Instructional design or assessments</option><option>AI workflow planning</option><option>Business analysis or financial model</option><option>Something else</option></select></label>
+          <div class="row2">
+            <label for="bScope">Size<select id="bScope" name="scope"><option value="">Not sure yet</option><option>A fix or a single workbook</option><option>A prototype to test an idea</option><option>A complete system</option></select></label>
+            <label for="bTime">Timeline<select id="bTime" name="time"><option value="">Flexible</option><option>As soon as possible</option><option>Within a month</option><option>One to three months</option></select></label>
+          </div>
+          <label for="bMsg">The problem<textarea id="bMsg" name="message" placeholder="What do you do every day or every week that takes too long? Who does it, and what would a good result look like?" required></textarea></label>
+          <div class="acts"><button class="btn btn-a" type="submit">Open in my email app<svg aria-hidden="true"><use href="#i-arrow"/></svg></button><button class="btn btn-b" type="button" id="copyBrief">Copy the brief</button></div>
+          <p class="out" id="briefOut" aria-live="polite"></p>
+          <p class="note">Nothing is sent from this page. Your email app opens with the brief filled in, addressed to me. If it doesn't open, copy the brief and email it to alvindiazmerasol@gmail.com.</p>
+        </form>
       </div>
     </div>
   </section>
-  <footer class="wrap"><div class="inner"><span>© 2026 Alvin Diaz Merasol, LPT, MBA</span><span>Maayon, Capiz, Philippines</span></div></footer>
+  <footer class="wrap"><div class="inner"><span>© 2026 Alvin Diaz Merasol, LPT, MBA</span><span><a href="https://github.com/tep2234" target="_blank" rel="noopener" style="color:inherit">github.com/tep2234</a> · Capiz, Philippines</span></div></footer>
 </main>
 
 <div class="scrim" id="scrim"></div>
@@ -913,7 +1101,7 @@ var SAMPLE_COURSE={tool:"",title:"",url:""};
 
 var F={web:"var(--f1)",school:"var(--f2)",business:"var(--f6)",cred:"var(--f4)"};
 var ITEMS=[
- {no:"01",id:"daliguro",title:"DALIguro",kind:"web",kindLabel:"Web app",state:"Live",live:true,ev:"Demonstrated",vid:"daliguro-app",img:"img/daliguro-dashboard.webp",sec:"daliguro",
+ {no:"01",id:"daliguro",title:"DALIguro",kind:"web",kindLabel:"Web app",state:"Live",live:true,ev:"Demonstrated",vid:"daliguro-app",img:"daliguro-dashboard.webp",sec:"daliguro",
   sum:"AI-powered workspace for DepEd Senior High School teachers.",tags:["Next.js","TypeScript","Supabase","Vercel","ILAW","E-grading","AI"],
   pts:["Role: product founder, planner and AI-assisted developer","Teacher Command Center, curriculum setup, attendance, e-grading","ILAW workflow: Identify, Learn, Analyze, Write Back","AI lesson generator, assessment builder, PowerPoint export","DALI, the AI companion","Item analysis and remediation","Multi-tenant. SY 2026–2027, DO 009 s. 2026"],
   link:["https://daliguro-main.vercel.app","Open the live app"],note:"The source repository is private. A code walkthrough is available on request. Some features are still in development; I'll confirm which are live on a call."},
@@ -950,23 +1138,23 @@ var ITEMS=[
  {no:"12",id:"release",title:"Security-aware database & release work",kind:"web",kindLabel:"DALIguro engineering",state:"Ongoing",ev:"Demonstrated",sec:"daliguro",
   sum:"Access rules, database migrations and release checks for DALIguro.",tags:["Supabase","PostgreSQL","RLS","Release gates"],
   pts:["Role: product owner and contributor in AI-assisted workflows","Sign-in and per-teacher data access requirements","Row-level security and role-based access work","Migration planning, release gates, test and build checks"],note:"Project-based work. Not an independent security audit or a certification."},
- {no:"13",id:"partsflow",title:"PartsFlow Pro",kind:"web",kindLabel:"Web app",state:"Live pilot",live:true,ev:"Demonstrated",img:"img/partsflow-command.webp",gallery:["img/partsflow-analytics.webp","img/partsflow-pos.webp"],sec:"business",
+ {no:"13",id:"partsflow",title:"PartsFlow Pro",kind:"web",kindLabel:"Web app",state:"Live pilot",live:true,ev:"Demonstrated",img:"partsflow-command.webp",gallery:["partsflow-analytics.webp","partsflow-pos.webp"],sec:"business",
   sum:"Live inventory and sales system with point of sale and analytics.",tags:["Next.js","Supabase","Vercel","Inventory","POS"],
   pts:["Operations command center","Product catalog with low-stock alerts","Point of sale terminal","Suppliers, customer ledger and sales analytics"],link:["https://partsflow-pro.vercel.app/dashboard","Open the live system"]},
- {no:"14",id:"asenso",title:"Asenso Gas One",kind:"business",kindLabel:"Venture",state:"Founder",ev:"Demonstrated",img:"img/asenso-packages.webp",sec:"business",
+ {no:"14",id:"asenso",title:"Asenso Gas One",kind:"business",kindLabel:"Venture",state:"Founder",ev:"Demonstrated",img:"asenso-packages.webp",sec:"business",
   sum:"Micro fuel station franchise in three tiers.",tags:["Franchise","Facebook ads","Content"],
   pts:["Starter Kit Plus, Growth Kit Pro, Community Pro Elite","Facebook page grown to 1K followers","A boosted post reached 64 reactions and 57 comments"],link:["https://www.facebook.com/p/Asenso-Gas-One-61583838741892/","View the page"]},
- {no:"15",id:"primeshade",title:"PrimeShade Auto Tint",kind:"business",kindLabel:"Client",state:"Active",ev:"Demonstrated",img:"img/primeshade-banner.webp",sec:"business",
+ {no:"15",id:"primeshade",title:"PrimeShade Auto Tint",kind:"business",kindLabel:"Client",state:"Active",ev:"Demonstrated",img:"primeshade-banner.webp",sec:"business",
   sum:"Social media client in Capiz, Iloilo and Aklan.",tags:["Social media","Campaigns","Lead generation"],
   pts:["Page content, campaigns and educational posts","Lead generation across three provinces"],link:["https://www.facebook.com/profile.php?id=61586100442996","View the client page"]},
  {no:"16",id:"consulting",title:"Feasibility, financial models & franchise development",kind:"business",kindLabel:"Consulting",state:"Available",ev:"Demonstrated",sec:"business",
   sum:"Feasibility studies, costing and projections, business plans and franchise strategy.",tags:["Feasibility study","Financial model","Franchise"],
   pts:["Role: business development consultant and founder","Business concept development and feasibility planning","Costing, break-even, cash-flow and financial projections","Operational planning and franchise development"],note:"Client models stay confidential; examples I show are labelled as examples."},
  {no:"17",id:"lpt",title:"Licensed Professional Teacher",kind:"cred",kindLabel:"Credential",state:"PRC",ev:"Demonstrated",sec:"experience",sum:"PRC License No. 1385342.",tags:["PRC","LPT"],pts:["Professional Regulation Commission, License No. 1385342"]},
- {no:"18",id:"mba",title:"Master of Business Administration",kind:"cred",kindLabel:"Credential",state:"MBA",ev:"Demonstrated",img:"img/graduation.webp",sec:"experience",sum:"Filamer Christian University.",tags:["MBA","BSBA"],pts:["MBA, Filamer Christian University","BS Business Administration, Capiz State University"]}
+ {no:"18",id:"mba",title:"Master of Business Administration",kind:"cred",kindLabel:"Credential",state:"MBA",ev:"Demonstrated",img:"graduation.webp",sec:"experience",sum:"Filamer Christian University.",tags:["MBA","BSBA"],pts:["MBA, Filamer Christian University","BS Business Administration, Capiz State University"]}
 ];
 var FILTERS=[["all","All"],["web","Web apps"],["school","School systems"],["business","Business"],["cred","Credentials"]];
-var SECTIONS=[["top","Overview","var(--f6)"],["build","Capabilities","var(--f2)"],["watch","Videos","var(--f1)"],["vault","Vault","var(--f4)"],["daliguro","DALIguro","var(--f1)"],["excel","Excel","var(--f2)"],["scanner","QR","var(--f5)"],["design","Lesson","var(--f3)"],["business","Business","var(--f6)"],["services","Services","var(--f3)"],["skills","Skills","var(--f4)"],["experience","Record","var(--f1)"],["contact","Contact","var(--f5)"]];
+var SECTIONS=[["top","Overview","var(--f6)"],["why","Why me","var(--f5)"],["build","Capabilities","var(--f2)"],["watch","Videos","var(--f1)"],["vault","Vault","var(--f4)"],["daliguro","DALIguro","var(--f1)"],["excel","Excel","var(--f2)"],["scanner","QR","var(--f5)"],["design","Lesson","var(--f3)"],["business","Business","var(--f6)"],["services","Services","var(--f3)"],["skills","Skills","var(--f4)"],["experience","Record","var(--f1)"],["contact","Contact","var(--f5)"]];
 function evc(t){t=(t||"").toLowerCase();return t.indexOf("develop")===0&&t.indexOf("in dev")<0?"v":(t.indexOf("demonstrated")===0?"d":"a")}
 var FEAT=[
  ["FS01","AI-Assisted Software Development","AI & Software","DALIguro, QR assessment","Demonstrated"],
@@ -1024,12 +1212,12 @@ $$("[data-sec]").forEach(function(s){io.observe(s)});
 
 /* ---------- 3D folder stack ---------- */
 var STACK=[
- {id:"partsflow",label:"PartsFlow Pro",c:"var(--f6)",tx:"58%",doc:'<img src="img/partsflow-command.webp" alt="">'},
+ {id:"partsflow",label:"PartsFlow Pro",c:"var(--f6)",tx:"58%",doc:'<img src="partsflow-command.webp" alt="">'},
  {id:"scanner",label:"Exam scanner",c:"var(--f5)",tx:"48%",doc:'<canvas data-qr width="29" height="29" style="width:38%;margin:10% auto;display:block;image-rendering:pixelated"></canvas>'},
  {id:"attendance",label:"Attendance v5",c:"var(--f4)",tx:"34%",doc:'<div data-att style="padding:8% 6%"></div>'},
  {id:"sf9",label:"SF9 Master",c:"var(--f3)",tx:"20%",doc:'<div style="padding:9% 8%;font:600 9px var(--mono);color:#2D3647;line-height:1.9">SCHOOL FORM 9 · LEARNER PROGRESS REPORT CARD<br>TERM 1 · TERM 2 · TERM 3 · FINAL<div style="height:5px;background:#D7DCE4;margin:6px 0 4px"></div><div style="height:5px;background:#D7DCE4;width:80%;margin-bottom:4px"></div><div style="height:5px;background:#D7DCE4;width:64%"></div></div>'},
  {id:"item-analysis",label:"Item analysis",c:"var(--f2)",tx:"6%",doc:'<div data-bars style="display:flex;align-items:flex-end;gap:4%;height:100%;padding:12% 8% 0"></div>'},
- {id:"daliguro",label:"DALIguro",c:"var(--f1)",tx:"62%",doc:'<img src="img/daliguro-dashboard.webp" alt="">'}
+ {id:"daliguro",label:"DALIguro",c:"var(--f1)",tx:"62%",doc:'<img src="daliguro-dashboard.webp" alt="">'}
 ];
 var rig=$("#rig");
 rig.innerHTML=STACK.map(function(f,i){
@@ -1038,7 +1226,7 @@ rig.innerHTML=STACK.map(function(f,i){
     '<span class="tab">'+esc(f.label)+'</span><span class="body"></span><span class="doc">'+f.doc+'</span>'+
     '<span class="front"><b>'+esc(f.label)+'</b><span>File '+itemNo(f.id)+'</span></span></button>';
 }).join("")+
- '<div class="personnel" aria-hidden="true"><span class="clip"></span><div class="ph"><img src="img/portrait.webp" width="900" height="1094" alt=""></div>'+
+ '<div class="personnel" aria-hidden="true"><span class="clip"></span><div class="ph"><img src="portrait.webp" width="900" height="1094" alt=""></div>'+
  '<div class="rows"><div><span>Name</span><b>A. D. Merasol</b></div><div><span>License</span><b>PRC 1385342</b></div><div><span>Degree</span><b>MBA</b></div><div><span>Since</span><b>2017</b></div></div>'+
  '<span class="stampmark">Licensed<br>Teacher</span></div>';
 function itemNo(id){var it=ITEMS.filter(function(x){return x.id===id})[0];return it?it.no:"--"}
@@ -1153,7 +1341,7 @@ function vIcon(){pb.querySelector("use").setAttribute("href",vid.paused?"#i-play
 function fmt(t){t=Math.floor(t||0);return Math.floor(t/60)+":"+("0"+t%60).slice(-2)}
 function renderList(){$("#chapters").innerHTML=VIDS.map(function(v){return '<li><button type="button" data-v="'+v.id+'" aria-current="'+(v.id===curV)+'"><span class="t">'+v.dur+'</span><span><b>'+esc(v.title)+'</b><span>'+esc(v.desc)+'</span></span></button></li>'}).join("")}
 function loadV(id,play){var v=VIDS.filter(function(x){return x.id===id})[0];if(!v)return;curV=id;
-  vid.src="media/"+id+".mp4";vid.poster="media/"+id+"-poster.webp";vid.setAttribute("aria-label","Screen recording of "+v.title);
+  vid.src=""+id+".mp4";vid.poster=""+id+"-poster.webp";vid.setAttribute("aria-label","Screen recording of "+v.title);
   $("#reelCap").textContent="Screen recording · "+v.title;$("#vtime").textContent="0:00 / "+v.dur;$("#scrub").style.transform="scaleX(0)";renderList();
   if(play){userPaused=false;vid.play().catch(function(){})}}
 renderList();
@@ -1214,6 +1402,64 @@ function cur(){var a=root.getAttribute("data-theme");return a||(matchMedia("(pre
 function paint(){var nx=cur()==="dark"?"light":"dark";tb.querySelector("use").setAttribute("href",nx==="light"?"#i-sun":"#i-moon");tb.setAttribute("aria-label","Switch to "+nx+" theme")}
 try{var sv=localStorage.getItem("adm-theme");if(sv==="light"||sv==="dark")root.setAttribute("data-theme",sv)}catch(e){}
 paint();tb.addEventListener("click",function(){var nx=cur()==="dark"?"light":"dark";root.setAttribute("data-theme",nx);try{localStorage.setItem("adm-theme",nx)}catch(e){}paint()});
+
+/* ---------- why hire me: dossier + routine converter ---------- */
+var WHY=[
+ {t:"I start from your workflow",st:"Workflow first",p:"Before any code, I learn how the task is done today: who does it, how often, where it breaks. The app follows the work, not the other way round.",l:["Watch the routine, list every step","Find the steps that repeat and the ones that fail","Agree on what a good result looks like"],proof:["DALIguro started from my own documentation workload","#daliguro"]},
+ {t:"A roadmap, not a guess",st:"Planned",p:"Problems become a staged plan with priorities, release gates and a clear definition of done, so you always know what ships next.",l:["Phases you can approve one at a time","Test, type and build checks before every release","Honest status for every feature"],proof:["Release work on DALIguro","#vault"]},
+ {t:"Working software, fast",st:"Ships",p:"I use AI-assisted development to get from idea to something you can click quickly, then harden it into an app people use daily.",l:["Early clickable versions to react to","Web apps on Next.js, Supabase and Vercel","Offline Excel and VBA systems where the internet is unreliable"],proof:["PartsFlow Pro is live","https://partsflow-pro.vercel.app/dashboard"]},
+ {t:"Classroom and business, both",st:"LPT · MBA",p:"I'm a licensed teacher and an MBA. I understand learners, school forms and assessments, and also costs, operations and what a business needs to grow.",l:["Teaching Senior High School since 2017","Feasibility studies, business plans, franchise work","Instructional design you can try on this page"],proof:["Try the micro-lesson","#design"]},
+ {t:"Curious about AI, every day",st:"Curious",p:"I study how AI and large language models work and where they actually help. I use them inside products, and I'm clear about what I'm still learning.",l:["AI lesson generator and DALI, the in-app assistant","Comparing models and their limits","Production LLMOps and fine-tuning: still developing"],proof:["See the skill map","#skills"]},
+ {t:"Honest about what's done",st:"Evidence",p:"Every skill and project on this page carries a label: demonstrated, planned or developing. You won't find invented numbers or features sold before they exist.",l:["Real screen recordings, not mockups","Features in development are marked","Figures you can check"],proof:["Watch the recordings","#watch"]}
+];
+var dsel=0;
+function renderWhy(){
+  $("#dlist").innerHTML=WHY.map(function(w,i){return '<button type="button" role="tab" id="wt'+i+'" aria-selected="'+(i===dsel)+'" aria-controls="dpanel" data-w="'+i+'"><span class="n">0'+(i+1)+'</span><b>'+esc(w.t)+'</b><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>'}).join("");
+  var w=WHY[dsel],ext=/^https?:/.test(w.proof[1]),pan=$("#dpanel");
+  pan.setAttribute("aria-labelledby","wt"+dsel);
+  pan.innerHTML='<span class="stampmark">'+esc(w.st)+'</span><span class="lbl">What your team gets · 0'+(dsel+1)+' of 06</span><h3>'+esc(w.t)+'</h3><p>'+esc(w.p)+'</p><ul>'+w.l.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul>'+
+   '<div class="proof"><span class="lbl">Proof</span><a href="'+w.proof[1]+'"'+(ext?' target="_blank" rel="noopener"':'')+'>'+esc(w.proof[0])+'<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>';
+  if(!reduce){pan.classList.remove("swap");void pan.offsetWidth;pan.classList.add("swap")}
+}
+$("#dlist").addEventListener("click",function(e){var b=e.target.closest("[data-w]");if(!b)return;dsel=+b.dataset.w;renderWhy();$("#wt"+dsel).focus()});
+$("#dlist").addEventListener("keydown",function(e){if(e.key!=="ArrowDown"&&e.key!=="ArrowUp")return;e.preventDefault();dsel=(dsel+(e.key==="ArrowDown"?1:WHY.length-1))%WHY.length;renderWhy();$("#wt"+dsel).focus()});
+renderWhy();
+
+var ROUT=[
+ {k:"Grading every term",today:["Copying scores between sheets","Recomputing averages by hand","Re-checking for typing errors"],build:["Encode scores once","Grades consolidate per term automatically","Report cards come out ready to print"],done:["E-Grading & School Reporting","egrading"]},
+ {k:"Lesson planning",today:["Rewriting the same plan format","Starting each lesson from a blank page","Retyping content into slides"],build:["A guided ILAW lesson plan","AI drafts the plan for you to edit","Export straight to PowerPoint"],done:["DALIguro","daliguro"]},
+ {k:"Attendance and SF2",today:["Daily marks in a paper grid","Counting absences at month's end","Retyping into SF2"],build:["One workbook for every section","Type P, A, L or E and save","Dashboard and report stay in sync"],done:["Smart Attendance System","attendance"]},
+ {k:"Checking tests",today:["Tallying answers item by item","Guessing which skills didn't land","Writing remediation plans from scratch"],build:["Encode responses once","Least learned competencies found for you","Remediation plan and ILMP generated"],done:["Smart Item Analysis","smart-item"]},
+ {k:"Report cards",today:["Filling SF9 learner by learner","Writing remarks again each term","Fixing format before printing"],build:["One masterlist feeds every card","Terms consolidate on their own","60 ready adviser remarks by performance band"],done:["SF9 Master","sf9"]},
+ {k:"Inventory and sales",today:["Stock counted on paper","Sales in a notebook","No warning before items run out"],build:["Product catalog with stock levels","Point of sale that updates stock","Low-stock alerts and sales analytics"],done:["PartsFlow Pro","partsflow"]},
+ {k:"Your own routine",today:["Tell me what you repeat every day","Who does it and how long it takes","Where it goes wrong"],build:["I map the workflow","Plan the roadmap with you","Build the first working version"],done:null}
+];
+var rsel=0;
+function renderConv(){
+  $("#rchips").innerHTML=ROUT.map(function(r,i){return '<button class="rchip" type="button" data-r="'+i+'" aria-pressed="'+(i===rsel)+'">'+esc(r.k)+'</button>'}).join("");
+  var r=ROUT[rsel],it=r.done?ITEMS.filter(function(x){return x.id===r.done[1]})[0]:null;
+  $("#convBody").innerHTML='<div class="conv-col today"><span class="lbl">Today</span><h4>The routine</h4><ul>'+r.today.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul></div>'+
+   '<div class="conv-arrow" aria-hidden="true"><svg><use href="#i-arrow"/></svg></div>'+
+   '<div class="conv-col"><span class="lbl">The app</span><h4>What I build</h4><ul>'+r.build.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul></div>'+
+   '<div class="conv-col built"><span class="lbl">Already built</span>'+(it?'<h4>'+esc(r.done[0])+'</h4><p>'+esc(it.sum)+'</p><span class="ev '+evc(it.ev)+'">'+esc(it.ev)+'</span><button class="tlink" type="button" data-open="'+it.id+'">Open the file<svg aria-hidden="true"><use href="#i-arrow"/></svg></button>'+(it.vid?'<button class="tlink" type="button" data-play="'+it.vid+'">Watch the recording<svg aria-hidden="true"><use href="#i-play"/></svg></button>':'')
+     :'<h4>Yours could be next</h4><p>Send me the routine and I\'ll reply with a plan.</p><a class="tlink" href="#contact">Write the brief<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>')+'</div>';
+}
+$("#rchips").addEventListener("click",function(e){var b=e.target.closest("[data-r]");if(!b)return;rsel=+b.dataset.r;renderConv()});
+$("#convBody").addEventListener("click",function(e){var b=e.target.closest("[data-open]");if(b)openFile(b.dataset.open,b)});
+renderConv();
+
+/* ---------- project brief: composes an email, sends nothing itself ---------- */
+function briefText(){var f=$("#brief");function v(id){return $("#"+id).value.trim()}
+  return "Hi Alvin,\n\n"+v("bMsg")+"\n\nProject type: "+(v("bType")||"Not sure")+"\nSize: "+(v("bScope")||"Not sure yet")+"\nTimeline: "+(v("bTime")||"Flexible")+"\n\n"+v("bName")+"\n"+v("bMail");}
+function briefOk(){var out=$("#briefOut");out.classList.remove("err");
+  var miss=[];if(!$("#bName").value.trim())miss.push("your name");if(!/^\S+@\S+\.\S+$/.test($("#bMail").value.trim()))miss.push("a valid email");if(!$("#bMsg").value.trim())miss.push("the problem");
+  if(miss.length){out.classList.add("err");out.textContent="Please add "+miss.join(", ")+".";return false}return true}
+$("#brief").addEventListener("submit",function(e){e.preventDefault();if(!briefOk())return;
+  var subj="Project inquiry: "+($("#bType").value||"New project")+" from "+$("#bName").value.trim();
+  location.href="mailto:alvindiazmerasol@gmail.com?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(briefText());
+  $("#briefOut").textContent="Your email app should open with the brief filled in. If it didn't, use Copy the brief.";});
+$("#copyBrief").addEventListener("click",function(){if(!briefOk())return;var t=briefText(),o=$("#briefOut");
+  try{navigator.clipboard.writeText(t).then(function(){o.textContent="Brief copied. Paste it into an email to alvindiazmerasol@gmail.com."},function(){o.textContent="Copy didn't work here. Select the text in the boxes and copy it manually."})}catch(err){o.textContent="Copy didn't work here. Select the text in the boxes and copy it manually."}});
 
 /* ---------- copy email ---------- */
 $("#copyBtn").addEventListener("click",function(){var b=this,m=$("#copyMsg"),t=$("#email").textContent;
