@@ -243,6 +243,8 @@ p{margin:0}
 .band.flip > :first-child{order:2}
 .media{min-width:0;display:grid;gap:14px}
 .shot{margin:0;border:1px solid var(--rule-2);background:var(--sheet);border-radius:4px;overflow:hidden;box-shadow:var(--sh)}
+.shot img{display:block;width:100%;height:auto}
+@media (max-width:359px){body .ev{white-space:normal;max-width:100%}}
 .shot figcaption{padding:9px 12px;font:500 11.5px var(--mono);color:var(--fg-3);border-top:1px solid var(--rule);letter-spacing:.03em}
 .copy{min-width:0;position:sticky;top:110px}
 .copy h3{font:900 clamp(2rem,4.2vw,3.4rem)/.95 var(--display);font-stretch:112%;letter-spacing:-.03em}
@@ -851,7 +853,7 @@ img,video{max-width:100%}
   <symbol id="i-at" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-3.5 7.1" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-gh" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></symbol>
   <symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10v7M8 7v.5M12 17v-4a2 2 0 0 1 4 0v4M12 10v7" stroke="currentColor" stroke-width="2"/></symbol>
-  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v15M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></symbol><symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 8V4H4v12h4" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-hand" viewBox="0 0 24 24"><path d="M12 3v10M8 7v7M16 7v7M4 12c0 5 3 9 8 9s8-4 8-9" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-mark" viewBox="0 0 40 40"><rect x="1" y="1" width="38" height="38" rx="3" fill="#F2A516"/><path d="M8 29L14.5 11h3L24 29h-3.6l-1.4-4.2h-6.2L11.4 29zM13.7 22h4.4l-2.2-6.6zM25.5 11h3.4l3.6 10.6L36 11h0v18h-3V18.6L29.4 29h-2l-1.9-5.6" fill="#1B1203"/></symbol>
@@ -1980,7 +1982,8 @@ $("#inqCopy").addEventListener("click",function(){if(!inqOk())return;var o=$("#i
 /* ---------- public page-view counter ----------
    Abacus (abacus.jasoncameron.dev): free, no account, no secret in the page. It stores one site-wide
    number. It cannot tell people apart, so the footer shows page views only, never "visitors".
-   Nothing is shown until the service returns a real value; any failure keeps the line hidden. */
+   Nothing is shown until the service returns a real whole number (0 included); any failure keeps the line hidden.
+   The admin key for the counter is never placed in this page or repository. */
 var PAGEVIEWS={api:"https://abacus.jasoncameron.dev",namespace:"tep2234-website",key:"pageviews"};
 (function(){
   var C=PAGEVIEWS,NAME=/^[A-Za-z0-9_.-]{3,64}$/,WINDOW=30*60*1000;
@@ -1993,7 +1996,7 @@ var PAGEVIEWS={api:"https://abacus.jasoncameron.dev",namespace:"tep2234-website"
   /* Count only with storage (so refreshes inside 30 min can be skipped), no opt-out signal, no automation. */
   var count=!!store&&!optOut&&!bot&&!recent;
   function show(v){
-    if(typeof v!=="number"||!isFinite(v)||v<1||Math.floor(v)!==v||v>Number.MAX_SAFE_INTEGER)return;
+    if(typeof v!=="number"||!isFinite(v)||v<0||Math.floor(v)!==v||v>Number.MAX_SAFE_INTEGER)return; /* a confirmed 0 is shown as 0 */
     var el=$("#statsText"),b=document.createElement("b");
     b.textContent=new Intl.NumberFormat("en-US").format(v);
     el.textContent="";el.appendChild(b);el.appendChild(document.createTextNode(v===1?" page view":" page views"));

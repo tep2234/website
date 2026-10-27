@@ -14,7 +14,6 @@ async def service(route):
     u=route.request.url; state['log'].append(u)
     if u==API+'/hit'+PATH: state['value']+=1; return await route.fulfill(status=200,content_type='application/json',body=json.dumps({'value':state['value']}),headers=CORS)
     if u==API+'/get'+PATH:
-        if state['value']==0: return await route.fulfill(status=404,content_type='application/json',body='{"error":"Key not found"}',headers=CORS)
         return await route.fulfill(status=200,content_type='application/json',body=json.dumps({'value':state['value']}),headers=CORS)
     await route.fulfill(status=404,body='{}',headers=CORS)
 async def open_page(b,handler=service,init='',storage=None,wait=900,**kw):
@@ -31,6 +30,9 @@ async def main():
     srv=subprocess.Popen([sys.executable,'-m','http.server','8810','-d',SITE],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL); time.sleep(1)
     async with async_playwright() as p:
         b=await p.chromium.launch()
+        # 0 counter exists at zero, read-only browser: genuine zero is shown
+        ctx,pg,reqs,errs=await open_page(b,init='Object.defineProperty(navigator,"doNotTrack",{get:()=>"1"})'); t=await text(pg)
+        ok('0. confirmed zero from the service is shown as "0 page views"', api(reqs)==['/get'+PATH] and t and '0 page views' in t, (api(reqs),t)); await ctx.close()
         # 1 real visit recording + display
         ctx,pg,reqs,errs=await open_page(b); t=await text(pg)
         ok('1. first visit sends one /hit', api(reqs)==['/hit'+PATH], api(reqs))
@@ -74,7 +76,7 @@ async def main():
         async def hang(r): await asyncio.sleep(8)
         cases=[('HTTP 500',fixed(500,'{"error":"x"}'),900),('HTTP 429 rate limit',fixed(429,'{"error":"x"}'),900),('404 key missing',fixed(404,'{"error":"Key not found"}'),900),
                ('network refused',refused,900),('no reply within 6 s',hang,7200),('non-JSON',fixed(200,'<html>'),900),('value as string',fixed(200,'{"value":"12"}'),900),
-               ('value 0',fixed(200,'{"value":0}'),900),('negative value',fixed(200,'{"value":-4}'),900),('fractional value',fixed(200,'{"value":3.5}'),900),
+               ('negative value',fixed(200,'{"value":-4}'),900),('fractional value',fixed(200,'{"value":3.5}'),900),
                ('null body',fixed(200,'null'),900),('missing value',fixed(200,'{}'),900)]
         for name,h,w in cases:
             ctx,pg,reqs,errs=await open_page(b,handler=h,wait=w)
