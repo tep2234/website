@@ -1,0 +1,316 @@
+{
+  "name": "Alvin Diaz Merasol",
+  "credentials": "LPT, MBA",
+  "location": "Capiz, Philippines (open to remote work)",
+  "email": "alvindiazmerasol@gmail.com",
+  "links": [
+    {
+      "label": "LinkedIn",
+      "text": "linkedin.com/in/alvin-diaz-lpt-mba-b533a0275",
+      "url": "https://www.linkedin.com/in/alvin-diaz-lpt-mba-b533a0275"
+    },
+    {
+      "label": "GitHub",
+      "text": "github.com/tep2234",
+      "url": "https://github.com/tep2234"
+    },
+    {
+      "label": "Portfolio",
+      "text": "tep2234.github.io/website",
+      "url": "https://tep2234.github.io/website/"
+    }
+  ],
+  "skills": {
+    "software": {
+      "label": "Software and AI",
+      "text": "AI-assisted application development (Claude Code, Codex, ChatGPT), prompt design, Next.js, React, TypeScript, Vite, Supabase, PostgreSQL, SQL, Vercel, Git, GitHub, pull-request and release workflows"
+    },
+    "solution": {
+      "label": "Solution design",
+      "text": "workflow mapping, technical requirements, product roadmaps, MVP scoping, release gates, QA and testing, technical documentation"
+    },
+    "data": {
+      "label": "Data and security",
+      "text": "relational schema design, row-level security and role-based access, database migrations, data validation and reconciliation"
+    },
+    "excel": {
+      "label": "Excel automation",
+      "text": "advanced formulas, VBA macros, dashboards, automated DepEd forms (SF2, SF9, SF10), printable reports"
+    },
+    "instructional": {
+      "label": "Instructional design",
+      "text": "learning objectives, lesson plans and modules, assessments and rubrics, item analysis and remediation, curriculum alignment"
+    },
+    "business": {
+      "label": "Business",
+      "text": "feasibility studies, business plans, financial projections and break-even analysis, franchise development, social media content and ads"
+    }
+  },
+  "experience": [
+    {
+      "id": "deped",
+      "title": "Senior High School Teacher",
+      "org": "Department of Education (DepEd), Philippines",
+      "dates": "2017 – Present",
+      "bullets": [
+        "Teach Senior High School subjects including Entrepreneurship, FABM, Applied Economics, Business Math, Business Finance, General Mathematics, Contemporary Literature and Media and Information Literacy.",
+        "Coordinate SHS class programming and teacher loading; built an automated class programming and teacher-load analysis tool covering 15 sections.",
+        "Designed a General Mathematics diagnostic and intervention cycle and a data-informed item analysis and remediation framework.",
+        "Develop DepEd-aligned lesson plans, modules, assessments, answer keys and rubrics.",
+        "Coached athletes to three 2026 Western Visayas Regional Athletic Association (WVRAA) medals: silver in Shot Put, bronze in Discus Throw and 100 m Dash."
+      ]
+    },
+    {
+      "id": "daliguro",
+      "title": "Founder and Developer, DALIguro",
+      "org": "AI-powered teacher workspace for DepEd Senior High School · daliguro-main.vercel.app",
+      "dates": "2024 – Present",
+      "bullets": [
+        "Designed and built a multi-tenant web app that turns teachers' daily routines into one workspace: Teacher Command Center, curriculum setup, attendance, e-grading and consolidated grades.",
+        "Built an AI lesson generator around the ILAW workflow, an assessment builder, PowerPoint export and DALI, an in-app AI assistant.",
+        "Built a QR assessment module: learner QR codes, printable exams, fast and batch score encoding with validation, and sync to grading and parent reports.",
+        "Implemented per-teacher data isolation with Supabase row-level security, database migrations, and pull-request release gates with test, type and build checks.",
+        "Stack: Next.js, TypeScript, Supabase/PostgreSQL, Vercel, GitHub Actions."
+      ]
+    },
+    {
+      "id": "excel",
+      "title": "Excel and VBA Systems Developer, DALIguro",
+      "org": "Offline school systems for teachers",
+      "dates": "Ongoing",
+      "bullets": [
+        "SF9 Master: macro-enabled workbook that produces the DepEd School Form 9 report card from one learner masterlist, with Term 1–3 consolidation and 60 adviser remarks across five performance bands; sold to schools as licensed client copies.",
+        "Smart Item Analysis and Intervention System: finds least-learned competencies, learner proficiency levels and priority items for up to 60 test items; generates remediation plans, ILMP and printable reports aligned to DepEd Order No. 8, s. 2015.",
+        "Smart Attendance System v5: one workbook for all sections with a shared engine for dashboard, report and calendar, a reconciliation check, and a guard against encoding into the wrong section or month."
+      ]
+    },
+    {
+      "id": "partsflow",
+      "title": "Founder and Developer, PartsFlow Pro",
+      "org": "Inventory and sales system · partsflow-pro.vercel.app",
+      "dates": "Pilot",
+      "bullets": [
+        "Built an inventory and sales system, now in pilot, with product catalog, low-stock alerts, point of sale, supplier management, customer ledger and sales analytics (Next.js, Supabase, Vercel)."
+      ]
+    },
+    {
+      "id": "asenso",
+      "title": "Founder and Business Developer, Asenso Gas One",
+      "org": "Micro fuel station franchise venture",
+      "dates": "Active",
+      "bullets": [
+        "Designed three franchise tiers, wrote the content and ran boosted Facebook ads; grew the page to 1,000 followers, with a top boosted post reaching 64 reactions and 57 comments."
+      ]
+    },
+    {
+      "id": "primeshade",
+      "title": "Social Media Manager, PrimeShade Auto Tint",
+      "org": "Client work · Capiz, Iloilo and Aklan",
+      "dates": "Active",
+      "bullets": [
+        "Manage page content, promotional campaigns and lead-generation posts."
+      ]
+    },
+    {
+      "id": "consulting",
+      "title": "Freelance Business Consultant",
+      "org": "",
+      "dates": "Ongoing",
+      "bullets": [
+        "Prepare feasibility studies, business plans, financial projections and franchise packages for startups, expansions and lending submissions."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "title": "Master of Business Administration (MBA)",
+      "where": "Filamer Christian University"
+    },
+    {
+      "title": "Bachelor of Science in Business Administration (BSBA)",
+      "where": "Capiz State University"
+    },
+    {
+      "title": "Licensed Professional Teacher (LPT)",
+      "where": "Professional Regulation Commission, License No. 1385342"
+    }
+  ],
+  "roles": [
+    {
+      "id": "master",
+      "label": "General (all roles)",
+      "headline": "AI Solutions Designer & Automation Developer | EdTech and Instructional Design",
+      "summary": "Business and education technology professional with an MBA, a Philippine teaching license and Senior High School teaching experience since 2017. I find the tasks people repeat every day, map the workflow, plan a staged roadmap and build working applications with AI-assisted development. Built DALIguro, an AI-powered workspace for DepEd teachers covering grading, lesson planning, scheduling, grade analysis and automated school forms, plus offline Excel and VBA systems for item analysis, attendance and report cards, one of them licensed to schools.",
+      "skills": [
+        "software",
+        "solution",
+        "data",
+        "excel",
+        "instructional",
+        "business"
+      ],
+      "projects": [
+        "daliguro",
+        "partsflow",
+        "sf9",
+        "item-analysis"
+      ]
+    },
+    {
+      "id": "ai-automation",
+      "label": "AI Automation Specialist",
+      "headline": "AI Automation Specialist | Workflow Automation and AI-Assisted Development",
+      "summary": "Automation builder with an MBA and a teaching license who turns repeated manual work into working software. I map how a task is done today, design the automated version, and build it with AI-assisted development, from AI lesson generation and assisted score encoding in DALIguro to Excel and VBA systems that generate reports, remediation plans and school forms from data entered once.",
+      "skills": [
+        "software",
+        "solution",
+        "excel",
+        "data",
+        "instructional",
+        "business"
+      ],
+      "projects": [
+        "daliguro",
+        "scanner",
+        "item-analysis",
+        "sf9"
+      ]
+    },
+    {
+      "id": "business-analyst",
+      "label": "Business Systems Analyst",
+      "headline": "Business Systems Analyst | Workflow Mapping, Requirements and Data Systems",
+      "summary": "Business systems analyst with an MBA who connects operations to the software that runs them. I document workflows, write requirements, plan staged roadmaps and deliver working systems: PartsFlow Pro for inventory, sales and suppliers, DALIguro for school operations, and spreadsheet systems with reconciliation checks. Experienced in feasibility studies, financial projections and franchise development.",
+      "skills": [
+        "solution",
+        "business",
+        "data",
+        "excel",
+        "software",
+        "instructional"
+      ],
+      "projects": [
+        "partsflow",
+        "daliguro",
+        "attendance",
+        "asenso"
+      ]
+    },
+    {
+      "id": "app-developer",
+      "label": "AI-Assisted Application Developer",
+      "headline": "AI-Assisted Application Developer | Next.js, TypeScript, Supabase, Vercel",
+      "summary": "Application developer who builds and deploys web apps with AI-assisted development (Claude Code, Codex). Built DALIguro, a multi-tenant teacher workspace on Next.js, TypeScript and Supabase with row-level security, migrations and pull-request release gates, and PartsFlow Pro, an inventory and point-of-sale system in pilot. Works from requirements to deployed software, with tests, type checks and build checks before release.",
+      "skills": [
+        "software",
+        "data",
+        "solution",
+        "excel",
+        "instructional",
+        "business"
+      ],
+      "projects": [
+        "daliguro",
+        "partsflow",
+        "scanner"
+      ]
+    },
+    {
+      "id": "operations",
+      "label": "Operations and Workflow Automation Specialist",
+      "headline": "Operations and Workflow Automation Specialist | Process Design and Automated Reporting",
+      "summary": "Operations-minded automation specialist with an MBA. I find the routines that cost teams the most time, redesign the workflow and automate it: attendance tracked once and reported automatically, report cards consolidated across terms, inventory and sales updated at the point of sale. Comfortable across spreadsheets, web apps and the business side of operations.",
+      "skills": [
+        "solution",
+        "excel",
+        "business",
+        "data",
+        "software",
+        "instructional"
+      ],
+      "projects": [
+        "attendance",
+        "partsflow",
+        "sf9",
+        "asenso"
+      ]
+    },
+    {
+      "id": "excel",
+      "label": "Excel Automation Specialist",
+      "headline": "Excel and VBA Automation Specialist | Dashboards, Reports and Form Automation",
+      "summary": "Excel and VBA developer who builds macro-enabled systems people use daily. My workbooks produce DepEd report cards from one masterlist, analyze up to 60 test items with remediation plans, and track attendance for every section with a shared engine and reconciliation checks. SF9 Master is sold to schools as licensed client copies.",
+      "skills": [
+        "excel",
+        "data",
+        "solution",
+        "business",
+        "instructional",
+        "software"
+      ],
+      "projects": [
+        "sf9",
+        "item-analysis",
+        "attendance"
+      ]
+    },
+    {
+      "id": "edtech",
+      "label": "Educational Technology Specialist",
+      "headline": "Educational Technology Specialist | Teacher Tools, Assessment and School Systems",
+      "summary": "Licensed teacher since 2017 who builds the technology schools need. I created DALIguro, an AI-powered workspace for DepEd teachers with grading, lesson planning, attendance, QR assessment and automated school forms, and offline Excel systems for item analysis, attendance and report cards. I design tools around how teachers actually work.",
+      "skills": [
+        "instructional",
+        "software",
+        "excel",
+        "solution",
+        "data",
+        "business"
+      ],
+      "projects": [
+        "daliguro",
+        "scanner",
+        "item-analysis",
+        "sf9"
+      ]
+    },
+    {
+      "id": "instructional",
+      "label": "Instructional Designer",
+      "headline": "Instructional Designer | Curriculum, Assessment and Learning Resources",
+      "summary": "Instructional designer and licensed teacher with Senior High School experience since 2017. I write learning objectives, lesson plans, modules, assessments and rubrics aligned to the DepEd curriculum, and use item analysis to target remediation. I also build the tools that support learning, from an AI lesson generator to automated item analysis.",
+      "skills": [
+        "instructional",
+        "excel",
+        "software",
+        "solution",
+        "data",
+        "business"
+      ],
+      "projects": [
+        "lesson",
+        "item-analysis",
+        "daliguro"
+      ]
+    },
+    {
+      "id": "bizdev",
+      "label": "Business Development Specialist",
+      "headline": "Business Development Specialist | Feasibility, Franchise Development and Growth",
+      "summary": "Business development professional with an MBA and hands-on venture experience. I founded Asenso Gas One, a micro fuel station franchise with three package tiers, and grew its page to 1,000 followers with content and boosted ads. I prepare feasibility studies, business plans and financial projections, manage social media for a client, and build systems such as PartsFlow Pro.",
+      "skills": [
+        "business",
+        "solution",
+        "excel",
+        "data",
+        "software",
+        "instructional"
+      ],
+      "projects": [
+        "asenso",
+        "partsflow",
+        "primeshade"
+      ]
+    }
+  ]
+}
