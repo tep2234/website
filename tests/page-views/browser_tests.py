@@ -3,7 +3,7 @@
 import asyncio, sys, subprocess, time, json, pathlib
 from playwright.async_api import async_playwright
 SITE=sys.argv[1] if len(sys.argv)>1 else str(pathlib.Path(__file__).resolve().parents[2])
-API='https://abacus.jasoncameron.dev'; PATH='/tep2234-website/pageviews'
+API='https://abacus.jasoncameron.dev'; PATH='/tep2234-website/pv-secure-2026'
 UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
 AXE=pathlib.Path('/home/claude/pdfwork/node_modules/axe-core/axe.min.js')
 CORS={'access-control-allow-origin':'*'}
