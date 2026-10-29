@@ -5,11 +5,13 @@ Static site served by GitHub Pages at https://tep2234.github.io/website/. No bui
 ## Layout
 | Path | What it is |
 | --- | --- |
-| `index.html` | The whole site: markup, styles and scripts in one file. |
+| `index.html` | The home page: markup, styles and scripts in one file. Includes the project reel (the swipeable carousel in Featured projects). |
+| `projects/daliguro.html` | DALIguro case study page: folder-to-page transition, recording with captions and chapters, scroll-told story, live item-analysis demo. Its font and colour tokens are copied from `index.html`; keep them in step. |
+| `assets/img/dg/` | Stills taken from the DALIguro recording. `assets/media/daliguro-app.vtt` holds its captions. |
 | `assets/img`, `assets/media`, `assets/fonts` | Screenshots, screen recordings with posters, self-hosted fonts. |
 | `resume/` | Résumé hub files: one PDF, Word file and print page per role. `resume-data.json` is the single source. |
 | `tools/` | Scripts that rebuild the résumé files. |
-| `tests/site/acceptance.py` | Site acceptance tests: features, 8 screen widths, axe WCAG 2.2 AA, performance (Playwright + Chromium). |
+| `tests/site/acceptance.py` | Site acceptance tests: features, 8 screen widths, axe WCAG 2.2 AA, performance (Playwright + Chromium), plus the reel and the case study page (layout, axe, CSP, mobile CLS/LCP/blocking-time budget). |
 | `tests/resume/ats_check.py` | ATS checks for all 9 résumé versions in PDF, DOCX and HTML (needs pypdf and pandoc). |
 | `tests/page-views/` | Browser tests for the footer page-view counter. See `docs/VISITOR-COUNTER.md`. |
 | `sitemap.xml` | Sitemap for search engines. |
@@ -26,6 +28,9 @@ The résumé hub on the home page reads its role list from the manifest data emb
 
 ## Deploying
 Merging to `main` runs `.github/workflows/static.yml`, which publishes the repository to GitHub Pages.
+
+## Content Security Policy
+Every page allows its inline scripts by hash. After editing any inline script, run `python3 tools/update-csp.py` (it covers `index.html` and `projects/*.html`).
 
 ## Notes
 - Traffic: the footer shows a public page-view total from Abacus (free, no account); private analytics use Cloudflare Web Analytics once a site token is added. Neither uses Supabase. See `docs/VISITOR-COUNTER.md`.
