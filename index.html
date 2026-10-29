@@ -942,7 +942,7 @@ img,video{max-width:100%}
 .hero-figure{position:absolute;z-index:1;left:-15%;bottom:7%;height:100%;aspect-ratio:383/795;container-type:size;margin:0;pointer-events:none}
 .hero-figure img{height:100%;width:auto;max-width:none;display:block;-webkit-mask-image:linear-gradient(180deg,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 86%,transparent 100%)}
 @media (max-width:1060px){.cab{height:clamp(560px,72vw,700px)}.rig{top:26%}.hero-figure{left:5%;height:90%;bottom:2%}}
-@media (max-width:760px){.cab{height:clamp(500px,140vw,600px)}.rig{top:40%}.hero-figure{z-index:3;left:4%;top:34px;bottom:auto;height:min(calc((100vw - 40px) / 1.22),380px)}.hero-figure img{-webkit-mask-image:none;mask-image:none}}
+@media (max-width:760px){.cab{--fh:min(calc((100vw - 40px) / 1.22),380px);height:calc(var(--fh) * 1.5 + 30px)}.rig{top:calc(30px + var(--fh) * .3)}.hero-figure{z-index:1;left:3%;top:30px;bottom:auto;height:var(--fh)}}
 @media (prefers-reduced-motion:no-preference){.hero-figure img{animation:figIn .9s cubic-bezier(.2,.7,.2,1) .15s both}@keyframes figIn{from{transform:translateY(22px)}to{transform:none}}}
 </style>
 <link rel="stylesheet" href="assets/css/chibi.css">
