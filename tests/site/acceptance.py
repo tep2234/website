@@ -16,7 +16,8 @@ async def api(route):
     await route.fulfill(status=200,content_type='application/json',body=json.dumps({'value':count['v']}),headers={'access-control-allow-origin':'*'})
 async def newpage(b,w=1440,h=850,scheme='light',mob=None,motion='no-preference'):
     mob=(w<768) if mob is None else mob
-    ctx=await b.new_context(viewport={'width':w,'height':h},is_mobile=mob,has_touch=mob,color_scheme=scheme,reduced_motion=motion,user_agent=UA)
+    # bypass_csp: the page's CSP (correctly) blocks the injected axe script; extras() tests the page WITH its CSP enforced
+    ctx=await b.new_context(viewport={'width':w,'height':h},is_mobile=mob,has_touch=mob,color_scheme=scheme,reduced_motion=motion,user_agent=UA,bypass_csp=True)
     pg=await ctx.new_page(); pg.errs=[]; pg.reqs=[]
     pg.on('pageerror',lambda e: pg.errs.append(str(e)))
     pg.on('console',lambda m: pg.errs.append(m.text) if m.type=='error' and not m.text.startswith('Failed to load resource') else None)
@@ -177,7 +178,7 @@ async def layout(b):
 
 async def perf(b):
     for w,label in [(1440,'desktop'),(390,'mobile')]:
-        ctx=await b.new_context(viewport={'width':w,'height':850},is_mobile=w<768,user_agent=UA); pg=await ctx.new_page(); await pg.route(API+'/**',api)
+        ctx=await b.new_context(viewport={'width':w,'height':850},is_mobile=w<768,user_agent=UA,bypass_csp=True); pg=await ctx.new_page(); await pg.route(API+'/**',api)
         cdp=await ctx.new_cdp_session(pg)
         if w<768:
             await cdp.send('Network.enable'); await cdp.send('Network.emulateNetworkConditions',{'offline':False,'latency':150,'downloadThroughput':1.6e6/8,'uploadThroughput':750e3/8})
@@ -192,7 +193,7 @@ async def perf(b):
             total_kb:Math.round((n.transferSize+rs.reduce((a,r)=>a+(r.transferSize||0),0))/1024),
             videos_preload:[...document.querySelectorAll("video")].map(v=>v.preload+":"+(v.getAttribute("src")?"src":"nosrc")),
             lazy_imgs:[...document.querySelectorAll("img")].filter(i=>i.loading==="lazy").length,imgs:document.images.length,
-            font_display:[...document.styleSheets].flatMap(s=>{try{return [...s.cssRules]}catch(e){return []}}).filter(r=>r.constructor.name==="CSSFontFaceRule").map(r=>r.style.fontDisplay)}})()''')
+            font_display:[...document.styleSheets].flatMap(s=>{try{return [...s.cssRules]}catch(e){return []}}).filter(r=>r.constructor.name==="CSSFontFaceRule"&&/url\\(/.test(r.style.src)).map(r=>r.style.fontDisplay)}})()''')
         tl=await cdp.send('Performance.getMetrics') if False else None
         print(f'PERF {label}{" (4x CPU, 1.6 Mbps, 150 ms)" if w<768 else " (no throttling)"}: '+json.dumps(m))
         ok('perf',f'{label}: CLS < 0.1',m['cls']<0.1,m['cls'])
@@ -201,13 +202,56 @@ async def perf(b):
         ok('perf',f'{label}: fonts use font-display swap/optional',all(f in('swap','optional','fallback') for f in m['font_display']),m['font_display'])
         await ctx.close()
 
+async def extras(b):
+    """Checks added with the Front-End Checklist fixes (CSP, fonts, images, video control, hint placement, 404)."""
+    G='checklist'
+    # 1. CSP enforced (no bypass): the page script still runs and nothing is blocked
+    ctx=await b.new_context(viewport={'width':1440,'height':850},user_agent=UA); pg=await ctx.new_page(); errs=[]
+    pg.on('pageerror',lambda e: errs.append(str(e)))
+    await pg.add_init_script('window.__csp=[];document.addEventListener("securitypolicyviolation",e=>window.__csp.push(e.violatedDirective+" "+e.blockedURI))')
+    await pg.route(API+'/**',api); await pg.goto(BASE+'index.html'); await pg.wait_for_timeout(1200)
+    ok('security','CSP meta tag present',await pg.evaluate('!!document.querySelector(\'meta[http-equiv="Content-Security-Policy"]\')'))
+    ok('security','page script runs under the CSP',await pg.locator('#rig .folder').count()==6 and await pg.locator('#pgrid .pcard').count()>0)
+    v=await pg.evaluate('window.__csp'); ok('security','no CSP violations on load',not v,v)
+    ok('security','CSP script hash is current (tools/update-csp.py --check)',subprocess.run([sys.executable,os.path.join(ROOT,'tools','update-csp.py'),'--check'],capture_output=True).returncode==0)
+    # 2. images: every <img> has width/height; large ones offer smaller copies that actually exist
+    im=await pg.evaluate('[...document.images].map(i=>({s:i.getAttribute("src")||"",w:i.getAttribute("width"),h:i.getAttribute("height"),ss:i.getAttribute("srcset")||"",nw:i.naturalWidth}))')
+    ok(G,'every <img> has width and height',all(i['w'] and i['h'] for i in im),[i['s'] for i in im if not(i['w'] and i['h'])])
+    big=[i for i in im if i['s'].endswith('.webp') and ('/img/' in i['s'] or '-poster' in i['s']) and 'favicon' not in i['s']]
+    ok(G,'content images have srcset',all(i['ss'] for i in big),[i['s'] for i in big if not i['ss']])
+    files=sorted({u.split(' ')[0] for i in big for u in i['ss'].split(', ') if u})
+    missing=[f for f in files if not os.path.exists(os.path.join(ROOT,f))]
+    ok(G,'every srcset file exists',not missing,missing)
+    # 3. fallback fonts are declared and used first in each stack
+    fam=await pg.evaluate('["--body","--mono","--display"].map(v=>getComputedStyle(document.documentElement).getPropertyValue(v))')
+    ok(G,'font stacks include metric-matched fallbacks',all('Fallback' in f.split(',')[1] for f in fam),fam)
+    # 4. the inline recording has a working pause control
+    await pg.locator('#ivid').scroll_into_view_if_needed(); await pg.wait_for_timeout(600)
+    vis=await pg.is_visible('#ivBtn'); ok(G,'inline video has a visible pause/play control',vis)
+    if vis:
+        await pg.evaluate('document.getElementById("ivid").play().catch(()=>{})'); await pg.wait_for_timeout(300)
+        await pg.click('#ivBtn'); await pg.wait_for_timeout(300)
+        ok(G,'pause control pauses the inline video',await pg.evaluate('document.getElementById("ivid").paused'))
+        ok(G,'pause control label reflects state',(await pg.get_attribute('#ivBtn','aria-label'))=='Play the recording')
+    await ctx.close()
+    # 5. "Pick a folder" hint sits clear of the ID card on narrow screens
+    for w in [320,375,430,760,1024]:
+        ctx,pg=await newpage(b,w=w)
+        r=await pg.evaluate('(()=>{const h=document.querySelector(".cab-hint").getBoundingClientRect(),c=document.querySelector(".personnel").getBoundingClientRect();return [Math.round(h.bottom),Math.round(c.top)]})()')
+        ok(G,f'{w}px: cabinet hint is above the ID card',r[0]<=r[1],r)
+        await ctx.close()
+    # 6. custom 404 page
+    p404=pathlib.Path(ROOT,'404.html')
+    t=p404.read_text() if p404.exists() else ''
+    ok(G,'404.html exists and links home','href="/website/"' in t and '<h1>' in t)
+
 async def main():
     srv=subprocess.Popen([sys.executable,'-m','http.server',str(PORT),'-d',ROOT],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL); time.sleep(1)
     try:
         async with async_playwright() as p:
             b=await p.chromium.launch()
             print('Browser:',b.version)
-            await functional(b); await layout(b); await perf(b)
+            await functional(b); await extras(b); await layout(b); await perf(b)
             await b.close()
     finally: srv.terminate()
     f=[r for r in res if not r[2]]

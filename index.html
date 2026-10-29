@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Security policy. The inline script is allowed by its hash: after editing the script, run  python3 tools/update-csp.py
+     Cloudflare's analytics host is pre-allowed so the snippet in docs/VISITOR-COUNTER.md works once it is pasted in. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-GIS0LIc5WmP6A+oDgFXFJL3LO1ujWPoEqaybIZSDebY=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'self' https://abacus.jasoncameron.dev https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <title>Alvin Diaz Merasol — AI-Powered Business and Education Systems</title>
 <meta name="description" content="Alvin Diaz Merasol, LPT, MBA. Practical AI-powered business and education systems: Excel automation, web apps, workflows and learning design.">
 <link rel="canonical" href="https://tep2234.github.io/website/">
@@ -10,6 +13,8 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plex-sans-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plex-sans-600.woff2" as="font" type="font/woff2" crossorigin>
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="Alvin Diaz Merasol">
 <meta property="og:title" content="Alvin Diaz Merasol — AI-Powered Business and Education Systems">
@@ -38,6 +43,14 @@
 @font-face{font-family:"IBM Plex Mono";src:url(assets/fonts/plex-mono-400.woff2) format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"IBM Plex Mono";src:url(assets/fonts/plex-mono-500.woff2) format("woff2");font-weight:500;font-display:swap}
 @font-face{font-family:"IBM Plex Mono";src:url(assets/fonts/plex-mono-600.woff2) format("woff2");font-weight:600;font-display:swap}
+/* Metric-matched fallbacks: while the web fonts download, text is set in a local font resized to
+   the same advance widths and line metrics, so nothing reflows when the real font swaps in.
+   Values were measured from the woff2 files against Arial / Courier New (see tests/site/acceptance.py). */
+@font-face{font-family:"Plex Sans Fallback";src:local("Arial"),local("ArialMT"),local("Helvetica"),local("Liberation Sans"),local("Roboto");font-weight:400;size-adjust:100.8%;ascent-override:101.6%;descent-override:27.3%;line-gap-override:0%}
+@font-face{font-family:"Plex Sans Fallback";src:local("Arial"),local("ArialMT"),local("Helvetica"),local("Liberation Sans"),local("Roboto");font-weight:500;size-adjust:103%;ascent-override:99.5%;descent-override:26.7%;line-gap-override:0%}
+@font-face{font-family:"Plex Sans Fallback";src:local("Arial Bold"),local("Arial-BoldMT"),local("Helvetica Bold"),local("Liberation Sans Bold"),local("Roboto Bold");font-weight:600 700;size-adjust:96.9%;ascent-override:105.8%;descent-override:28.4%;line-gap-override:0%}
+@font-face{font-family:"Plex Mono Fallback";src:local("Courier New"),local("CourierNewPSMT"),local("Liberation Mono");font-weight:400 600;size-adjust:100%;ascent-override:102.5%;descent-override:27.5%;line-gap-override:0%}
+@font-face{font-family:"Archivo Fallback";src:local("Arial Bold"),local("Arial-BoldMT"),local("Helvetica Bold"),local("Liberation Sans Bold"),local("Roboto Bold");font-weight:700 900;size-adjust:111%;ascent-override:79%;descent-override:19%;line-gap-override:0%}
 
 /* Layout: a teacher's filing cabinet. Index tabs stick out of the right edge; every section is a file.
    Hero = a fanned stack of 3D folders (the vault). Work is listed in a ledger, read on paper case sheets. */
@@ -48,9 +61,9 @@
   --amber:#F2A516; --amber-text:#F6B93B; --on-amber:#1B1203; --stamp:#E0533F; --green:#43C08F;
   --f1:#2C4A7C; --f2:#3B6B57; --f3:#8C5D2C; --f4:#55607A; --f5:#8F3A31; --f6:#80601A;
   --sh:0 1px 0 rgba(255,255,255,.04) inset,0 24px 48px -24px rgba(0,0,0,.75);
-  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
-  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --display:"Archivo","Archivo Fallback","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Plex Sans Fallback",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono","Plex Mono Fallback",ui-monospace,Menlo,Consolas,monospace;
   --ease-out:cubic-bezier(.23,1,.32,1); --ease-io:cubic-bezier(.77,0,.175,1); --ease-drawer:cubic-bezier(.32,.72,0,1);
   color-scheme:dark;
 }
@@ -106,6 +119,10 @@ p{margin:0}
 .tbtn:active{transform:scale(.97)}
 .tbtn svg{width:16px;height:16px;flex:none}
 .tbtn kbd{font:500 11px var(--mono);padding:2px 5px;border:1px solid var(--rule-2);border-radius:3px}
+/* shortcut hint is generated content, so it is not part of the button's text or accessible name */
+#kbd::after{content:attr(data-k)}
+/* visually hidden, still read by screen readers */
+.vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .tbtn.sq{width:38px;padding:0;justify-content:center}
 
 /* index tabs on the right edge */
@@ -164,6 +181,10 @@ p{margin:0}
 .stampmark{position:absolute;right:-14px;bottom:44%;transform:rotate(-12deg);border:2.5px solid var(--stamp);color:var(--stamp);padding:5px 9px;font:700 11px/1.15 var(--mono);letter-spacing:.08em;text-transform:uppercase;text-align:center;border-radius:3px;background:color-mix(in srgb,var(--paper) 70%,transparent);mix-blend-mode:multiply}
 .cab-hint{position:absolute;left:0;bottom:4px;display:flex;gap:8px;align-items:center}
 .cab-hint svg{width:14px;height:14px;color:var(--amber-text)}
+/* stamps always sit on paper, so use the darker red in both themes (dark-theme red was 3.2:1 on paper) */
+.stampmark{--stamp:#B7362A}
+/* below 1060px the ID card overhangs the cabinet's bottom edge; keep the hint in the empty top-left corner */
+@media (max-width:1060px){.cab-hint{top:2px;bottom:auto}}
 
 /* specializations form row */
 .spec{margin-top:clamp(40px,6vw,72px);border-top:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2);display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
@@ -197,6 +218,7 @@ p{margin:0}
 .inline-vid video{width:100%;aspect-ratio:1920/902;object-fit:contain;background:#05080F}
 .inline-vid figcaption{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 12px;font:500 11.5px var(--mono);color:var(--fg-3);border-top:1px solid var(--rule);background:var(--sheet)}
 .watch-btn{display:inline-flex;align-items:center;gap:8px;font:600 13px var(--body);color:var(--amber-text)}
+.vbtns{display:inline-flex;gap:16px;flex:none}
 .watch-btn svg{width:12px;height:12px}
 .reel-bar{display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--sheet);border-top:1px solid var(--rule)}
 .play{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--amber);color:var(--on-amber);flex:none;transition:transform 140ms var(--ease-out)}
@@ -234,9 +256,9 @@ p{margin:0}
 .lrow .st.live{border-color:var(--green);color:var(--green)}
 .lrow .go{width:18px;height:18px;color:var(--fg-3);transition:transform 160ms var(--ease-out)}
 .lempty{padding:28px 0;color:var(--fg-2);border-bottom:1px solid var(--rule)}
-.peek{position:fixed;left:0;top:0;z-index:65;width:300px;pointer-events:none;border:1px solid var(--rule-2);background:var(--paper);padding:6px;box-shadow:0 30px 50px -20px rgba(0,0,0,.6);opacity:0;transition:opacity 160ms ease;will-change:transform}
+.peek{position:fixed;left:0;top:0;z-index:65;width:300px;pointer-events:none;border:1px solid var(--rule-2);background:var(--paper);padding:6px;box-shadow:0 30px 50px -20px rgba(0,0,0,.6);opacity:0;transition:opacity 160ms ease}
 .peek.on{opacity:1}
-.peek img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top left}
+.peek img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top left}
 
 /* bands */
 .band{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(28px,5vw,72px);align-items:start}
@@ -573,7 +595,7 @@ footer .inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px
 .pfoot{display:flex;gap:16px;padding:9px 14px;border-top:1px solid var(--rule)}
 
 /* cursor: a ring that becomes a label over things you can open */
-.cur{position:fixed;left:0;top:0;z-index:120;pointer-events:none;will-change:transform;opacity:0;transition:opacity 160ms ease}
+.cur{position:fixed;left:0;top:0;z-index:120;pointer-events:none;opacity:0;transition:opacity 160ms ease}
 .cur .ring{position:absolute;left:-15px;top:-15px;width:30px;height:30px;border:1.5px solid var(--amber);border-radius:50%;transition:transform 200ms var(--ease-out),opacity 160ms ease}
 .cur .word{position:absolute;left:14px;top:14px;padding:4px 8px;background:var(--amber);color:var(--on-amber);font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;border-radius:2px;white-space:nowrap;opacity:0;transform:translateY(4px) scale(.96);transition:opacity 140ms ease,transform 180ms var(--ease-out)}
 .cur.label .ring{transform:scale(.45)}
@@ -825,6 +847,8 @@ img,video{max-width:100%}
 .hero-grid > div:first-child{min-width:0;position:relative;z-index:2}
 @media (max-width:760px){.mono-mark .badge{display:grid}.headline{font-size:clamp(1.95rem,9.2vw,3rem)}}
 .mono-mark .badge{display:grid;font:800 15px/1 var(--display);color:var(--on-amber);letter-spacing:-.02em}
+/* initials are generated content so the link's name comes from its aria-label alone */
+.mono-mark .badge::after{content:attr(data-t)}
 
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .budget{display:grid;gap:6px;font:600 13px var(--body);color:#2D3647}
@@ -860,15 +884,15 @@ img,video{max-width:100%}
 </svg>
 
 <div class="cur" id="cur" aria-hidden="true"><span class="ring"></span><span class="word" id="curWord">Open</span></div>
-<div class="peek" id="peek" aria-hidden="true"><img id="peekImg" alt=""></div>
+<div class="peek" id="peek" aria-hidden="true"><img id="peekImg" alt="" width="300" height="188"></div>
 
 <a class="skip" href="#projects">Skip to projects</a>
 <header class="bar wrap">
   <div class="inner">
-    <a class="mono-mark" href="#top" aria-label="Alvin Diaz Merasol, back to top"><span class="badge" aria-hidden="true">AM</span><span><b>Alvin Diaz Merasol</b><span>LPT · MBA · Capiz, Philippines</span></span></a>
+    <a class="mono-mark" href="#top" aria-label="Alvin Diaz Merasol, LPT · MBA · Capiz, Philippines. Back to top"><span class="badge" aria-hidden="true" data-t="AM"></span><span><b>Alvin Diaz Merasol</b> <span>LPT · MBA · Capiz, Philippines</span></span></a>
     <span class="grow"></span>
     <a class="tbtn hire" href="#contact" data-client="">Hire me</a>
-    <button class="tbtn search" type="button" data-pal aria-label="Search the portfolio"><svg aria-hidden="true"><use href="#i-search"/></svg><span class="wide-only">Search</span><kbd class="wide-only" id="kbd">Ctrl K</kbd></button>
+    <button class="tbtn search" type="button" data-pal aria-label="Search the portfolio"><svg aria-hidden="true"><use href="#i-search"/></svg><span class="wide-only">Search</span><kbd class="wide-only" id="kbd" aria-hidden="true" data-k="Ctrl K"></kbd></button>
     <button class="tbtn sq" type="button" id="themeBtn" aria-label="Switch theme"><svg aria-hidden="true"><use href="#i-sun"/></svg></button>
   </div>
 </header>
@@ -990,8 +1014,8 @@ img,video{max-width:100%}
   <section class="sec wrap" id="daliguro" data-sec="cases" aria-labelledby="dg-title">
     <div class="inner band">
       <div class="media">
-        <figure class="shot"><img src="assets/img/daliguro-dashboard.webp" width="1200" height="683" alt="DALIguro education workflow dashboard" loading="lazy"><figcaption>Workflow dashboard · screenshot from the app</figcaption></figure>
-        <figure class="shot"><img src="assets/img/daliguro-ilaw.webp" width="1200" height="688" alt="DALIguro ILAW lesson planning pipeline" loading="lazy"><figcaption>ILAW lesson planning pipeline · screenshot from the app</figcaption></figure>
+        <figure class="shot"><img src="assets/img/daliguro-dashboard.webp" srcset="assets/img/daliguro-dashboard-400.webp 400w, assets/img/daliguro-dashboard-800.webp 800w, assets/img/daliguro-dashboard.webp 1200w" sizes="(max-width:760px) calc(100vw - 32px), 690px" width="1200" height="683" alt="DALIguro education workflow dashboard" loading="lazy"><figcaption>Workflow dashboard · screenshot from the app</figcaption></figure>
+        <figure class="shot"><img src="assets/img/daliguro-ilaw.webp" srcset="assets/img/daliguro-ilaw-400.webp 400w, assets/img/daliguro-ilaw-800.webp 800w, assets/img/daliguro-ilaw.webp 1200w" sizes="(max-width:760px) calc(100vw - 32px), 690px" width="1200" height="688" alt="DALIguro ILAW lesson planning pipeline" loading="lazy"><figcaption>ILAW lesson planning pipeline · screenshot from the app</figcaption></figure>
       </div>
       <div class="copy">
         <div class="fno lbl"><i style="--tc:var(--f1)"></i>File 01 · Web app · Live</div>
@@ -1023,7 +1047,7 @@ img,video{max-width:100%}
         <div class="media">
           <figure class="inline-vid" style="margin:0">
             <video id="ivid" src="assets/media/item-analysis.mp4" poster="assets/media/item-analysis-poster.webp" muted loop playsinline preload="none" aria-label="Screen recording of the Smart Item Analysis and Intervention System workbook"></video>
-            <figcaption><span>Screen recording · Smart Item Analysis &amp; Intervention System · learner data blurred</span><button class="watch-btn" type="button" data-play="item-analysis"><svg aria-hidden="true"><use href="#i-play"/></svg>Watch larger</button></figcaption>
+            <figcaption><span>Screen recording · Smart Item Analysis &amp; Intervention System · learner data blurred</span><span class="vbtns"><button class="watch-btn" type="button" id="ivBtn" aria-label="Pause the recording" hidden><svg aria-hidden="true"><use href="#i-pause"/></svg><span>Pause</span></button><button class="watch-btn" type="button" data-play="item-analysis"><svg aria-hidden="true"><use href="#i-play"/></svg>Watch larger</button></span></figcaption>
           </figure>
         </div>
         <div class="copy">
@@ -1112,17 +1136,17 @@ img,video{max-width:100%}
       </div>
       <div class="biz">
         <article class="case wide" style="--tc:var(--f6)">
-          <div class="pic"><img src="assets/img/partsflow-command.webp" width="1200" height="689" alt="PartsFlow Pro operations command center" loading="lazy"></div>
+          <div class="pic"><img src="assets/img/partsflow-command.webp" srcset="assets/img/partsflow-command-400.webp 400w, assets/img/partsflow-command-800.webp 800w, assets/img/partsflow-command.webp 1200w" sizes="(max-width:760px) calc(100vw - 32px), 690px" width="1200" height="689" alt="PartsFlow Pro operations command center" loading="lazy"></div>
           <div class="txt"><span class="lbl">Web app · Pilot</span><h3>PartsFlow Pro</h3><p>An inventory and sales system in pilot: product catalog with low-stock alerts, point of sale, suppliers, customer ledger and sales analytics.</p><div class="tags" style="margin:0"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">Vercel</span></div><a class="tlink" href="https://partsflow-pro.vercel.app/dashboard" target="_blank" rel="noopener" data-cur="Visit">Open the pilot<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </article>
         <article class="case" style="--tc:var(--f5)">
-          <div class="pic"><img src="assets/img/asenso-packages.webp" width="1200" height="560" alt="Asenso Gas One package comparison banner with three tiers" loading="lazy"></div>
+          <div class="pic"><img src="assets/img/asenso-packages.webp" srcset="assets/img/asenso-packages-400.webp 400w, assets/img/asenso-packages-800.webp 800w, assets/img/asenso-packages.webp 1200w" sizes="(max-width:760px) calc(100vw - 32px), 690px" width="1200" height="560" alt="Asenso Gas One package comparison banner with three tiers" loading="lazy"></div>
           <div class="txt"><span class="lbl">Venture · Founder</span><h3>Asenso Gas One</h3><p>A micro fuel station franchise in three tiers. I designed the packages, wrote the content and ran the boosted ads.</p>
             <div class="nums"><div><b>1K</b><span class="lbl">Followers</span></div><div><b>64</b><span class="lbl">Reactions</span></div><div><b>57</b><span class="lbl">Comments</span></div></div>
             <a class="tlink" href="https://www.facebook.com/p/Asenso-Gas-One-61583838741892/" target="_blank" rel="noopener" data-cur="Visit">View the page<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </article>
         <article class="case" style="--tc:var(--f4)">
-          <div class="pic"><img src="assets/img/primeshade-banner.webp" width="1200" height="540" alt="PrimeShade Auto Tint page banner" loading="lazy"></div>
+          <div class="pic"><img src="assets/img/primeshade-banner.webp" srcset="assets/img/primeshade-banner-400.webp 400w, assets/img/primeshade-banner-800.webp 800w, assets/img/primeshade-banner.webp 1200w" sizes="(max-width:760px) calc(100vw - 32px), 690px" width="1200" height="540" alt="PrimeShade Auto Tint page banner" loading="lazy"></div>
           <div class="txt"><span class="lbl">Client · Social media</span><h3>PrimeShade Auto Tint</h3><p>Page content, campaigns and lead-generation posts for a window tinting business serving Capiz, Iloilo and Aklan.</p><a class="tlink" href="https://www.facebook.com/profile.php?id=61586100442996" target="_blank" rel="noopener" data-cur="Visit">View the client page<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </article>
         <article class="small-case" style="--tc:var(--f3)"><span class="lbl">Service</span><h3>Business consulting</h3><p>Feasibility studies, business plans and franchise development for startups, expansions and lending submissions.</p></article>
@@ -1141,7 +1165,7 @@ img,video{max-width:100%}
         <div class="why-pitch">
           <p>If your people spend their days encoding, checking, scheduling and reporting by hand, you don't need more software. You need someone who <strong>learns how the work is done today</strong>, plans the fix, and <strong>ships something your team actually uses</strong>.</p>
           <p>That's the builder you'll find on this page: a licensed teacher and MBA who spends most of his time building apps, gets excited by every new idea, and keeps learning <strong>how AI and large language models can take routine work off people's hands</strong>.</p>
-          <div class="sig"><img src="assets/img/portrait.webp" alt="" width="46" height="46"><div><b>Alvin Diaz Merasol</b><span>LPT · MBA · teaching since 2017</span></div></div>
+          <div class="sig"><img src="assets/img/portrait-200.webp" srcset="assets/img/portrait-200.webp 200w, assets/img/portrait-400.webp 400w, assets/img/portrait.webp 900w" sizes="46px" alt="" width="46" height="46" loading="lazy"><div><b>Alvin Diaz Merasol</b><span>LPT · MBA · teaching since 2017</span></div></div>
         </div>
       </div>
 
@@ -1275,7 +1299,7 @@ img,video{max-width:100%}
           <li><div class="when">Ongoing</div><div><h3>Business consultant</h3><div class="org">Feasibility studies · Business plans · Franchise development</div></div></li>
         </ol>
         <div class="creds">
-          <figure class="grad"><img src="assets/img/graduation.webp" width="700" height="700" alt="Alvin Diaz Merasol at his MBA graduation" loading="lazy"><figcaption>MBA graduation · Filamer Christian University</figcaption></figure>
+          <figure class="grad"><img src="assets/img/graduation.webp" srcset="assets/img/graduation-400.webp 400w, assets/img/graduation.webp 700w" sizes="(max-width:760px) calc(100vw - 48px), 400px" width="700" height="700" alt="Alvin Diaz Merasol at his MBA graduation" loading="lazy"><figcaption>MBA graduation · Filamer Christian University</figcaption></figure>
           <div class="cred"><b>Master of Business Administration</b><span>Filamer Christian University</span></div>
           <div class="cred"><b>BS Business Administration</b><span>Capiz State University</span></div>
           <div class="cred"><b>Licensed Professional Teacher</b><span>PRC No. 1385342</span></div>
@@ -1328,7 +1352,7 @@ img,video{max-width:100%}
       <p class="ct-lede">Tell me the problem, who it's for and when you need it. I'll reply with how I'd approach it, usually within a day on weekdays.</p>
       <div class="ct-grid">
         <div>
-          <div class="me-card"><img src="assets/img/portrait.webp" alt="Alvin Diaz Merasol" width="76" height="76" loading="lazy"><div><b>You'll work directly with me</b><p>No middlemen and no handoffs. I read and answer every message myself.</p></div></div>
+          <div class="me-card"><img src="assets/img/portrait-200.webp" srcset="assets/img/portrait-200.webp 200w, assets/img/portrait-400.webp 400w, assets/img/portrait.webp 900w" sizes="76px" alt="Alvin Diaz Merasol" width="76" height="76" loading="lazy"><div><b>You'll work directly with me</b><p>No middlemen and no handoffs. I read and answer every message myself.</p></div></div>
           <div class="crow"><span class="ic"><svg aria-hidden="true"><use href="#i-mail"/></svg></span><span class="v"><span class="lbl">Email</span><b id="email">alvindiazmerasol@gmail.com</b></span><button class="mini" type="button" id="copyBtn">Copy</button></div>
           <div class="crow"><span class="ic"><svg aria-hidden="true"><use href="#i-in"/></svg></span><span class="v"><span class="lbl">LinkedIn</span><b><a href="https://www.linkedin.com/in/alvin-diaz-lpt-mba-b533a0275" target="_blank" rel="noopener" data-cur="Visit">alvin-diaz-lpt-mba</a></b></span></div>
           <div class="crow"><span class="ic"><svg aria-hidden="true"><use href="#i-gh"/></svg></span><span class="v"><span class="lbl">GitHub</span><b><a href="https://github.com/tep2234" target="_blank" rel="noopener" data-cur="Visit">github.com/tep2234</a></b></span></div>
@@ -1493,6 +1517,9 @@ var TAX=[
 ];
 var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+/* responsive image variants (generated copies at smaller widths; last entry is the original width) */
+var VARIANTS={"partsflow-command":[400,800,1200],"daliguro-dashboard":[400,800,1200],"daliguro-ilaw":[400,800,1200],"asenso-packages":[400,800,1200],"primeshade-banner":[400,800,1200],"partsflow-pos":[400,800,1200],"partsflow-analytics":[400,800,1200],"portrait":[200,400,900],"graduation":[400,700],"daliguro-app-poster":[640,1280],"smart-attendance-poster":[640,1280],"sf9-master-poster":[640,1280],"item-analysis-poster":[640,1280]};
+function rs(src,sizes){var m=/^(.*\/)([a-z0-9-]+)\.webp$/.exec(src),v=m&&VARIANTS[m[2]];if(!v)return "";return ' srcset="'+v.map(function(w,i){return (i===v.length-1?src:m[1]+m[2]+"-"+w+".webp")+" "+w+"w"}).join(", ")+'" sizes="'+sizes+'"'}
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 var fine=matchMedia("(hover: hover) and (pointer: fine)").matches;
 var IC='<svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"/></svg>';
@@ -1508,21 +1535,21 @@ $$("[data-sec]").forEach(function(s){io.observe(s)});
 
 /* ---------- 3D folder stack ---------- */
 var STACK=[
- {id:"partsflow",label:"PartsFlow Pro",c:"var(--f6)",tx:"58%",doc:'<img src="assets/img/partsflow-command.webp" alt="">'},
+ {id:"partsflow",label:"PartsFlow Pro",c:"var(--f6)",tx:"58%",doc:'<img src="assets/img/partsflow-command.webp"'+rs("assets/img/partsflow-command.webp","(max-width:760px) 45vw, 300px")+' width="1200" height="689" alt="">'},
  {id:"scanner",label:"Exam scanner",c:"var(--f5)",tx:"48%",doc:'<canvas data-qr width="29" height="29" style="width:38%;margin:10% auto;display:block;image-rendering:pixelated"></canvas>'},
  {id:"attendance",label:"Attendance v5",c:"var(--f4)",tx:"34%",doc:'<div data-att style="padding:8% 6%"></div>'},
  {id:"sf9",label:"SF9 Master",c:"var(--f3)",tx:"20%",doc:'<div style="padding:9% 8%;font:600 9px var(--mono);color:#2D3647;line-height:1.9">SCHOOL FORM 9 · LEARNER PROGRESS REPORT CARD<br>TERM 1 · TERM 2 · TERM 3 · FINAL<div style="height:5px;background:#D7DCE4;margin:6px 0 4px"></div><div style="height:5px;background:#D7DCE4;width:80%;margin-bottom:4px"></div><div style="height:5px;background:#D7DCE4;width:64%"></div></div>'},
  {id:"item-analysis",label:"Item analysis",c:"var(--f2)",tx:"6%",doc:'<div data-bars style="display:flex;align-items:flex-end;gap:4%;height:100%;padding:12% 8% 0"></div>'},
- {id:"daliguro",label:"DALIguro",c:"var(--f1)",tx:"62%",doc:'<img src="assets/img/daliguro-dashboard.webp" alt="">'}
+ {id:"daliguro",label:"DALIguro",c:"var(--f1)",tx:"62%",doc:'<img src="assets/img/daliguro-dashboard.webp"'+rs("assets/img/daliguro-dashboard.webp","(max-width:760px) 45vw, 300px")+' width="1200" height="683" alt="">'}
 ];
 var rig=$("#rig");
 rig.innerHTML=STACK.map(function(f,i){
   var n=STACK.length-1-i; /* 0 = front */
-  return '<button class="folder" type="button" data-open="'+f.id+'" data-cur="Open" data-n="'+n+'" style="--fc:'+f.c+';--tx:'+f.tx+'" aria-label="Open the '+esc(f.label)+' file">'+
-    '<span class="tab">'+esc(f.label)+'</span><span class="body"></span><span class="doc">'+f.doc+'</span>'+
-    '<span class="front"><b>'+esc(f.label)+'</b><span>File '+itemNo(f.id)+'</span></span></button>';
+  return '<button class="folder" type="button" data-open="'+f.id+'" data-cur="Open" data-n="'+n+'" style="--fc:'+f.c+';--tx:'+f.tx+'" >'+
+    '<span class="tab" aria-hidden="true">'+esc(f.label)+'</span><span class="body" aria-hidden="true"></span><span class="doc" aria-hidden="true">'+f.doc+'</span>'+
+    '<span class="front"><b>'+esc(f.label)+'</b><span>File '+itemNo(f.id)+'</span><span class="vh">, open the file</span></span></button>';
 }).join("")+
- '<div class="personnel" aria-hidden="true"><span class="clip"></span><div class="ph"><img src="assets/img/portrait.webp" width="900" height="1094" alt=""></div>'+
+ '<div class="personnel" aria-hidden="true"><span class="clip"></span><div class="ph"><img src="assets/img/portrait.webp"'+rs("assets/img/portrait.webp","(max-width:760px) 140px, 230px")+' width="900" height="1094" alt=""></div>'+
  '<div class="rows"><div><span>Name</span><b>A. D. Merasol</b></div><div><span>License</span><b>PRC 1385342</b></div><div><span>Degree</span><b>MBA</b></div><div><span>Since</span><b>2017</b></div></div>'+
  '<span class="stampmark">Licensed<br>Teacher</span></div>';
 function itemNo(id){var it=ITEMS.filter(function(x){return x.id===id})[0];return it?it.no:"--"}
@@ -1546,7 +1573,7 @@ $$("[data-att]").forEach(function(el){var s="PPPAPPLPPPPEPPPAPPPP".split(""),h='
   s.forEach(function(ch){h+='<span style="padding:3px 0;background:'+(ch==="P"?"#DCE5DF":ch==="A"?"#F0D3CD":"#EDE3C9")+';color:#2D3647">'+ch+'</span>'});el.innerHTML=h+'</div>';});
 
 /* rig follows the pointer (eased), stays still for touch and reduced motion */
-(function(){var cab=$("#cab"),base=innerWidth<760?{x:12,y:-10}:{x:14,y:-18},tx=0,ty=0,cx=0,cy=0,raf=0;
+(function(){var cab=$("#cab"),base=matchMedia("(max-width:759px)").matches?{x:12,y:-10}:{x:14,y:-18},tx=0,ty=0,cx=0,cy=0,raf=0;
   function apply(){rig.style.transform="rotateX("+(base.x+cy).toFixed(2)+"deg) rotateY("+(base.y+cx).toFixed(2)+"deg) rotateZ(1deg)"}
   if(!fine||reduce){apply();return}
   function loop(){cx+=(tx-cx)*.09;cy+=(ty-cy)*.09;apply();if(Math.abs(tx-cx)>.01||Math.abs(ty-cy)>.01)raf=requestAnimationFrame(loop);else raf=0}
@@ -1588,7 +1615,7 @@ function openFile(id,from){var i=ITEMS.filter(function(x){return x.id===id})[0];
   $("#dNo").textContent="File "+i.no+" · "+i.kindLabel;
   var imgs=(i.img?[i.img]:[]).concat(i.gallery||[]);
   $("#dBody").innerHTML='<span class="stampmark">'+esc(i.state)+'</span><h3 id="dTitle">'+esc(i.title)+'</h3><p class="lede">'+esc(i.sum)+'</p><span class="ev '+evc(i.ev)+'" style="filter:brightness(.8)">'+esc(i.ev)+'</span>'+
-    imgs.map(function(s){return '<figure class="shot"><img src="'+s+'" alt="'+esc(i.title)+'"></figure>'}).join("")+
+    imgs.map(function(s){return '<figure class="shot"><img src="'+s+'"'+rs(s,"(max-width:600px) 100vw, 560px")+' alt="'+esc(i.title)+'"></figure>'}).join("")+
     '<ul>'+i.pts.map(function(p){return '<li>'+esc(p)+'</li>'}).join("")+'</ul>'+(i.file?'<div class="lbl" style="color:#7A4A00">'+esc(i.file)+'</div>':'')+
     '<div class="tags" style="margin:0">'+i.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>'}).join("")+'</div>'+
     (i.note?'<p class="note">'+esc(i.note)+'</p>':'')+
@@ -1623,7 +1650,7 @@ document.addEventListener("keydown",function(e){
     else if(e.key==="ArrowUp"){e.preventDefault();sel=Math.max(sel-1,0);palRender()}
     else if(e.key==="Enter"){e.preventDefault();palGo(res[sel])}}
 });
-if(/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent))$("#kbd").textContent="⌘K";
+if(/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent))$("#kbd").setAttribute("data-k","⌘K");
 
 /* ---------- video playlist ---------- */
 var VIDS=[
@@ -1650,8 +1677,14 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-play
   loadV(b.dataset.play,true);var w=document.getElementById("watch");if(w)w.scrollIntoView({behavior:reduce?"auto":"smooth"})});
 if(!reduce){
   new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){if(!userPaused)vid.play().catch(function(){})}else vid.pause()})},{threshold:.5}).observe(vid);
-  var iv=$("#ivid");if(iv)new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){iv.preload="auto";iv.play().catch(function(){})}else iv.pause()})},{threshold:.5}).observe(iv);
 }
+/* inline recording: plays while in view (unless reduced motion), but always has a visible pause control (WCAG 2.2.2) */
+var iv=$("#ivid"),ivb=$("#ivBtn"),ivStopped=false;
+if(iv&&ivb){ivb.hidden=false;
+    var ivIcon=function(){var p=iv.paused;ivb.querySelector("use").setAttribute("href",p?"#i-play":"#i-pause");ivb.querySelector("span").textContent=p?"Play":"Pause";ivb.setAttribute("aria-label",p?"Play the recording":"Pause the recording")};
+    iv.addEventListener("play",ivIcon);iv.addEventListener("pause",ivIcon);ivIcon();
+    ivb.addEventListener("click",function(){if(iv.paused){ivStopped=false;iv.preload="auto";iv.play().catch(function(){})}else{ivStopped=true;iv.pause()}});
+    if(!reduce)new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){if(!ivStopped){iv.preload="auto";iv.play().catch(function(){})}}else iv.pause()})},{threshold:.5}).observe(iv);}
 
 /* ---------- micro-lesson ---------- */
 var DATA=[["Q1",82],["Q2",45],["Q3",67],["Q4",38],["Q5",91],["Q6",50]];
@@ -1709,16 +1742,16 @@ var WHY=[
  {t:"Claims you can check",st:"Evidence",p:"You want to trust what you read. Every skill and project here is labelled demonstrated, planned or developing, with real recordings instead of mockups.",l:["Real screen recordings of the apps","Features in development are marked as such","Figures you can verify"],proof:["Watch the recordings","#watch"]}
 ];
 var dsel=0;
-function renderWhy(){
+function renderWhy(anim){
   $("#dlist").innerHTML=WHY.map(function(w,i){return '<button type="button" role="tab" id="wt'+i+'" aria-selected="'+(i===dsel)+'" aria-controls="dpanel" data-w="'+i+'"><span class="n">0'+(i+1)+'</span><b>'+esc(w.t)+'</b><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>'}).join("");
   var w=WHY[dsel],ext=/^https?:/.test(w.proof[1]),pan=$("#dpanel");
   pan.setAttribute("aria-labelledby","wt"+dsel);
   pan.innerHTML='<span class="stampmark">'+esc(w.st)+'</span><span class="lbl">What you\'re looking for · 0'+(dsel+1)+' of 06</span><h3>'+esc(w.t)+'</h3><p>'+esc(w.p)+'</p><ul>'+w.l.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul>'+
    '<div class="proof"><span class="lbl">Proof</span><a href="'+w.proof[1]+'"'+(ext?' target="_blank" rel="noopener"':'')+'>'+esc(w.proof[0])+'<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>';
-  if(!reduce){pan.classList.remove("swap");void pan.offsetWidth;pan.classList.add("swap")}
+  if(anim&&!reduce){pan.classList.remove("swap");void pan.offsetWidth;pan.classList.add("swap")}
 }
-$("#dlist").addEventListener("click",function(e){var b=e.target.closest("[data-w]");if(!b)return;dsel=+b.dataset.w;renderWhy();$("#wt"+dsel).focus()});
-$("#dlist").addEventListener("keydown",function(e){if(e.key!=="ArrowDown"&&e.key!=="ArrowUp")return;e.preventDefault();dsel=(dsel+(e.key==="ArrowDown"?1:WHY.length-1))%WHY.length;renderWhy();$("#wt"+dsel).focus()});
+$("#dlist").addEventListener("click",function(e){var b=e.target.closest("[data-w]");if(!b)return;dsel=+b.dataset.w;renderWhy(true);$("#wt"+dsel).focus()});
+$("#dlist").addEventListener("keydown",function(e){if(e.key!=="ArrowDown"&&e.key!=="ArrowUp")return;e.preventDefault();dsel=(dsel+(e.key==="ArrowDown"?1:WHY.length-1))%WHY.length;renderWhy(true);$("#wt"+dsel).focus()});
 renderWhy();
 
 var ROUT=[
@@ -1827,8 +1860,8 @@ function renderProjects(){
   var cats=[["all","All"],["business","Business"],["education","Education"]];
   $("#pfilter").innerHTML=cats.map(c=>`<button type="button" data-pc="${c[0]}" aria-pressed="${c[0]===pf}">${c[1]} ${c[0]==="all"?PROJECTS.length:PROJECTS.filter(p=>p.cat===c[0]).length}</button>`).join("");
   $("#pgrid").innerHTML=PROJECTS.filter(p=>pf==="all"||p.cat===pf).map(p=>{
-    var media=p.vid?`<button class="pm" type="button" data-play="${p.vid}" aria-label="Play the ${h(p.title)} screen recording"><img src="assets/media/${p.vid}-poster.webp" alt="" loading="lazy" width="1280" height="602"><span class="play-chip"><svg aria-hidden="true"><use href="#i-play"/></svg>Screen recording</span></button>`
-      :p.img?`<span class="pm"><img src="${p.img}" alt="${h(p.title)} screenshot" loading="lazy" width="1200" height="680"></span>`:"";
+    var media=p.vid?`<button class="pm" type="button" data-play="${p.vid}" aria-label="Play the ${h(p.title)} screen recording"><img src="assets/media/${p.vid}-poster.webp"${rs("assets/media/"+p.vid+"-poster.webp","(max-width:760px) calc(100vw - 32px), 610px")} alt="" loading="lazy" width="1280" height="602"><span class="play-chip"><svg aria-hidden="true"><use href="#i-play"/></svg>Screen recording</span></button>`
+      :p.img?`<span class="pm"><img src="${p.img}"${rs(p.img,"(max-width:760px) calc(100vw - 32px), 610px")} alt="${h(p.title)} screenshot" loading="lazy" width="1200" height="680"></span>`:"";
     return `<article class="pcard" style="--tc:${p.tc}">${media}<div class="pb">
       <div class="ph"><span class="lbl">${h(p.catLabel)}</span><span class="status ${p.status[1]}">${h(p.status[0])}</span></div>
       <h3>${h(p.title)}</h3>
