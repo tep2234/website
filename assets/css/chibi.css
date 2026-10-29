@@ -1,0 +1,45 @@
+/* Chibi Alvin styles (used by assets/js/chibi.js). Linked in the page head so adding him later never restyles the page. */
+.chibi{position:absolute;z-index:6;width:var(--s);height:var(--s);padding:0;border:0;background:none;cursor:pointer;opacity:0;transition:opacity 260ms ease,transform 200ms cubic-bezier(.23,1,.32,1);-webkit-tap-highlight-color:transparent}
+.chibi.on{opacity:1}
+.chibi .spr{position:absolute;inset:0;background-image:var(--sheet);background-repeat:no-repeat;background-size:calc(var(--s) * 9) calc(var(--s) * 11);background-position:calc(var(--c,0) * var(--s) * -1) calc(var(--r,0) * var(--s) * -1);pointer-events:none}
+.chibi:focus-visible{outline:2px solid var(--amber,#F2A516);outline-offset:2px;border-radius:12px}
+.chibi-hero{--s:clamp(150px,13vw,210px);right:-1%;bottom:-6px;transform-origin:50% 92%}
+@media (max-width:760px){.chibi-hero{right:0;bottom:-8px}}
+.chibi-bub{position:absolute;z-index:7;max-width:240px;padding:9px 13px;border-radius:14px;background:var(--paper,#fff);color:var(--paper-ink,#121927);font:600 13.5px/1.35 var(--body,system-ui,sans-serif);box-shadow:0 14px 30px -14px rgba(0,0,0,.55),0 0 0 1px rgba(18,25,39,.08);opacity:0;transform:translateY(6px) scale(.96);transform-origin:90% 100%;transition:opacity 180ms ease,transform 220ms cubic-bezier(.23,1,.32,1);pointer-events:none}
+.chibi-bub.on{opacity:1;transform:none;pointer-events:auto}
+.chibi-bub::after{content:"";position:absolute;right:26px;bottom:-6px;width:12px;height:12px;background:inherit;transform:rotate(45deg);box-shadow:3px 3px 0 0 rgba(18,25,39,.04)}
+.chibi-bub .cb-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chibi-bub button{min-height:34px;padding:0 12px;border-radius:999px;border:1px solid rgba(18,25,39,.2);background:none;color:inherit;font:600 13px var(--body,system-ui,sans-serif);cursor:pointer}
+.chibi-bub button.cb-go{background:var(--amber,#F2A516);border-color:var(--amber,#F2A516);color:var(--on-amber,#1B1203)}
+.chibi-hero-bub{--s:clamp(150px,13vw,210px);right:calc(var(--s) * .6);bottom:calc(var(--s) * .74)}
+@media (max-width:760px){.chibi-hero-bub{right:calc(var(--s) * .45);max-width:190px;font-size:13px;padding:8px 11px}}
+.chibi-dock{--ds:clamp(88px,calc(6vw + 50px),150px);position:fixed;z-index:50;right:calc(8px + env(safe-area-inset-right,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));width:var(--ds);height:var(--ds);opacity:0;transform:translateY(16px);transition:opacity 220ms ease,transform 260ms cubic-bezier(.23,1,.32,1);pointer-events:none}
+.chibi-dock.on{opacity:1;transform:none;pointer-events:auto}
+@media (min-width:1100px){.chibi-dock{right:calc(48px + env(safe-area-inset-right,0px))}}
+.chibi-dock .chibi{--s:var(--ds);position:absolute;left:0;top:0;opacity:1}
+.chibi-dock .cb-x{position:absolute;z-index:9;right:0;top:0;width:26px;height:26px;border-radius:50%;border:1px solid var(--rule-2,rgba(0,0,0,.2));background:var(--sheet,var(--paper,#fff));color:var(--fg,#121927);font:600 14px/1 system-ui;display:grid;place-items:center;cursor:pointer;opacity:0;transition:opacity 160ms ease}
+.chibi-dock:hover .cb-x,.chibi-dock:focus-within .cb-x{opacity:1}
+@media (hover:none){.chibi-dock .cb-x{opacity:1}}
+.chibi-dock .chibi-bub{right:calc(var(--ds) * .3);bottom:calc(var(--ds) * .92);width:max-content;max-width:min(260px,calc(100vw - 32px));transform-origin:90% 100%}
+.chibi-bub a.cb-chip,.chibi-bub button.cb-chip{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;border:1px solid rgba(18,25,39,.2);background:none;color:inherit;font:600 13px var(--body,system-ui,sans-serif);text-decoration:none;cursor:pointer}
+.chibi-bub a.cb-chip.cb-go,.chibi-bub button.cb-chip.cb-go{background:var(--amber,#F2A516);border-color:var(--amber,#F2A516);color:var(--on-amber,#1B1203)}
+@media (hover:hover){.chibi-bub a.cb-chip:hover{border-color:var(--amber,#F2A516)}}
+.chibi-confetti{position:absolute;z-index:8;left:50%;top:40%;width:8px;height:12px;border-radius:2px;pointer-events:none;animation:chibi-pop 1100ms cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes chibi-pop{0%{transform:translate(-50%,-50%) rotate(0);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot));opacity:0}}
+.chibi-tour-hl{outline:3px solid var(--amber,#F2A516)!important;outline-offset:6px;border-radius:6px;transition:outline-color 200ms ease}
+.chibi-tour{position:fixed;z-index:85;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(560px,calc(100% - 32px));display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:end;padding:14px 16px 14px 8px;border-radius:14px;background:var(--paper,#fff);color:var(--paper-ink,#121927);box-shadow:0 30px 60px -24px rgba(0,0,0,.6),0 0 0 1px rgba(18,25,39,.1)}
+.chibi-tour .chibi{--s:96px;position:relative;opacity:1;cursor:default}
+.chibi-tour .cb-say{margin:0;font:500 15px/1.45 var(--body,system-ui,sans-serif)}
+.chibi-tour .cb-k{font:500 11px var(--mono,monospace);letter-spacing:.07em;text-transform:uppercase;color:#4E586B;margin-bottom:4px}
+.chibi-tour .cb-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chibi-tour[hidden]{display:none!important}
+.chibi-tour button[hidden]{display:none}
+.chibi-tour button{min-height:40px;padding:0 14px;border-radius:4px;border:1px solid rgba(18,25,39,.22);background:none;color:inherit;font:600 14px var(--body,system-ui,sans-serif);cursor:pointer}
+.chibi-tour button.cb-go{background:var(--amber,#F2A516);border-color:var(--amber,#F2A516);color:var(--on-amber,#1B1203)}
+@media (max-width:520px){.chibi-tour{grid-template-columns:72px minmax(0,1fr)}.chibi-tour .chibi{--s:72px}}
+.chibi-404{position:relative;--s:170px;display:block;margin:0 auto -18px;opacity:1}
+@media (hover:hover){.chibi-bub button:hover,.chibi-tour button:hover{border-color:var(--amber,#F2A516)}}
+@media (prefers-reduced-motion:reduce){.chibi,.chibi-bub,.chibi-dock{transition:none!important}}
+/* keep Alvin's layout work inside his own boxes, so adding or animating him never re-lays-out the page */
+#cab{contain:layout}
+.chibi,.chibi-dock,.chibi-tour{contain:layout style}

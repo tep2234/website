@@ -26,45 +26,6 @@
   var store = { get: function (k) { try { return localStorage.getItem(k) } catch (e) { return null } },
                 set: function (k, v) { try { localStorage.setItem(k, v) } catch (e) {} } };
 
-  var CSS = [
-    ".chibi{position:absolute;z-index:6;width:var(--s);height:var(--s);padding:0;border:0;background:none;cursor:pointer;opacity:0;transition:opacity 260ms ease,transform 200ms cubic-bezier(.23,1,.32,1);-webkit-tap-highlight-color:transparent}",
-    ".chibi.on{opacity:1}",
-    ".chibi .spr{position:absolute;inset:0;background-image:var(--sheet);background-repeat:no-repeat;background-size:calc(var(--s) * " + COLS + ") calc(var(--s) * " + ROWS + ");background-position:calc(var(--c,0) * var(--s) * -1) calc(var(--r,0) * var(--s) * -1);pointer-events:none}",
-    ".chibi:focus-visible{outline:2px solid var(--amber,#F2A516);outline-offset:2px;border-radius:12px}",
-    ".chibi-hero{--s:190px;right:-1%;bottom:-6px;transform-origin:50% 92%}",
-    "@media (max-width:760px){.chibi-hero{--s:140px;right:0;bottom:-8px}}",
-    ".chibi-bub{position:absolute;z-index:7;max-width:240px;padding:9px 13px;border-radius:14px;background:var(--paper,#fff);color:var(--paper-ink,#121927);font:600 13.5px/1.35 var(--body,system-ui,sans-serif);box-shadow:0 14px 30px -14px rgba(0,0,0,.55),0 0 0 1px rgba(18,25,39,.08);opacity:0;transform:translateY(6px) scale(.96);transform-origin:90% 100%;transition:opacity 180ms ease,transform 220ms cubic-bezier(.23,1,.32,1);pointer-events:none}",
-    ".chibi-bub.on{opacity:1;transform:none;pointer-events:auto}",
-    ".chibi-bub::after{content:\"\";position:absolute;right:26px;bottom:-6px;width:12px;height:12px;background:inherit;transform:rotate(45deg);box-shadow:3px 3px 0 0 rgba(18,25,39,.04)}",
-    ".chibi-bub .cb-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}",
-    ".chibi-bub button{min-height:34px;padding:0 12px;border-radius:999px;border:1px solid rgba(18,25,39,.2);background:none;color:inherit;font:600 13px var(--body,system-ui,sans-serif);cursor:pointer}",
-    ".chibi-bub button.cb-go{background:var(--amber,#F2A516);border-color:var(--amber,#F2A516);color:var(--on-amber,#1B1203)}",
-    ".chibi-hero-bub{right:calc(190px * .62);bottom:calc(190px * .72)}",
-    "@media (max-width:760px){.chibi-hero-bub{right:calc(140px * .5);bottom:calc(140px * .78);max-width:170px;font-size:13px;padding:8px 11px}.chibi-hero-bub .cb-row button{min-height:30px;padding:0 10px}}",
-    ".chibi-dock{position:fixed;z-index:50;right:calc(46px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));width:96px;height:96px;opacity:0;transform:translateY(16px);transition:opacity 220ms ease,transform 260ms cubic-bezier(.23,1,.32,1);pointer-events:none}",
-    ".chibi-dock.on{opacity:1;transform:none;pointer-events:auto}",
-    ".chibi-dock .chibi{--s:96px;position:absolute;left:0;top:0;opacity:1}",
-    ".chibi-dock .cb-x{position:absolute;z-index:9;right:-4px;top:-4px;width:24px;height:24px;border-radius:50%;border:1px solid var(--rule-2,rgba(0,0,0,.2));background:var(--sheet,var(--paper,#fff));color:var(--fg,#121927);font:600 14px/1 system-ui;display:grid;place-items:center;cursor:pointer;opacity:0;transition:opacity 160ms ease}",
-    ".chibi-dock:hover .cb-x,.chibi-dock:focus-within .cb-x{opacity:1}",
-    "@media (hover:none){.chibi-dock .cb-x{opacity:1}}",
-    ".chibi-dock .chibi-bub{right:30px;bottom:100px;width:max-content;max-width:190px;transform-origin:90% 100%}",
-    ".chibi-confetti{position:absolute;z-index:8;left:50%;top:40%;width:8px;height:12px;border-radius:2px;pointer-events:none;animation:chibi-pop 1100ms cubic-bezier(.2,.7,.3,1) forwards}",
-    "@keyframes chibi-pop{0%{transform:translate(-50%,-50%) rotate(0);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot));opacity:0}}",
-    ".chibi-tour-hl{outline:3px solid var(--amber,#F2A516)!important;outline-offset:6px;border-radius:6px;transition:outline-color 200ms ease}",
-    ".chibi-tour{position:fixed;z-index:85;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(560px,calc(100% - 32px));display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:end;padding:14px 16px 14px 8px;border-radius:14px;background:var(--paper,#fff);color:var(--paper-ink,#121927);box-shadow:0 30px 60px -24px rgba(0,0,0,.6),0 0 0 1px rgba(18,25,39,.1)}",
-    ".chibi-tour .chibi{--s:96px;position:relative;opacity:1;cursor:default}",
-    ".chibi-tour .cb-say{margin:0;font:500 15px/1.45 var(--body,system-ui,sans-serif)}",
-    ".chibi-tour .cb-k{font:500 11px var(--mono,monospace);letter-spacing:.07em;text-transform:uppercase;color:#4E586B;margin-bottom:4px}",
-    ".chibi-tour .cb-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}",
-    ".chibi-tour[hidden]{display:none!important}",
-    ".chibi-tour button[hidden]{display:none}",
-    ".chibi-tour button{min-height:40px;padding:0 14px;border-radius:4px;border:1px solid rgba(18,25,39,.22);background:none;color:inherit;font:600 14px var(--body,system-ui,sans-serif);cursor:pointer}",
-    ".chibi-tour button.cb-go{background:var(--amber,#F2A516);border-color:var(--amber,#F2A516);color:var(--on-amber,#1B1203)}",
-    "@media (max-width:520px){.chibi-tour{grid-template-columns:72px minmax(0,1fr)}.chibi-tour .chibi{--s:72px}}",
-    ".chibi-404{position:relative;--s:170px;display:block;margin:0 auto -18px;opacity:1}",
-    "@media (hover:hover){.chibi-bub button:hover,.chibi-tour button:hover{border-color:var(--amber,#F2A516)}}",
-    "@media (prefers-reduced-motion:reduce){.chibi,.chibi-bub,.chibi-dock{transition:none!important}}"
-  ].join("\n");
 
   /* ---------- one animated character ---------- */
   function Sprite(el) {
@@ -108,6 +69,43 @@
     if (interactive) b.removeAttribute("aria-hidden"); else b.setAttribute("aria-hidden", "true");
     if (ms) b._t = setTimeout(function () { b.classList.remove("on"); b.setAttribute("aria-hidden", "true"); }, ms);
   }
+  /* a bubble with buttons stays while the visitor reads or hovers it */
+  function keepOpen(b) {
+    b.addEventListener("pointerenter", function () { clearTimeout(b._t); });
+    b.addEventListener("focusin", function () { clearTimeout(b._t); });
+    b.addEventListener("pointerleave", function () { if (b.classList.contains("on")) b._t = setTimeout(function () { hush(b); }, 2500); });
+  }
+  var EMAIL = "alvindiazmerasol@gmail.com";
+  var HOME = PAGE === "case" ? "../index.html" : "";
+  function chips(list) {
+    return '<div class="cb-row">' + list.map(function (c, i) {
+      var cls = "cb-chip" + (i === 0 ? " cb-go" : "");
+      if (c[1].charAt(0) === "!") return '<button type="button" class="' + cls + '" data-act="' + c[1].slice(1) + '">' + esc(c[0]) + '</button>';
+      return '<a class="' + cls + '" href="' + c[1] + '">' + esc(c[0]) + '</a>';
+    }).join("") + '</div>';
+  }
+  function talk(b, text, list, ms) {
+    say(b, esc(text) + (list && list.length ? chips(list) : ""), ms || (list && list.length ? 7000 : 2800), !!(list && list.length));
+    delete b.dataset.menu;
+  }
+  function menu(b) {
+    var list = PAGE === "case"
+      ? [["Try the demo", "#try"], ["Watch it work", "#watch"], ["All projects", "../index.html#projects"], ["Hire me", "../index.html#contact"], ["Hide me", "!hide"]]
+      : [["Take the 60-second tour", "!tour"], ["See projects", "#projects"], ["Get my résumé", "#resume"], ["Hire me", "#contact"], ["Hide me", "!hide"]];
+    talk(b, "Kumusta! What do you need?", list, 9000); b.dataset.menu = "1";
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest(".chibi-bub [data-act], .chibi-bub a.cb-chip"); if (!a) return;
+    var b = a.closest(".chibi-bub"), act = a.dataset.act;
+    if (!act) { setTimeout(function () { hush(b); }, 150); return; }
+    if (act === "tour") { hush(b); tourStart(a); }
+    else if (act === "hide") { store.set("adm-chibi", "off"); hush(b); if (dock) dock.classList.remove("on"); }
+    else if (act === "email") {
+      var done = function () { talk(b, "Copied " + EMAIL + ". Talk soon!"); if (dockSpr) dockSpr.play("thumbs"); };
+      try { navigator.clipboard.writeText(EMAIL).then(done, function () { talk(b, "My email: " + EMAIL, null, 8000); }); } catch (_) { talk(b, "My email: " + EMAIL, null, 8000); }
+    }
+    else if (act === "weak") { var w = document.querySelector('[data-load="weak"]'); if (w) w.click(); hush(b); }
+  });
   function hush(b) { clearTimeout(b._t); b.classList.remove("on"); b.setAttribute("aria-hidden", "true"); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
@@ -125,30 +123,27 @@
 
   /* ---------- the corner companion (wide screens) ---------- */
   var dock = null, dockSpr = null, dockBub = null;
-  function gutterOk() {
-    if (innerWidth < 1100) return false;
-    var inner = document.querySelector("main .inner, .inner"); if (!inner) return false;
-    var right = 0;
-    document.querySelectorAll("main .inner").forEach(function (n) { var r = n.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight) right = Math.max(right, r.right); });
-    if (!right) right = inner.getBoundingClientRect().right;
-    return innerWidth - right - 46 >= 78;   /* 46 px = the index tabs; the cell's own padding covers the rest */
-  }
+  function typing() { var a = document.activeElement; return !!a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && innerWidth < 760; }
   function buildDock() {
     if (dock) return;
-    dock = document.createElement("div"); dock.className = "chibi-dock"; dock.setAttribute("role", "complementary"); dock.setAttribute("aria-label", "Chibi Alvin");
-    var who = make("", "Chibi Alvin. Press to wave.");
+    dock = document.createElement("div"); dock.className = "chibi-dock"; dock.setAttribute("role", "complementary"); dock.setAttribute("aria-label", "Chibi Alvin, your guide");
+    var who = make("", "Chibi Alvin. Press for shortcuts.");
     var x = document.createElement("button"); x.type = "button"; x.className = "cb-x"; x.setAttribute("aria-label", "Hide chibi Alvin"); x.textContent = "×";
     dockBub = bubble();
     dock.appendChild(dockBub); dock.appendChild(who); dock.appendChild(x);
     document.body.appendChild(dock);
     dockSpr = new Sprite(who); dockSpr.play("idle");
-    who.addEventListener("click", function () { dockSpr.play("wave"); say(dockBub, "Kumusta! 👋", 2200); });
+    who.addEventListener("click", function () {
+      if (dockBub.classList.contains("on") && dockBub.dataset.menu) { hush(dockBub); return; }
+      dockSpr.play("wave"); menu(dockBub);
+    });
     x.addEventListener("click", function () { store.set("adm-chibi", "off"); dock.classList.remove("on"); hush(dockBub); });
+    keepOpen(dockBub);
   }
   var dockWanted = false;
   function updateDock(want) {
     if (want !== undefined) dockWanted = want;
-    if (store.get("adm-chibi") === "off" || !dockWanted || !gutterOk() || tourOpen) { if (dock) dock.classList.remove("on"); return; }
+    if (store.get("adm-chibi") === "off" || !dockWanted || tourOpen || typing()) { if (dock) { dock.classList.remove("on"); if (dockBub) hush(dockBub); } return; }
     buildDock(); dock.classList.add("on");
   }
   function dockShown() { return dock && dock.classList.contains("on"); }
@@ -158,26 +153,27 @@
   function heroVisible() { if (!hero) return false; var r = hero.getBoundingClientRect(); return r.bottom > 40 && r.top < innerHeight - 40; }
   function react(move, text, ms) {
     if (heroVisible()) { heroSpr.play(move, { hold: 900 }); if (text) say(heroBub, esc(text), ms || 2600); return; }
-    if (!dockShown() && store.get("adm-chibi") !== "off") {
-      if (gutterOk()) updateDock(true);
-      else if (innerWidth >= 900 && !tourOpen) {   /* no free margin: pop in briefly, like a toast */
-        buildDock(); dock.classList.add("on"); clearTimeout(dock._t);
-        dock._t = setTimeout(function () { if (!(dockWanted && gutterOk())) { dock.classList.remove("on"); hush(dockBub); } }, (ms || 2800) + 400);
-      }
-    }
-    if (dockShown()) { dockSpr.play(move, { hold: 900, then: function () { dockSpr.play(sectionMove || "idle"); } }); if (text) say(dockBub, esc(text), ms || 2800); }
+    if (!dockShown() && store.get("adm-chibi") !== "off" && !tourOpen) updateDock(true);
+    if (dockShown()) { dockSpr.play(move, { hold: 900, then: function () { dockSpr.play(sectionMove || "idle"); } }); if (text) talk(dockBub, text, null, ms || 3200); }
   }
   window.addEventListener("chibi", function (e) { var d = e.detail || {}; react(d.move || "wave", d.say, d.ms); });
 
   /* ---------- section moods for the companion ---------- */
   var SECTIONS = PAGE === "case" ? {
-    watch: ["typing", "This is the real app, recorded."], story: ["idea", "Scroll on. The picture follows."],
-    "try": ["point", "Tap the answers. Try it!"], role: ["thumbs", "I decide, the AI drafts."]
+    watch: ["typing", "This is the real app, recorded. Jump to any part.", [["Skip to the demo", "#try"]]],
+    story: ["idea", "Problem to result in four steps.", [["Try the demo", "#try"]]],
+    "try": ["point", "Tap any answer and I'll re-check the class.", [["Load a struggling class", "!weak"]]],
+    role: ["thumbs", "I decide, the AI drafts.", [["Ask for a code walkthrough", "../index.html#contact"]]]
   } : {
-    projects: ["typing", "Flip through the files."], services: ["idea", "What can I build for you?"],
-    cases: ["typing", "Real problems, real fixes."], about: ["wave", "Kumusta! That's me."],
-    skills: ["thumbs", "Excel, AI, data, design."], experience: ["idea", "Teaching since 2017."],
-    resume: ["resume", "Pick the version for your role."], contact: ["wave", "Let's talk!"]
+    projects: ["typing", "Flip through the files. DALIguro has a full case study.", [["Open the case study", "projects/daliguro.html"]]],
+    services: ["idea", "What can I build for you?", [["Tell me your project", "#contact"]]],
+    cases: ["typing", "Real problems, real fixes.", [["Try the live demo", "projects/daliguro.html#try"]]],
+    about: ["wave", "Kumusta! That's me. Teacher by day, builder always.", [["See my résumé", "#resume"]]],
+    skills: ["thumbs", "Excel, AI, data, design.", [["Check a job against them", "#match"]]],
+    experience: ["idea", "Teaching since 2017.", [["Get the résumé", "#resume"]]],
+    resume: ["resume", "Pick the version for your role.", [["Check job fit first", "#match"]]],
+    match: ["point", "Paste a job post and I'll be honest about the fit.", [["Then talk to me", "#contact"]]],
+    contact: ["wave", "Let's talk! Or copy my email.", [["Copy my email", "!email"]]]
   };
   var sectionMove = "idle", lastSec = "";
   function watchSections() {
@@ -186,11 +182,11 @@
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (en) {
         if (!en.isIntersecting) return;
-        var key = PAGE === "case" ? en.target.id : en.target.getAttribute("data-sec");
+        var key = PAGE === "case" ? en.target.id : (en.target.id === "match" ? "match" : en.target.getAttribute("data-sec"));
         if (key === lastSec || !SECTIONS[key]) return; lastSec = key;
         var s = SECTIONS[key]; sectionMove = s[0] === "wave" || s[0] === "point" || s[0] === "thumbs" || s[0] === "resume" ? "idle" : s[0];
         updateDock(!heroVisible());
-        if (dockShown()) { dockSpr.play(s[0], { then: function () { dockSpr.play(sectionMove); } }); say(dockBub, esc(s[1]), 3000); }
+        if (dockShown()) { dockSpr.play(s[0], { then: function () { dockSpr.play(sectionMove); } }); talk(dockBub, s[1], s[2], 7000); }
       });
     }, { rootMargin: "-45% 0px -50% 0px" });
     targets.forEach(function (t) { io.observe(t); });
@@ -344,19 +340,22 @@
   }
 
   function start() {
-    var st = document.createElement("style"); st.textContent = CSS; document.head.appendChild(st);
     if (PAGE === "404") { build404(); return; }
     if (PAGE === "home") buildHero();
     watchSections(); watchTools();
+    if (PAGE === "case") updateDock(true);
     addEventListener("resize", function () { updateDock(); }, { passive: true });
-    addEventListener("scroll", function () { if (dock && dockWanted) updateDock(); }, { passive: true });
+    document.addEventListener("focusin", function () { if (typing()) updateDock(); });
+    document.addEventListener("focusout", function () { setTimeout(function () { updateDock(); }, 50); });
+
     window.chibiAlvin = { react: react, tour: tourStart, hero: function () { return heroSpr; }, dock: function () { return dockSpr; } };
   }
   /* wait for the page to finish loading and the sheet to download, then appear */
   function boot() {
     var img = new Image(); img.decoding = "async";
-    img.onload = start; img.onerror = function () {};
     img.src = SHEET;
+    /* decode off the main thread before anything paints with it */
+    (img.decode ? img.decode() : new Promise(function (r) { img.onload = r; })).then(function () { window.__chibiImg = img; start(); }, function () {});
   }
   function later() { (window.requestIdleCallback || function (f) { setTimeout(f, 300); })(boot, { timeout: 2000 }); }
   if (PAGE === "404") { document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", boot) : boot(); }
