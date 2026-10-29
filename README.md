@@ -7,6 +7,8 @@ Static site served by GitHub Pages at https://tep2234.github.io/website/. No bui
 | --- | --- |
 | `index.html` | The home page: markup, styles and scripts in one file. Includes the project reel (the swipeable carousel in Featured projects). |
 | `projects/daliguro.html` | DALIguro case study page: folder-to-page transition, recording with captions and chapters, scroll-told story, live item-analysis demo. Its font and colour tokens are copied from `index.html`; keep them in step. |
+| `assets/js/chibi.js` | Chibi Alvin: the animated guide on the home page (follows the mouse, points at folders, offers a 60-second tour), the corner companion on wide screens, tool reactions, easter eggs and the 404 character. Loads after the page, never blocks it. |
+| `assets/img/alvin-sprite.webp` | His sprite sheet: 9 columns × 11 rows of 384 px frames. Rebuild with `python3 tools/make-chibi-sprite.py --site`. |
 | `assets/img/dg/` | Stills taken from the DALIguro recording. `assets/media/daliguro-app.vtt` holds its captions. |
 | `assets/img`, `assets/media`, `assets/fonts` | Screenshots, screen recordings with posters, self-hosted fonts. |
 | `resume/` | Résumé hub files: one PDF, Word file and print page per role. `resume-data.json` is the single source. |

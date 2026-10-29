@@ -317,13 +317,95 @@ async def showcase(b):
     ok('perf','case page mobile: CLS < 0.1',m['cls']<0.1,m); ok('perf','case page mobile: LCP < 2.5 s',m['lcp']<2500,m); ok('perf','case page mobile: blocking time < 200 ms',m['tbt']<200,m)
     await c3.close()
 
+async def chibi(b):
+    """Chibi Alvin: hero character, mouse follow, folder reactions, companion, tool reactions, tour, easter eggs, 404."""
+    G='chibi'
+    ctx,pg=await newpage(b)
+    try: await pg.wait_for_selector('.chibi-hero.on',timeout=8000); shown=True
+    except Exception: shown=False
+    ok(G,'hero Alvin appears after the page loads',shown)
+    if not shown: await ctx.close(); return
+    box=await pg.locator('.chibi-hero').bounding_box()
+    ok(G,'hero Alvin is 190 px on desktop',round(box['width'])==190 and round(box['height'])==190,box)
+    ok(G,'he greets the visitor and offers the tour','tour' in (await pg.inner_text('.chibi-hero-bub')).lower() or 'Kumusta' in await pg.inner_text('.chibi-hero-bub'))
+    await pg.wait_for_timeout(1600)
+    await pg.mouse.move(150,120); await pg.wait_for_timeout(150); await pg.mouse.move(160,130); await pg.wait_for_timeout(200)
+    pos=await pg.evaluate('getComputedStyle(document.querySelector(".chibi-hero .spr")).backgroundPosition')
+    ok(G,'his eyes follow the mouse (look-up-left frame)',pos=='0px -1900px',pos)
+    await pg.mouse.move(1300,150); await pg.wait_for_timeout(200)
+    pos2=await pg.evaluate('getComputedStyle(document.querySelector(".chibi-hero .spr")).backgroundPosition')
+    ok(G,'moving the mouse changes where he looks',pos2!=pos,pos2)
+    await pg.mouse.move(box['x']+box['width']*.46,box['y']+box['height']*.4); await pg.wait_for_timeout(300)
+    ok(G,'he waves when the mouse comes close',await pg.evaluate('chibiAlvin.hero().name')=='wave')
+    await pg.wait_for_timeout(1400)
+    await pg.locator('#rig .folder >> nth=0').dispatch_event('pointerenter'); await pg.wait_for_timeout(300)
+    ok(G,'he points at the hovered folder and names it',await pg.evaluate('chibiAlvin.hero().name')=='point' and 'PartsFlow' in await pg.inner_text('.chibi-hero-bub'))
+    for _ in range(5): await pg.click('.chibi-hero',force=True); await pg.wait_for_timeout(60)
+    await pg.wait_for_timeout(150)
+    ok(G,'five quick clicks start party mode with confetti',await pg.locator('.chibi-confetti').count()>10 and await pg.evaluate('chibiAlvin.hero().name')=='celebrate')
+    await pg.wait_for_timeout(2600)
+    # tour
+    await pg.evaluate('document.documentElement.style.scrollBehavior="auto";scrollTo(0,0)'); await pg.wait_for_timeout(300)
+    await pg.click('.chibi-hero',force=True); await pg.wait_for_timeout(300)
+    await pg.click('.chibi-hero-bub [data-tour]'); await pg.wait_for_timeout(600)
+    ok(G,'tour opens on step 1 of 4 with focus on Next',(await pg.inner_text('.chibi-tour .cb-k')).lower()=='tour · 1 of 4' and await pg.evaluate('document.activeElement.classList.contains("cb-next")'))
+    for _ in range(3): await pg.click('.chibi-tour .cb-next'); await pg.wait_for_timeout(250)
+    ok(G,'tour reaches the résumé on step 4',(await pg.inner_text('.chibi-tour .cb-k')).lower()=='tour · 4 of 4' and await pg.evaluate('!!document.querySelector("#resume .chibi-tour-hl, #resume.chibi-tour-hl")'))
+    await pg.keyboard.press('Escape'); await pg.wait_for_timeout(200)
+    ok(G,'Esc closes the tour, clears the highlight and returns focus to Alvin',await pg.evaluate('document.querySelector(".chibi-tour").hidden && !document.querySelector(".chibi-tour-hl") && document.activeElement.classList.contains("chibi-hero")'))
+    # companion + tool reactions
+    await pg.evaluate("scrollTo(0,document.querySelector('#reel').getBoundingClientRect().top+scrollY-100)"); await pg.wait_for_timeout(900)
+    ok(G,'corner companion appears in the margin while reading projects',await pg.evaluate('!!document.querySelector(".chibi-dock.on") && chibiAlvin.dock().name==="typing"'))
+    dk=await pg.evaluate('(()=>{const d=document.querySelector(".chibi-dock").getBoundingClientRect();return [d.width,d.left,innerWidth]})()')
+    ok(G,'companion is 96 px and sits beside the content, not on it',dk[0]==96 and dk[1]>=1290,dk)
+    await pg.evaluate("scrollTo(0,document.querySelector('#match').getBoundingClientRect().top+scrollY-100)"); await pg.wait_for_timeout(600)
+    await pg.click('#jdSample'); await pg.wait_for_timeout(400)
+    ok(G,'job fit result makes him react',await pg.evaluate('["celebrate","idea","worried"].includes(chibiAlvin.dock().name)') and await pg.inner_text('.chibi-dock .chibi-bub')!='')
+    await pg.click('.chibi-dock .cb-x',force=True); await pg.wait_for_timeout(300)
+    ok(G,'the companion can be hidden',not await pg.evaluate('!!document.querySelector(".chibi-dock.on")'))
+    await pg.reload(); await pg.wait_for_selector('.chibi-hero.on',timeout=8000)
+    await pg.evaluate("document.documentElement.style.scrollBehavior='auto';scrollTo(0,document.querySelector('#reel').getBoundingClientRect().top+scrollY-100)"); await pg.wait_for_timeout(900)
+    ok(G,'hidden companion stays hidden after reload',not await pg.evaluate('!!document.querySelector(".chibi-dock.on")'))
+    ok(G,'no JavaScript errors with Alvin running',not pg.errs,pg.errs[:3])
+    await ctx.close()
+    # phone: 140 px, no companion, no overflow
+    ctx,pg=await newpage(b,w=390,h=844)
+    await pg.wait_for_selector('.chibi-hero.on',timeout=8000)
+    w=await pg.evaluate('document.querySelector(".chibi-hero").getBoundingClientRect().width')
+    ok(G,'hero Alvin is 140 px on phones',round(w)==140,w)
+    await pg.evaluate("document.documentElement.style.scrollBehavior='auto';scrollTo(0,document.querySelector('#projects').getBoundingClientRect().top+scrollY)"); await pg.wait_for_timeout(800)
+    ok(G,'no corner companion on phones',not await pg.evaluate('!!document.querySelector(".chibi-dock.on")'))
+    ok(G,'no horizontal overflow on phones with Alvin',await pg.evaluate('document.documentElement.scrollWidth<=innerWidth'))
+    await ctx.close()
+    # reduced motion: still frames, no confetti
+    ctx,pg=await newpage(b,motion='reduce')
+    await pg.wait_for_selector('.chibi-hero.on',timeout=8000)
+    for _ in range(5): await pg.click('.chibi-hero',force=True); await pg.wait_for_timeout(60)
+    ok(G,'reduced motion: no confetti',await pg.locator('.chibi-confetti').count()==0)
+    a=await pg.evaluate('getComputedStyle(document.querySelector(".chibi-hero .spr")).backgroundPosition'); await pg.wait_for_timeout(500)
+    ok(G,'reduced motion: the frame holds still',a==await pg.evaluate('getComputedStyle(document.querySelector(".chibi-hero .spr")).backgroundPosition'))
+    await ctx.close()
+    # 404 and case page under their real CSP
+    c=await b.new_context(viewport={'width':1440,'height':900},user_agent=UA); p=await c.new_page(); errs=[]; p.on('pageerror',lambda e:errs.append(str(e)))
+    await p.add_init_script('window.__csp=[];document.addEventListener("securitypolicyviolation",e=>window.__csp.push(e.violatedDirective+" "+e.blockedURI))')
+    # the 404 page uses absolute /website/ paths (it can be served from any URL); map them to the local server
+    await p.route('**/website/**',lambda r: r.continue_(url=r.request.url.replace('/website/','/')))
+    await p.goto(BASE+'404.html'); await p.wait_for_timeout(1200)
+    ok(G,'404 page shows a confused Alvin',await p.locator('.chibi-404').count()==1)
+    await p.goto(BASE+'projects/daliguro.html'); await p.wait_for_timeout(1500)
+    await p.evaluate("document.documentElement.style.scrollBehavior='auto';scrollTo(0,document.querySelector('#try').getBoundingClientRect().top+scrollY-80)"); await p.wait_for_timeout(1200)
+    await p.click('[data-load="strong"]'); await p.wait_for_timeout(500)
+    ok(G,'case page: Alvin cheers when every competency is mastered',await p.evaluate('chibiAlvin.dock()&&chibiAlvin.dock().name==="celebrate"'))
+    ok('security','Alvin runs with no CSP violations (404 + case page)',not await p.evaluate('window.__csp') and not errs,errs[:2])
+    await c.close()
+
 async def main():
     srv=subprocess.Popen([sys.executable,'-m','http.server',str(PORT),'-d',ROOT],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL); time.sleep(1)
     try:
         async with async_playwright() as p:
             b=await p.chromium.launch()
             print('Browser:',b.version)
-            await functional(b); await showcase(b); await extras(b); await layout(b); await perf(b)
+            await functional(b); await showcase(b); await chibi(b); await extras(b); await layout(b); await perf(b)
             await b.close()
     finally: srv.terminate()
     f=[r for r in res if not r[2]]
