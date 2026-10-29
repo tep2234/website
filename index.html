@@ -149,7 +149,7 @@ p{margin:0}
 .who .lbl{color:var(--amber-text)}
 .statement{margin-top:18px;font:900 clamp(3.1rem,8.4vw,7.6rem)/.86 var(--display);font-stretch:118%;letter-spacing:-.035em;text-transform:uppercase}
 .statement > span{display:block}
-.statement .thin{font-weight:300;font-stretch:72%;letter-spacing:-.02em;color:var(--fg-2);text-transform:none;font-size:.62em;line-height:1;margin:.12em 0 .1em}
+.statement .thin{font-weight:300;font-stretch:62%;letter-spacing:-.025em;color:var(--fg-2);text-transform:none;font-size:.62em;line-height:1;margin:.12em 0 .1em}
 .intro{margin-top:26px;max-width:60ch;font-size:1.08rem;color:var(--fg-2)}
 .intro strong{color:var(--fg);font-weight:600}
 .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
@@ -847,7 +847,22 @@ img,video{max-width:100%}
 .ct-lede{margin-top:22px;max-width:60ch;color:var(--fg-2);font-size:1.08rem}
 .copy-msg{margin-top:12px;color:var(--fg-3);font-size:13.5px}
 /* footer + visitor statistics */
-.site-foot .inner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 24px}
+.site-foot{padding-block:clamp(40px,6vw,72px) clamp(28px,4vw,40px)}
+.site-foot .inner{display:grid;gap:clamp(28px,4vw,44px)}
+.foot-avail{margin:0;display:flex;align-items:center;gap:10px;color:var(--fg-2);font-size:14px}
+.foot-avail i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 22%,transparent)}
+.foot-map{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:32px 28px;padding-top:clamp(28px,4vw,40px);border-top:1px solid var(--rule)}
+.foot-col{min-width:0}
+.foot-col h3{margin:0 0 14px;color:var(--fg-3);letter-spacing:.18em;font-size:11px}
+.foot-col ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.foot-col a{display:inline-flex;align-items:center;min-height:34px;color:var(--fg-2);text-decoration:none;font-size:14.5px;line-height:1.35}
+.foot-col a:hover,.foot-col a:focus-visible{color:var(--amber-text)}
+.foot-base{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 24px;padding-top:24px;border-top:1px solid var(--rule);color:var(--fg-3);font-size:13.5px}
+.foot-made{display:inline-flex;align-items:center;gap:8px}
+.foot-made i{width:8px;height:8px;background:var(--amber);transform:rotate(45deg)}
+@media (max-width:1060px){.foot-map{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.foot-map{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 18px}.foot-col a{min-height:40px;font-size:14px}}
+@media (max-width:360px){.foot-map{grid-template-columns:minmax(0,1fr)}}
 .stats{margin:0;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:13px;color:var(--fg-2)}
 .stats b{color:var(--fg);font-variant-numeric:tabular-nums}
 .foot-links{display:flex;flex-wrap:wrap;gap:4px 16px}
@@ -917,6 +932,18 @@ img,video{max-width:100%}
 @media (max-width:430px){.feat16{grid-template-columns:minmax(0,1fr)}.personnel{left:9%;width:36%}}
 @media (max-width:430px){.cab{perspective-origin:22% 20%}.personnel{left:12%}}
 
+
+/* hero portrait: cut-out figure standing in front of the vault and a giant wordmark */
+.cab{container-type:inline-size}
+.cab .personnel{display:none}
+.wordmark{position:absolute;z-index:-1;left:-6.8cqw;top:.4cqh;font:900 29.7cqh/.74 var(--display);font-stretch:62%;letter-spacing:-.025em;white-space:nowrap;pointer-events:none;user-select:none;
+  background:linear-gradient(180deg,var(--amber) 0%,var(--amber) 35%,color-mix(in srgb,var(--amber) 30%,transparent) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rig{z-index:2}
+.hero-figure{position:absolute;z-index:1;left:-15%;bottom:7%;height:100%;aspect-ratio:383/795;container-type:size;margin:0;pointer-events:none}
+.hero-figure img{height:100%;width:auto;max-width:none;display:block;-webkit-mask-image:linear-gradient(180deg,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 86%,transparent 100%)}
+@media (max-width:1060px){.cab{height:clamp(560px,72vw,700px)}.rig{top:26%}.hero-figure{left:5%;height:90%;bottom:2%}}
+@media (max-width:760px){.cab{height:clamp(500px,140vw,600px)}.rig{top:40%}.hero-figure{z-index:3;left:4%;top:34px;bottom:auto;height:min(calc((100vw - 40px) / 1.22),380px)}.hero-figure img{-webkit-mask-image:none;mask-image:none}}
+@media (prefers-reduced-motion:no-preference){.hero-figure img{animation:figIn .9s cubic-bezier(.2,.7,.2,1) .15s both}@keyframes figIn{from{transform:translateY(22px)}to{transform:none}}}
 </style>
 <link rel="stylesheet" href="assets/css/chibi.css">
 </head>
@@ -976,6 +1003,7 @@ img,video{max-width:100%}
         </div>
         <div class="cab" id="cab" aria-label="The vault: a stack of project folders. Select a folder to open it.">
           <div class="rig" id="rig"></div>
+          <figure class="hero-figure"><span class="wordmark" aria-hidden="true">PORTFOLIO</span><img src="assets/img/alvin-cutout.webp" srcset="assets/img/alvin-cutout-400.webp 191w, assets/img/alvin-cutout.webp 383w" sizes="(max-width:760px) 170px, 290px" width="383" height="795" alt="Alvin Diaz Merasol in a black suit" fetchpriority="high"></figure>
           <div class="cab-hint lbl"><svg aria-hidden="true"><use href="#i-hand"/></svg><span id="cabHint">Pick a folder</span></div>
         </div>
       </div>
@@ -1371,7 +1399,7 @@ img,video{max-width:100%}
           <li><div class="when">Ongoing</div><div><h3>Business consultant</h3><div class="org">Feasibility studies · Business plans · Franchise development</div></div></li>
         </ol>
         <div class="creds">
-          <figure class="grad"><img src="assets/img/graduation.webp" srcset="assets/img/graduation-400.webp 400w, assets/img/graduation.webp 700w" sizes="(max-width:760px) calc(100vw - 48px), 400px" width="700" height="700" alt="Alvin Diaz Merasol at his MBA graduation" loading="lazy"><figcaption>MBA graduation · Filamer Christian University</figcaption></figure>
+          <figure class="grad"><img src="assets/img/suit-portrait.webp" srcset="assets/img/suit-portrait-400.webp 400w, assets/img/suit-portrait.webp 700w" sizes="(max-width:760px) calc(100vw - 48px), 400px" width="700" height="700" alt="Alvin Diaz Merasol in a black suit" loading="lazy"><figcaption>Alvin Diaz Merasol · LPT, MBA</figcaption></figure>
           <div class="cred"><b>Master of Business Administration</b><span>Filamer Christian University</span></div>
           <div class="cred"><b>BS Business Administration</b><span>Capiz State University</span></div>
           <div class="cred"><b>Licensed Professional Teacher</b><span>PRC No. 1385342</span></div>
@@ -1462,11 +1490,55 @@ img,video{max-width:100%}
     </div>
   </section>
 
-  <footer class="wrap site-foot">
+  <footer class="wrap site-foot" aria-labelledby="foot-title">
     <div class="inner">
-      <span>© 2026 Alvin Diaz Merasol, LPT, MBA</span>
-      <p class="stats" id="stats" hidden><span class="lbl">Site traffic</span> <span id="statsText"></span></p>
-      <span class="foot-links"><a href="resume/">Résumé</a><a href="https://github.com/tep2234" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/alvin-diaz-lpt-mba-b533a0275" target="_blank" rel="noopener">LinkedIn</a></span>
+      <h2 id="foot-title" class="vh">Site map</h2>
+      <p class="foot-avail"><i></i>Available for remote projects and roles</p>
+      <nav class="foot-map" aria-label="Site map">
+        <div class="foot-col"><h3 class="lbl">Work</h3><ul>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#watch">Watch it working</a></li>
+          <li><a href="#vault">The vault: every file</a></li>
+          <li><a href="#services">Services</a></li>
+        </ul></div>
+        <div class="foot-col"><h3 class="lbl">Case studies</h3><ul>
+          <li><a href="#daliguro">DALIguro</a></li>
+          <li><a href="projects/daliguro.html">DALIguro full case study</a></li>
+          <li><a href="#excel">Excel reporting systems</a></li>
+          <li><a href="#scanner">Exam scanner</a></li>
+          <li><a href="#design">Instructional design</a></li>
+          <li><a href="#business">The MBA, at work</a></li>
+        </ul></div>
+        <div class="foot-col"><h3 class="lbl">About me</h3><ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#facts">By the numbers</a></li>
+          <li><a href="#skills">What I build</a></li>
+          <li><a href="#skillmap">Skill map</a></li>
+          <li><a href="#experience">Experience</a></li>
+        </ul></div>
+        <div class="foot-col"><h3 class="lbl">Résumé by role</h3><ul>
+          <li><a href="resume/ai-automation.html">AI Automation Specialist</a></li>
+          <li><a href="resume/business-analyst.html">Business Systems Analyst</a></li>
+          <li><a href="resume/app-developer.html">AI-Assisted Application Developer</a></li>
+          <li><a href="resume/operations.html">Operations &amp; Workflow Automation</a></li>
+          <li><a href="resume/excel.html">Excel Automation Specialist</a></li>
+          <li><a href="resume/edtech.html">Educational Technology Specialist</a></li>
+          <li><a href="resume/instructional.html">Instructional Designer</a></li>
+          <li><a href="resume/bizdev.html">Business Development Specialist</a></li>
+        </ul></div>
+        <div class="foot-col"><h3 class="lbl">Hire &amp; connect</h3><ul>
+          <li><a href="#match">Does this job fit?</a></li>
+          <li><a href="#resume">All résumés</a></li>
+          <li><a href="#contact">Contact me</a></li>
+          <li><a href="https://github.com/tep2234" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/alvin-diaz-lpt-mba-b533a0275" target="_blank" rel="noopener">LinkedIn</a></li>
+        </ul></div>
+      </nav>
+      <div class="foot-base">
+        <span>© 2026 Alvin Diaz Merasol, LPT, MBA</span>
+        <p class="stats" id="stats" hidden><span class="lbl">Site traffic</span> <span id="statsText"></span></p>
+        <span class="foot-made"><i aria-hidden="true"></i>Made in Capiz, Philippines</span>
+      </div>
     </div>
   </footer>
 
