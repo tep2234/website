@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- Inline scripts are allowed by hash: after editing a script, run  python3 tools/update-csp.py -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-7XW5HDH9L3bWgQ7ESkRdc7pHAcrXXbmVatGPpTFig0U=' 'sha256-j73s4u1dpQamPckovP+VCRQgcsBoC8hiy1jb0WONb+s='; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-7XW5HDH9L3bWgQ7ESkRdc7pHAcrXXbmVatGPpTFig0U=' 'sha256-j73s4u1dpQamPckovP+VCRQgcsBoC8hiy1jb0WONb+s=' 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <title>DALIguro case study — Alvin Diaz Merasol</title>
 <meta name="description" content="How Alvin Diaz Merasol, a licensed teacher and MBA, built DALIguro: one AI-assisted workspace for a DepEd teacher's planning, records, grading and school forms.">
 <link rel="canonical" href="https://tep2234.github.io/website/projects/daliguro.html">
@@ -558,5 +558,6 @@ $$("[data-load]").forEach(function(b){b.addEventListener("click",function(){load
 var lio=new IntersectionObserver(function(es){if(es[0].isIntersecting){lio.disconnect();load("mixed")}},{rootMargin:"800px 0px"});lio.observe($("#try"));
 })();
 </script>
+<script src="../assets/js/chibi.js" defer data-page="case"></script>
 </body>
 </html>
