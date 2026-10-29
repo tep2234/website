@@ -245,13 +245,85 @@ async def extras(b):
     t=p404.read_text() if p404.exists() else ''
     ok(G,'404.html exists and links home','href="/website/"' in t and '<h1>' in t)
 
+async def showcase(b):
+    """Project reel on the home page and the DALIguro case study page."""
+    G='showcase'
+    ctx,pg=await newpage(b)
+    ok(G,'reel renders 7 files',await pg.locator('#reelTrack .slide').count()==7)
+    ok(G,'reel starts on DALIguro',(await pg.inner_text('#reelPanel h3'))=='DALIguro web app')
+    await pg.locator('#reel').scroll_into_view_if_needed()
+    await pg.click('#reelNext'); await pg.wait_for_timeout(700)
+    t=await pg.inner_text('#reelPanel h3'); ok(G,'next button moves the reel and updates the panel',t=='Smart Automated Item Analysis',t)
+    await pg.focus('#reelTrack'); await pg.keyboard.press('ArrowLeft'); await pg.wait_for_timeout(700)
+    ok(G,'arrow keys move the reel',(await pg.inner_text('#reelPanel h3'))=='DALIguro web app')
+    side=await pg.evaluate('getComputedStyle(document.querySelector(".slide[data-i=\'2\']")).filter')
+    ok(G,'neighbouring files are blurred',side.startswith('blur'),side)
+    await pg.click('#reelDots [data-go="2"]'); await pg.wait_for_timeout(700)
+    await pg.click('#reelPanel [data-open="partsflow"]'); await pg.wait_for_timeout(350)
+    ok(G,'reel panel opens the case file drawer',await pg.inner_text('#dTitle')=='PartsFlow Pro')
+    await pg.keyboard.press('Escape'); await pg.wait_for_timeout(250)
+    ok(G,'hero DALIguro folder links to its case study',await pg.get_attribute('#rig a.folder','href')=='projects/daliguro.html')
+    await pg.evaluate("document.querySelectorAll('#rig .folder').forEach(f=>f.dispatchEvent(new PointerEvent('pointerenter')))"); await pg.wait_for_timeout(150)
+    ok(G,'hovering a folder raises no error',not pg.errs,pg.errs[:2])
+    await pg.goto(BASE+'index.html'); await pg.wait_for_timeout(600)
+    await pg.evaluate("document.querySelector('#rig a.folder').click()"); await pg.wait_for_url('**/projects/daliguro.html'); await pg.wait_for_timeout(600)
+    ok(G,'folder click opens the case study page','teacher' in (await pg.inner_text('h1')))
+    await pg.locator('#try').scroll_into_view_if_needed(); await pg.wait_for_timeout(300)
+    ok(G,'answer sheet is built when it nears the screen',await pg.locator('#ia .cell').count()==80)
+    first=await pg.inner_text('#report .mps b')
+    await pg.click('#ia [data-r="0"][data-c="5"]'); await pg.wait_for_timeout(100)
+    ok(G,'toggling an answer recalculates the analysis',await pg.inner_text('#report .mps b')!=first)
+    ok(G,'focus stays on the toggled answer',await pg.evaluate('document.activeElement.dataset.r==="0"&&document.activeElement.dataset.c==="5"'))
+    await pg.click('[data-load="strong"]'); await pg.wait_for_timeout(100)
+    ok(G,'strong class shows no re-teaching','Every competency' in await pg.inner_text('#report'))
+    await pg.click('[data-load="weak"]'); await pg.wait_for_timeout(100)
+    r=await pg.inner_text('#report'); ok(G,'struggling class names learners for small-group help','Re-teach' in r and 'Learner' in r,r[:120])
+    await pg.click('#chapters [data-t="70.5"]'); await pg.wait_for_timeout(800)
+    # python's http.server ignores Range requests, so the video can't seek locally; GitHub Pages supports them
+    sk=await pg.evaluate('(()=>{const v=document.getElementById("rv");return {t:v.currentTime,seekable:v.seekable.length?v.seekable.end(0):0,rs:v.readyState}})()')
+    ok(G,'chapter buttons load the recording and seek it (where the server allows seeking)',sk['t']>=70 or (sk['seekable']==0 and sk['rs']>=1),sk)
+    ok(G,'case page has no JavaScript errors',not pg.errs,pg.errs[:3])
+    await ctx.close()
+    ctx=await b.new_context(viewport={'width':1440,'height':850},user_agent=UA); pg=await ctx.new_page()
+    await pg.add_init_script('window.__csp=[];document.addEventListener("securitypolicyviolation",e=>window.__csp.push(e.violatedDirective+" "+e.blockedURI))')
+    await pg.goto(BASE+'projects/daliguro.html'); await pg.wait_for_timeout(500)
+    await pg.locator('#try').scroll_into_view_if_needed(); await pg.wait_for_timeout(400)
+    ok('security','case page script runs under its CSP',await pg.locator('#ia .cell').count()==80)
+    v=await pg.evaluate('window.__csp'); ok('security','case page: no CSP violations',not v,v)
+    locs=await pg.evaluate('[...new Set([...document.querySelectorAll("a[href],img[src],source[src],track[src],link[href]")].map(e=>e.href||e.src).filter(u=>u.startsWith(location.origin)))]')
+    bad=[u for u in locs if (await pg.request.get(u.split('#')[0])).status!=200]
+    ok(G,f'case page local files resolve ({len(locs)})',not bad,bad[:5])
+    await ctx.close()
+    axe=pathlib.Path(AXE).read_text() if pathlib.Path(AXE).exists() else None
+    JS='(()=>{const W=document.documentElement.clientWidth;const tb=[...document.querySelectorAll("a,button")].filter(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return s.display!=="none"&&r.width>0&&(r.width<24||r.height<24)&&!e.closest("p,li")}).map(e=>e.textContent.trim().slice(0,16)||e.className);return {over:document.documentElement.scrollWidth>W+1,tb}})()'
+    for w in [320,390,768,1440]:
+        for scheme in ['light','dark']:
+            c2=await b.new_context(viewport={'width':w,'height':850},is_mobile=w<768,has_touch=w<768,color_scheme=scheme,bypass_csp=True); p2=await c2.new_page()
+            await p2.goto(BASE+'projects/daliguro.html'); await p2.wait_for_timeout(500)
+            r=await p2.evaluate(JS)
+            ok('layout',f'case page {w}px {scheme}: no horizontal overflow',not r['over'])
+            ok('a11y',f'case page {w}px {scheme}: controls at least 24x24 px',not r['tb'],r['tb'][:4])
+            if axe:
+                await p2.add_script_tag(content=axe)
+                v=await p2.evaluate("axe.run(document,{runOnly:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}).then(r=>r.violations.map(v=>v.id+':'+v.nodes.length+' '+v.nodes[0].target))")
+                ok('a11y',f'case page {w}px {scheme}: axe WCAG 2.2 AA, 0 violations',not v,v)
+            await c2.close()
+    c3=await b.new_context(viewport={'width':390,'height':850},is_mobile=True,user_agent=UA,bypass_csp=True); p3=await c3.new_page(); cdp=await c3.new_cdp_session(p3)
+    await cdp.send('Network.enable'); await cdp.send('Network.emulateNetworkConditions',{'offline':False,'latency':150,'downloadThroughput':1.6e6/8,'uploadThroughput':750e3/8}); await cdp.send('Emulation.setCPUThrottlingRate',{'rate':4})
+    await p3.add_init_script('window.__cls=0;window.__lcp=0;window.__tbt=0;new PerformanceObserver(l=>{for(const e of l.getEntries())if(!e.hadRecentInput)window.__cls+=e.value}).observe({type:"layout-shift",buffered:true});new PerformanceObserver(l=>{const e=l.getEntries();window.__lcp=e[e.length-1].startTime}).observe({type:"largest-contentful-paint",buffered:true});new PerformanceObserver(l=>{for(const e of l.getEntries())window.__tbt+=Math.max(0,e.duration-50)}).observe({type:"longtask",buffered:true});')
+    await p3.goto(BASE+'projects/daliguro.html',wait_until='load'); await p3.wait_for_timeout(2500)
+    m=await p3.evaluate('({cls:+window.__cls.toFixed(3),lcp:Math.round(window.__lcp),tbt:Math.round(window.__tbt)})')
+    print('PERF case page mobile (4x CPU, 1.6 Mbps):',m)
+    ok('perf','case page mobile: CLS < 0.1',m['cls']<0.1,m); ok('perf','case page mobile: LCP < 2.5 s',m['lcp']<2500,m); ok('perf','case page mobile: blocking time < 200 ms',m['tbt']<200,m)
+    await c3.close()
+
 async def main():
     srv=subprocess.Popen([sys.executable,'-m','http.server',str(PORT),'-d',ROOT],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL); time.sleep(1)
     try:
         async with async_playwright() as p:
             b=await p.chromium.launch()
             print('Browser:',b.version)
-            await functional(b); await extras(b); await layout(b); await perf(b)
+            await functional(b); await showcase(b); await extras(b); await layout(b); await perf(b)
             await b.close()
     finally: srv.terminate()
     f=[r for r in res if not r[2]]

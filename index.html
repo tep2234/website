@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- Security policy. The inline script is allowed by its hash: after editing the script, run  python3 tools/update-csp.py
      Cloudflare's analytics host is pre-allowed so the snippet in docs/VISITOR-COUNTER.md works once it is pasted in. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-GIS0LIc5WmP6A+oDgFXFJL3LO1ujWPoEqaybIZSDebY=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'self' https://abacus.jasoncameron.dev https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-EZltavTNsmnJ01A76wda9SHu1nHND2clFl41sOuOCEI=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'self' https://abacus.jasoncameron.dev https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <title>Alvin Diaz Merasol — AI-Powered Business and Education Systems</title>
 <meta name="description" content="Alvin Diaz Merasol, LPT, MBA. Practical AI-powered business and education systems: Excel automation, web apps, workflows and learning design.">
 <link rel="canonical" href="https://tep2234.github.io/website/">
@@ -89,6 +89,9 @@
   --sh:0 1px 0 rgba(255,255,255,.04) inset,0 24px 48px -24px rgba(0,0,0,.75); color-scheme:dark;
 }
 
+@view-transition{navigation:auto}
+::view-transition-group(case-sheet){animation-duration:420ms;animation-timing-function:cubic-bezier(.23,1,.32,1)}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:calc(76px + env(safe-area-inset-top,0px))}
 body{background:var(--bg);color:var(--fg);font:400 16px/1.62 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
@@ -170,6 +173,7 @@ p{margin:0}
 .folder .front b{font:800 clamp(14px,1.5vw,19px)/1.05 var(--display);font-stretch:112%}
 .folder .front span{font:500 10.5px var(--mono);letter-spacing:.06em;opacity:.8;text-transform:uppercase;white-space:nowrap}
 .folder.lift{z-index:2}
+a.folder{display:block;color:inherit;text-decoration:none}
 .personnel{position:absolute;left:0;top:30%;width:min(230px,38%);transform:translateZ(170px) rotateZ(-4deg);background:var(--paper);color:var(--paper-ink);border-radius:2px;padding:12px 12px 14px;box-shadow:0 30px 50px -22px rgba(0,0,0,.75)}
 .personnel .clip{position:absolute;top:-12px;left:50%;width:56px;height:20px;margin-left:-28px;border-radius:4px;background:linear-gradient(#C7CDD8,#8F98A8);box-shadow:0 2px 3px rgba(0,0,0,.3)}
 .personnel .ph{aspect-ratio:4/4.4;overflow:hidden;background:#C9CFD9}
@@ -744,6 +748,60 @@ img,video{max-width:100%}
 .pcard dd{margin:0;font-size:14.5px;color:var(--fg-2)}
 .pcard dd strong{color:var(--fg);font-weight:600}
 .pcard .pl{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:auto;padding-top:6px}
+/* project reel: a "try the look" carousel. The middle file is in focus, its neighbours step back
+   and blur; the panel lists what is inside the file in focus. Native scrolling with snap points,
+   so trackpads, touch and keyboards all work and the motion can always be interrupted. */
+.reel{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,340px);border:1px solid var(--rule);background:linear-gradient(180deg,var(--sheet),color-mix(in srgb,var(--sheet) 55%,var(--bg)));margin-bottom:clamp(40px,6vw,72px);min-width:0}
+.reel-stage{container-type:inline-size;min-width:0;display:grid;grid-template-rows:auto 1fr auto;padding-block:16px 14px}
+.reel-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-inline:18px}
+.reel-top .lbl{display:inline-flex;align-items:center;gap:8px}
+.reel-count{white-space:nowrap}
+.reel-top svg{width:14px;height:14px;color:var(--amber-text)}
+.reel-track{--sw:min(56cqi,560px);display:flex;align-items:center;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;padding:clamp(18px,3vw,34px) calc(50cqi - var(--sw) / 2) 8px;cursor:grab;outline-offset:-3px}
+.reel-track::-webkit-scrollbar{display:none}
+.reel-track.drag{scroll-snap-type:none;cursor:grabbing;user-select:none}
+.reel-track.drag .slide{pointer-events:none}
+.slide{--p:1;position:relative;flex:0 0 var(--sw);margin-inline:calc(var(--sw) * -.07);scroll-snap-align:center;text-align:left;
+  transform:scale(calc(1 - .3 * min(var(--p),1))) translateY(calc(min(var(--p),1) * 4%));filter:blur(calc(min(var(--p),1) * 2.4px)) saturate(calc(1 - .35 * min(var(--p),1)));opacity:calc(1 - .38 * min(var(--p),1.6));transform-origin:50% 100%;will-change:transform}
+.slide .stab{display:inline-flex;align-items:center;height:26px;padding:0 12px;margin-left:8%;background:var(--tc);border-radius:5px 5px 0 0;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#F4F6FA;white-space:nowrap;max-width:84%;overflow:hidden;text-overflow:ellipsis}
+.slide .sheet{position:relative;display:block;aspect-ratio:16/10;background:var(--paper);border-top:4px solid var(--tc);border-radius:2px 4px 4px 4px;overflow:hidden;box-shadow:0 28px 40px -26px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.4) inset}
+.slide .sheet img,.slide .sheet video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left}
+.slide .sheet video{opacity:0;transition:opacity 200ms ease}
+.slide .sheet video.on{opacity:1}
+.slide .blank{position:absolute;inset:0;display:grid;place-content:center;gap:10px;text-align:center;color:var(--paper-ink);background:repeating-linear-gradient(0deg,transparent 0 27px,var(--paper-rule) 27px 28px),var(--paper);padding:8%}
+.slide .blank b{font:900 clamp(18px,3cqi,28px)/1 var(--display);font-stretch:110%}
+.slide .blank span{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#4E586B}
+.slide .cap{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px;padding-inline:2px}
+.slide .cap b{font:800 clamp(15px,2.2cqi,21px)/1.1 var(--display);font-stretch:108%;min-width:0}
+.slide .cap span{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-3);white-space:nowrap}
+.slide::after{content:"";position:absolute;left:12%;right:12%;bottom:-14px;height:14px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.22),transparent);z-index:-1}
+.slide.on .sheet{box-shadow:0 34px 50px -26px rgba(0,0,0,.6),0 0 0 1px color-mix(in srgb,var(--tc) 55%,transparent)}
+.reel-ctrl{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 18px 0}
+.reel-ctrl .tbtn svg{width:16px;height:16px}
+.reel-dots{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
+.reel-dots button{width:26px;height:26px;display:grid;place-items:center;border-radius:4px}
+.reel-dots button i{width:8px;height:8px;border-radius:2px;background:var(--rule-2);transition:transform 160ms var(--ease-out),background-color 160ms ease}
+.reel-dots button[aria-current="true"] i{background:var(--amber);transform:scale(1.35) rotate(45deg)}
+.reel-panel{border-left:1px solid var(--rule);padding:22px 22px 24px;display:grid;align-content:start;gap:14px;min-width:0;background:color-mix(in srgb,var(--sheet) 80%,transparent)}
+.reel-panel .ph{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.reel-panel h3{font:900 clamp(1.4rem,2.2vw,1.9rem)/1 var(--display);font-stretch:110%;letter-spacing:-.02em}
+.reel-panel .sum{font-size:14.5px;color:var(--fg-2)}
+.inside{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.inside li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--rule);font-size:14.5px}
+.inside li span{font:500 11px var(--mono);color:var(--fg-3)}
+.reel-panel .out{font-size:13.5px;color:var(--fg-2);padding:10px 12px;border-left:3px solid var(--tc);background:color-mix(in srgb,var(--tc) 9%,transparent)}
+.reel-panel .acts{display:grid;gap:10px;margin-top:4px}
+.reel-panel .acts .btn{justify-content:space-between;width:100%}
+.reel-panel .acts .row{display:flex;flex-wrap:wrap;gap:8px 18px}
+.more-h{font:800 clamp(1.15rem,1.8vw,1.4rem)/1.1 var(--display);font-stretch:108%;margin-bottom:14px}
+@media (prefers-reduced-motion:no-preference){.reel-panel .pin{animation:pin 240ms var(--ease-out) both}@keyframes pin{from{opacity:0;transform:translateY(6px)}}}
+@media (prefers-reduced-motion:reduce){.slide{filter:none;transform:scale(calc(1 - .18 * min(var(--p),1)))}}
+@media (max-width:900px){
+  .reel{grid-template-columns:minmax(0,1fr)}
+  .reel-track{--sw:min(76cqi,520px)}
+  .slide{margin-inline:calc(var(--sw) * -.1)}
+  .reel-panel{border-left:0;border-top:1px solid var(--rule)}
+}
 /* case study strips */
 .cases-intro{padding-block:clamp(64px,9vw,112px) 0;border-bottom:0}
 .pao{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:18px 0 0;background:var(--rule);border:1px solid var(--rule)}
@@ -948,6 +1006,19 @@ img,video{max-width:100%}
         <div><div class="fno lbl"><i style="--tc:var(--f1)"></i>Featured projects</div><h2 id="proj-title">Working <span class="hl">systems</span>, not mockups</h2></div>
         <p>Each project shows the problem, what was built, my part in it, the tools actually used and its real status. Recordings and screenshots are from the working builds.</p>
       </div>
+      <div class="reel" id="reel">
+        <div class="reel-stage">
+          <div class="reel-top"><span class="lbl"><svg aria-hidden="true"><use href="#i-hand"/></svg>Swipe or drag through the files</span><span class="lbl reel-count" id="reelCount" aria-hidden="true">01 / 07</span></div>
+          <div class="reel-track" id="reelTrack" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Featured projects. Use the left and right arrow keys to move between files."></div>
+          <div class="reel-ctrl">
+            <button class="tbtn sq" type="button" id="reelPrev" aria-label="Previous project"><svg aria-hidden="true" style="transform:rotate(-135deg)"><use href="#i-arrow"/></svg></button>
+            <div class="reel-dots" id="reelDots" role="group" aria-label="Choose a project"></div>
+            <button class="tbtn sq" type="button" id="reelNext" aria-label="Next project"><svg aria-hidden="true" style="transform:rotate(45deg)"><use href="#i-arrow"/></svg></button>
+          </div>
+        </div>
+        <aside class="reel-panel" id="reelPanel" aria-live="polite" aria-label="About the selected project"></aside>
+      </div>
+      <h3 class="more-h" id="more-title">Every project, side by side</h3>
       <div class="pfilter" id="pfilter" role="group" aria-label="Filter projects"></div>
       <div class="pgrid" id="pgrid"></div>
     </div>
@@ -1418,6 +1489,8 @@ img,video{max-width:100%}
    The page shows it next to the lesson; while url is empty, nothing is shown. */
 var SAMPLE_COURSE={tool:"",title:"",url:""};
 
+/* projects that have their own case study page (opened with a folder-to-page view transition) */
+var CASES={daliguro:"projects/daliguro.html"};
 var F={web:"var(--f1)",school:"var(--f2)",business:"var(--f6)",cred:"var(--f4)"};
 var ITEMS=[
  {no:"01",id:"daliguro",title:"DALIguro",kind:"web",kindLabel:"Web app",state:"Live",live:true,ev:"Demonstrated",vid:"daliguro-app",img:"assets/img/daliguro-dashboard.webp",sec:"daliguro",
@@ -1540,14 +1613,15 @@ var STACK=[
  {id:"attendance",label:"Attendance v5",c:"var(--f4)",tx:"34%",doc:'<div data-att style="padding:8% 6%"></div>'},
  {id:"sf9",label:"SF9 Master",c:"var(--f3)",tx:"20%",doc:'<div style="padding:9% 8%;font:600 9px var(--mono);color:#2D3647;line-height:1.9">SCHOOL FORM 9 · LEARNER PROGRESS REPORT CARD<br>TERM 1 · TERM 2 · TERM 3 · FINAL<div style="height:5px;background:#D7DCE4;margin:6px 0 4px"></div><div style="height:5px;background:#D7DCE4;width:80%;margin-bottom:4px"></div><div style="height:5px;background:#D7DCE4;width:64%"></div></div>'},
  {id:"item-analysis",label:"Item analysis",c:"var(--f2)",tx:"6%",doc:'<div data-bars style="display:flex;align-items:flex-end;gap:4%;height:100%;padding:12% 8% 0"></div>'},
- {id:"daliguro",label:"DALIguro",c:"var(--f1)",tx:"62%",doc:'<img src="assets/img/daliguro-dashboard.webp"'+rs("assets/img/daliguro-dashboard.webp","(max-width:760px) 45vw, 300px")+' width="1200" height="683" alt="">'}
+ {id:"daliguro",label:"DALIguro",c:"var(--f1)",tx:"62%",href:CASES.daliguro,doc:'<img src="assets/img/daliguro-dashboard.webp"'+rs("assets/img/daliguro-dashboard.webp","(max-width:760px) 45vw, 300px")+' width="1200" height="683" alt="">'}
 ];
 var rig=$("#rig");
 rig.innerHTML=STACK.map(function(f,i){
   var n=STACK.length-1-i; /* 0 = front */
-  return '<button class="folder" type="button" data-open="'+f.id+'" data-cur="Open" data-n="'+n+'" style="--fc:'+f.c+';--tx:'+f.tx+'" >'+
+  /* a folder with its own case study page is a real link; the rest open the case-file drawer */
+  return (f.href?'<a class="folder case-link" href="'+f.href+'"':'<button class="folder" type="button" data-open="'+f.id+'"')+' data-cur="Open" data-n="'+n+'" style="--fc:'+f.c+';--tx:'+f.tx+'" >'+
     '<span class="tab" aria-hidden="true">'+esc(f.label)+'</span><span class="body" aria-hidden="true"></span><span class="doc" aria-hidden="true">'+f.doc+'</span>'+
-    '<span class="front"><b>'+esc(f.label)+'</b><span>File '+itemNo(f.id)+'</span><span class="vh">, open the file</span></span></button>';
+    '<span class="front"><b>'+esc(f.label)+'</b><span>File '+itemNo(f.id)+'</span><span class="vh">'+(f.href?', open the case study':', open the file')+'</span></span>'+(f.href?'</a>':'</button>');
 }).join("")+
  '<div class="personnel" aria-hidden="true"><span class="clip"></span><div class="ph"><img src="assets/img/portrait.webp"'+rs("assets/img/portrait.webp","(max-width:760px) 140px, 230px")+' width="900" height="1094" alt=""></div>'+
  '<div class="rows"><div><span>Name</span><b>A. D. Merasol</b></div><div><span>License</span><b>PRC 1385342</b></div><div><span>Degree</span><b>MBA</b></div><div><span>Since</span><b>2017</b></div></div>'+
@@ -1557,10 +1631,10 @@ var folders=$$(".folder",rig);
 function place(f,lift){var n=+f.dataset.n;
   f.style.transform="translate3d("+(n*1.6)+"%,"+(n*-14-(lift?12:0))+"%,"+(n*-44+(lift?30:0))+"px)";}
 folders.forEach(function(f){place(f,false);
-  f.addEventListener("pointerenter",function(){if(fine){place(f,true);f.classList.add("lift");$("#cabHint").textContent=f.getAttribute("aria-label").replace("Open the ","").replace(" file","")}});
+  f.addEventListener("pointerenter",function(){if(fine){place(f,true);f.classList.add("lift");$("#cabHint").textContent=f.querySelector(".front b").textContent}});
   f.addEventListener("pointerleave",function(){place(f,false);f.classList.remove("lift");$("#cabHint").textContent="Pick a folder"});
   f.addEventListener("focus",function(){place(f,true)}); f.addEventListener("blur",function(){place(f,false)});
-  f.addEventListener("click",function(){openFile(f.dataset.open,f)});
+  f.addEventListener("click",function(){if(f.dataset.open)openFile(f.dataset.open,f)});
 });
 /* little documents inside the folders */
 function drawQR(cv){var c=cv.getContext("2d"),n=29,seed=7;function r(){seed=(seed*16807)%2147483647;return seed/2147483647}
@@ -1873,6 +1947,93 @@ function renderProjects(){
 $("#pfilter").addEventListener("click",function(e){var b=e.target.closest("[data-pc]");if(!b)return;pf=b.dataset.pc;renderProjects()});
 $("#pgrid").addEventListener("click",function(e){var b=e.target.closest("[data-open]");if(b)openFile(b.dataset.open,b)});
 renderProjects();
+
+/* ---------- project reel ("try the look" carousel) ---------- */
+var INSIDE={
+ daliguro:["Teacher Command Center with today's counts","Attendance, e-grading and consolidated grades","ILAW lesson planning with AI, PowerPoint export","QR assessment, item analysis and remediation"],
+ sf9:["One learner masterlist feeds every report card","Term 1 to 3 consolidation and final summary","Grade slip for each learner","60 adviser remarks across five performance bands"],
+ "smart-item":["Mastery and error level per item","Least-learned competencies, ranked","Learner proficiency and who needs help","ILMP and class intervention plan, printable"],
+ attendance:["P, A, L or E per learner, per day","Every section in one workbook","Dashboard, report and calendar on one engine","Guard against typing into the wrong month"],
+ partsflow:["Inventory with low-stock alerts","Point of sale","Purchase orders and suppliers","Customer ledger and sales analytics"],
+ "qr-proto":["Assessment creator and answer keys","Learner manager with CSV import","Printable QR-coded answer sheets","Assisted scoring and competency analysis"],
+ asenso:["Three franchise tiers","Compliance messaging","Boosted Facebook campaigns","Page grown to 1,000 followers"]
+};
+var REEL=["asenso","sf9","partsflow","daliguro","smart-item","attendance","qr-proto"].map(function(id){return PROJECTS.filter(function(p){return p.id===id})[0]}).filter(Boolean);
+(function(){
+  var track=$("#reelTrack"),panel=$("#reelPanel"),dots=$("#reelDots"),count=$("#reelCount");if(!track)return;
+  var active=-1,slides,raf=0,drag=null,moved=false;
+  function pad(n){return (n<10?"0":"")+n}
+  track.innerHTML=REEL.map(function(p,i){
+    var pic=p.vid?"assets/media/"+p.vid+"-poster.webp":p.img;
+    var media=pic?'<img src="'+pic+'"'+rs(pic,"(max-width:900px) 76vw, 560px")+' width="1280" height="720" alt="" loading="'+(Math.abs(i-3)<2?"eager":"lazy")+'" decoding="async" draggable="false">'
+      :'<span class="blank"><b>'+h(p.title)+'</b><span>Prototype · screenshots coming</span></span>';
+    return '<button class="slide" type="button" data-i="'+i+'" style="--tc:'+p.tc+'" aria-label="'+h(p.title)+', file '+(i+1)+' of '+REEL.length+'">'+
+      '<span class="stab" aria-hidden="true">'+h(p.catLabel)+'</span><span class="sheet" aria-hidden="true">'+media+'</span>'+
+      '<span class="cap" aria-hidden="true"><b>'+h(p.title)+'</b><span>'+h(p.status[0])+'</span></span></button>';
+  }).join("");
+  dots.innerHTML=REEL.map(function(p,i){return '<button type="button" data-go="'+i+'" aria-label="Show '+h(p.title)+'"><i></i></button>'}).join("");
+  slides=$$(".slide",track);
+  function primary(p){
+    if(CASES[p.id])return '<a class="btn btn-a case-link" href="'+CASES[p.id]+'" data-cur="Open">Open the case study'+ARROW+'</a>';
+    if(p.vid)return '<button class="btn btn-a" type="button" data-play="'+p.vid+'">Watch it working<svg aria-hidden="true"><use href="#i-play"/></svg></button>';
+    return '<button class="btn btn-a" type="button" data-open="'+p.id+'">Read the file'+ARROW+'</button>';
+  }
+  function paint(i){var p=REEL[i];
+    panel.innerHTML='<div class="pin" style="display:grid;gap:14px;--tc:'+p.tc+'"><div class="ph"><span class="lbl">'+h(p.catLabel)+'</span><span class="status '+p.status[1]+'">'+h(p.status[0])+'</span></div>'+
+      '<h3>'+h(p.title)+'</h3><p class="sum">'+h(p.problem)+'</p>'+
+      '<div><span class="lbl">In this file</span><ol class="inside" style="margin-top:8px">'+(INSIDE[p.id]||[]).map(function(t,k){return '<li><span>'+pad(k+1)+'</span>'+h(t)+'</li>'}).join("")+'</ol></div>'+
+      '<p class="out"><span class="vh">Outcome: </span>'+h(p.outcome)+'</p>'+
+      '<div class="acts">'+primary(p)+'<div class="row">'+p.links.filter(function(l){var t=CASES[p.id]?"":p.vid?"#play:"+p.vid:"#open:"+p.id;return l[0]!==t}).map(linkHtml).join("")+'</div></div></div>';
+  }
+  function setActive(i){if(i===active)return;active=i;
+    slides.forEach(function(s,k){s.classList.toggle("on",k===i);s.setAttribute("aria-current",String(k===i))});
+    $$("button",dots).forEach(function(d,k){d.setAttribute("aria-current",String(k===i))});
+    count.textContent=pad(i+1)+" / "+pad(REEL.length);stopPreview();paint(i);}
+  function centre(s){return s.offsetLeft+s.offsetWidth/2}
+  function measure(){raf=0;var c=track.scrollLeft+track.clientWidth/2,step=Math.abs(centre(slides[1])-centre(slides[0]))||1,best=0,bd=1e9;
+    slides.forEach(function(s,k){var d=Math.abs(centre(s)-c)/step;s.style.setProperty("--p",d.toFixed(3));s.style.zIndex=String(100-Math.round(d*10));if(d<bd){bd=d;best=k}});
+    setActive(best);}
+  function go(i,instant){i=Math.max(0,Math.min(REEL.length-1,i));track.scrollTo({left:centre(slides[i])-track.clientWidth/2,behavior:instant||reduce?"auto":"smooth"})}
+  track.addEventListener("scroll",function(){if(!raf)raf=requestAnimationFrame(measure)},{passive:true});
+  var started=false;
+  new ResizeObserver(function(){if(started){go(active,true);measure()}}).observe(track);
+  track.addEventListener("click",function(e){if(moved){e.preventDefault();e.stopPropagation();moved=false;return}
+    var s=e.target.closest(".slide");if(!s)return;var i=+s.dataset.i;
+    if(i!==active){go(i);return}
+    var a=panel.querySelector(".acts .btn");if(a)a.click();},true);
+  track.addEventListener("keydown",function(e){var k=e.key;
+    if(k==="ArrowRight"||k==="ArrowLeft"){e.preventDefault();go(active+(k==="ArrowRight"?1:-1))}
+    else if(k==="Home"||k==="End"){e.preventDefault();go(k==="Home"?0:REEL.length-1)}});
+  $("#reelPrev").addEventListener("click",function(){go(active-1)});
+  $("#reelNext").addEventListener("click",function(){go(active+1)});
+  dots.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(b)go(+b.dataset.go)});
+  panel.addEventListener("click",function(e){var b=e.target.closest("[data-open]");if(b)openFile(b.dataset.open,b)});
+  /* mouse drag (touch and trackpads already scroll natively) */
+  track.addEventListener("pointerdown",function(e){if(e.pointerType!=="mouse"||e.button!==0)return;drag={x:e.clientX,l:track.scrollLeft,id:e.pointerId};moved=false});
+  track.addEventListener("pointermove",function(e){if(!drag)return;var dx=e.clientX-drag.x;
+    if(!moved&&Math.abs(dx)>5){moved=true;track.classList.add("drag");try{track.setPointerCapture(drag.id)}catch(_){}}
+    if(moved)track.scrollLeft=drag.l-dx});
+  function end(){if(!drag)return;drag=null;if(track.classList.contains("drag")){track.classList.remove("drag");go(active)}}
+  track.addEventListener("pointerup",end);track.addEventListener("pointercancel",end);
+  /* hover preview: the file in focus plays a muted few seconds of its recording (desktop only) */
+  var pv=null;
+  function stopPreview(){if(pv){pv.pause();pv.classList.remove("on")}}
+  track.addEventListener("pointerover",function(e){if(!fine||reduce||drag)return;var s=e.target.closest(".slide");if(!s||+s.dataset.i!==active)return;var p=REEL[active];if(!p.vid)return;
+    var sheet=s.querySelector(".sheet");pv=sheet.querySelector("video");
+    if(!pv){pv=document.createElement("video");pv.muted=true;pv.loop=true;pv.playsInline=true;pv.preload="none";pv.setAttribute("aria-hidden","true");pv.src="assets/media/"+p.vid+".mp4";
+      pv.addEventListener("playing",function(){this.classList.add("on")});sheet.appendChild(pv)}
+    pv.play().catch(function(){});});
+  track.addEventListener("pointerout",function(e){var s=e.target.closest(".slide");if(s&&!s.contains(e.relatedTarget))stopPreview()});
+  go(REEL.indexOf(REEL.filter(function(p){return p.id==="daliguro"})[0]),true);measure();started=true;
+})();
+
+/* folder-to-page morph: the sheet that was clicked becomes the header of the case study page
+   (cross-document View Transitions; browsers without it simply navigate) */
+document.addEventListener("click",function(e){var a=e.target.closest("a.case-link");if(!a)return;
+  $$("[style*='view-transition-name']").forEach(function(x){x.style.viewTransitionName=""});
+  var src=a.classList.contains("folder")?a.querySelector(".front"):($(".slide.on .sheet")||a);
+  src.style.viewTransitionName="case-sheet";});
+window.addEventListener("pageshow",function(){$$("[style*='view-transition-name']").forEach(function(x){x.style.viewTransitionName=""})});
 
 /* ---------- visitor pathways ---------- */
 var PATHS=[

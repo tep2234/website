@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Refresh the script hash in index.html's Content-Security-Policy.
+"""Refresh the script hashes in each page's Content-Security-Policy (index.html and projects/*.html).
 
-The page's JavaScript is one inline <script>. The CSP allows it by its SHA-256 hash, so ANY edit to
+Each page's JavaScript is inline. The CSP allows it by its SHA-256 hash, so ANY edit to
 that script changes the hash and the browser will refuse to run it until the hash is updated.
 Run this after every change to the inline script:
 
@@ -10,7 +10,8 @@ Run this after every change to the inline script:
 """
 import base64, hashlib, pathlib, re, sys
 
-PAGE = pathlib.Path(__file__).resolve().parents[1] / "index.html"
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+PAGES = [ROOT / "index.html", *sorted((ROOT / "projects").glob("*.html"))]
 EXEC_TYPES = ("", "text/javascript", "module", "application/javascript")
 
 
@@ -27,27 +28,33 @@ def script_hashes(html: str) -> list[str]:
     return out
 
 
-def main() -> int:
-    html = PAGE.read_text(encoding="utf-8")
+def refresh(page: pathlib.Path, check: bool) -> int:
+    html = page.read_text(encoding="utf-8")
+    name = page.relative_to(ROOT)
     m = re.search(r'(<meta http-equiv="Content-Security-Policy" content=")([^"]*)(")', html)
     if not m:
-        print("No CSP meta tag found in index.html")
+        print(f"No CSP meta tag found in {name}")
         return 1
     policy = m.group(2)
     want = " ".join(script_hashes(html))
-    new_policy = re.sub(r"script-src (?:'sha256-[^']+' ?)*", "script-src " + want + " ", policy)
-    if "--check" in sys.argv:
+    new_policy = re.sub(r"script-src (?:'sha256-[^']+' ?)*", "script-src " + want + " ", policy).replace(want + " ;", want + ";")
+    if check:
         if new_policy != policy:
-            print("CSP script hash is stale: run python3 tools/update-csp.py")
+            print(f"{name}: CSP script hash is stale: run python3 tools/update-csp.py")
             return 1
-        print("CSP script hash is current")
+        print(f"{name}: CSP script hash is current")
         return 0
     if new_policy == policy:
-        print("CSP script hash already current")
+        print(f"{name}: CSP script hash already current")
         return 0
-    PAGE.write_text(html[: m.start(2)] + new_policy + html[m.end(2):], encoding="utf-8")
-    print("Updated CSP script-src to", want)
+    page.write_text(html[: m.start(2)] + new_policy + html[m.end(2):], encoding="utf-8")
+    print(f"{name}: updated CSP script-src to", want)
     return 0
+
+
+def main() -> int:
+    check = "--check" in sys.argv
+    return max(refresh(p, check) for p in PAGES)
 
 
 if __name__ == "__main__":
